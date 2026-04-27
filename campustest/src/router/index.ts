@@ -1,10 +1,18 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory('/'),
   routes: [
-
+    {
+      path: '/',
+      name: 'intro',
+      component: () => import('@/views/landing/introPage.vue'),
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: () => import('@/views/auth/loginForm.vue'),
+    },
   ],
 })
 
