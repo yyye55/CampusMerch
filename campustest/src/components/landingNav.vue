@@ -16,6 +16,8 @@
 <style scoped>
 .landing-container {
   background: linear-gradient(-45deg, #ee7652ba, #e73c7ec9);
+  animation: gradient 15s ease infinite;
+  background-size: 200% 200%;
   height: 100vh;
   overflow: hidden;
 }
@@ -37,5 +39,17 @@ a {
 }
 a:hover {
   text-decoration: underline;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 </style>
