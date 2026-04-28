@@ -68,9 +68,10 @@
 
           <el-form-item>
             <el-button type="primary" class="register-submit-btn" @click="handleRegister"
-              >注册</el-button>
+              >注册</el-button
+            >
           </el-form-item>
-                  <div class="login-link">已有账号？<router-link to="/login">立即登录</router-link></div>
+          <div class="login-link">已有账号？<router-link to="/login">立即登录</router-link></div>
         </el-form>
       </div>
     </div>
@@ -99,7 +100,7 @@ const registerRules = ref({
   confirmPassword: [
     { required: true, message: '请确认密码', trigger: 'blur' },
     {
-      validator: (rule: any, value: string, callback: any) => {
+      validator: (rule, value: string, callback: (error?: Error) => void) => {
         if (value !== registerForm.value.password) {
           callback(new Error('两次输入的密码不一致'))
         } else {
@@ -136,12 +137,14 @@ const showResetDialog = ref(false)
 const resetForm = ref({
   email: '',
   captcha: '',
+  phone: '',
   password: '',
   password_confirmation: '',
 })
 const resetRules = ref({
   email: [{ type: 'email', message: '请输入有效的邮箱格式', trigger: 'blur' }],
   captcha: [{ required: true, message: '请输入验证码', trigger: 'blur' }],
+  phone: [{ required: true, message: '请输入电话号码', trigger: 'blur' }],
   password: [{ min: 6, message: '请输入至少6位新密码', trigger: 'blur' }],
   password_confirmation: [
     { required: true, message: '请确认新密码', trigger: 'blur' },
@@ -206,14 +209,13 @@ const handleReset = async () => {
   height: 80vh;
 }
 
-
 .login-container {
   position: relative; /* 必须，为了让关闭按钮绝对定位 */
   background-color: rgba(255, 255, 255, 0.874);
   padding: 40px 40px 30px;
   border-radius: 20px; /* 要求的 20px 圆角 */
   width: 320px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.251);
 }
 /* 右上角关闭按钮 */
 .close-icon {
@@ -240,8 +242,8 @@ const handleReset = async () => {
 }
 .login-container h1 {
   text-align: center;
-  margin-bottom: 10px;
-  color: #ee7652ba;
+  margin-bottom: 30px;
+  color: var(--first-color, #a755f6);
 }
 
 :deep(.el-form-item__label) {
@@ -262,7 +264,7 @@ const handleReset = async () => {
 }
 
 :deep(.el-input__wrapper.is-focus) {
-  box-shadow: 0 0 0 1px pink inset !important;
+  box-shadow: 0 0 0 1px var(--first-color, #a755f6) inset !important;
 }
 
 /* 记住我 + 忘记密码 */
@@ -282,7 +284,7 @@ const handleReset = async () => {
   color: black;
 }
 .forgot-link:hover {
-  color: #ee7652ba;
+  color: var(--first-color);
   text-decoration: underline;
 }
 
@@ -290,18 +292,19 @@ const handleReset = async () => {
 .register-submit-btn {
   height: 40px;
   width: 100%;
-  background: #ea8567 !important;
+  background: var(--first-color, #a755f6) !important;
   border: none !important;
   border-radius: 10px !important;
   font-size: 15px !important;
   font-weight: 600 !important;
-  box-shadow: 0 4px 8px #ea6a6a9f !important;
+  box-shadow: 0 4px 8px rgba(167, 85, 246, 0.4) !important;
   transition: all 0.2s ease !important;
   color: white !important;
 }
 .register-submit-btn:hover {
   cursor: pointer;
   transform: translateY(-2px);
+  background: var(--second-color, #7c3aed) !important;
 }
 
 /* 弹窗样式 */
@@ -320,7 +323,7 @@ const handleReset = async () => {
 .reset-header-tip h2 {
   font-size: 24px;
   font-weight: 600;
-  color: #ee7652ba;
+  color: var(--first-color);
 }
 
 /* 验证码行 70% : 30% 比例 */
@@ -338,7 +341,7 @@ const handleReset = async () => {
   border-radius: 10px !important;
   padding: 0 !important; /* 比例较窄，取消内边距防止文字溢出 */
   font-size: 13px;
-  background: #ea8567 !important;
+  background: var(--first-color) !important;
   border: none !important;
 }
 
@@ -356,11 +359,11 @@ const handleReset = async () => {
   font-size: 15px;
 }
 .reset-cancel-btn {
-  border: 1px solid #ee7652ba !important;
-  color: #ee7652ba !important;
+  border: 1px solid var(--first-color) !important;
+  color: var(--first-color) !important;
 }
 .reset-confirm-btn {
-  background: #ea8567 !important;
+  background: var(--first-color) !important;
   border: none !important;
   color: white !important;
 }
@@ -371,11 +374,13 @@ const handleReset = async () => {
   color: #667085;
 }
 .login-link a {
-  color: #ee7652ba;
+  color: var(--first-color);
   text-decoration: none;
-  font-weight: 600;
+
 }
 .login-link a:hover {
   text-decoration: underline;
+  color: var(--second-color);
+  font-weight: 700;
 }
 </style>

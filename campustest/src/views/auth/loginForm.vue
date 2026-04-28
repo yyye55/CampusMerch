@@ -154,7 +154,6 @@
           暂无账号？
           <router-link class="register-link" to="/register">注册账号</router-link>
         </div>
-
       </div>
     </div>
   </landingNav>
@@ -274,11 +273,11 @@ const handleReset = async () => {
 /* 登录容器 */
 .login-container {
   position: relative; /* 必须，为了让关闭按钮绝对定位 */
-  background-color: rgba(255, 255, 255, 0.874);
+  background-color: rgba(255, 255, 255, 0.893);
   padding: 40px 40px 30px;
   border-radius: 20px; /* 要求的 20px 圆角 */
   width: 320px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.167);
 }
 
 /* 右上角关闭按钮 */
@@ -304,11 +303,10 @@ const handleReset = async () => {
 .close-icon:hover {
   background-color: #e4e7ed;
 }
-
 .login-container h1 {
   text-align: center;
   margin-bottom: 30px;
-  color: #ee7652ba;
+  color: var(--first-color);
 }
 
 :deep(.el-form-item__label) {
@@ -329,7 +327,7 @@ const handleReset = async () => {
 }
 
 :deep(.el-input__wrapper.is-focus) {
-  box-shadow: 0 0 0 1px pink inset !important;
+  box-shadow: 0 0 0 1px var(--first-color) inset !important;
 }
 
 /* 记住我 + 忘记密码 */
@@ -349,26 +347,28 @@ const handleReset = async () => {
   color: #667085;
 }
 .forgot-link:hover {
-  color: #ee7652ba;
+  color: var(--first-color);
   text-decoration: underline;
+  font-weight: 700;
 }
 
 /* 登录按钮 */
 .login-submit-btn {
   height: 40px;
   width: 100%;
-  background: #ea8567 !important;
+  background: var(--first-color) !important;
   border: none !important;
   border-radius: 10px !important;
   font-size: 15px !important;
   font-weight: 600 !important;
-  box-shadow: 0 4px 8px #ea6a6a9f !important;
+  box-shadow: 0 4px 8px rgba(167, 85, 246, 0.4) !important;
   transition: all 0.2s ease !important;
   color: white !important;
 }
 .login-submit-btn:hover {
   cursor: pointer;
   transform: translateY(-2px);
+  background: var(--second-color) !important;
 }
 
 /* 弹窗样式 */
@@ -387,7 +387,7 @@ const handleReset = async () => {
 .reset-header-tip h2 {
   font-size: 24px;
   font-weight: 600;
-  color: #ee7652ba;
+  color: var(--first-color);
 }
 
 /* 验证码行 70% : 30% 比例 */
@@ -405,8 +405,14 @@ const handleReset = async () => {
   border-radius: 10px !important;
   padding: 0 !important; /* 比例较窄，取消内边距防止文字溢出 */
   font-size: 13px;
-  background: #ea8567 !important;
+  background: var(--first-color) !important;
   border: none !important;
+  color: white !important;
+  transition: all 0.2s ease !important;
+}
+
+.input-with-button .el-button:hover {
+  background: var(--second-color) !important;
 }
 
 /* 弹窗底部按钮 */
@@ -423,15 +429,31 @@ const handleReset = async () => {
   font-size: 15px;
 }
 .reset-cancel-btn {
-  border: 1px solid #ee7652ba !important;
-  color: #ee7652ba !important;
-}
-.reset-confirm-btn {
-  background: #ea8567 !important;
-  border: none !important;
-  color: white !important;
+  border: 1px solid var(--first-color, #a755f6) !important;
+  color: var(--first-color, #a755f6) !important;
+  transition: all 0.2s ease !important;
+   box-shadow: 0 4px 8px rgba(168, 85, 246, 0.119) !important;
 }
 
+.reset-cancel-btn:hover {
+  background: var(--first-color, #a755f6) !important;
+  color: white !important;
+  transform: translateY(-2px);
+}
+
+.reset-confirm-btn {
+  background: var(--first-color, #a755f6) !important;
+  border: none !important;
+  color: white !important;
+  transition: all 0.2s ease !important;
+   box-shadow: 0 4px 8px rgba(167, 85, 246, 0.4) !important;
+}
+
+.reset-confirm-btn:hover {
+  background: var(--second-color, #7c3aed) !important;
+  
+  transform: translateY(-2px);
+}
 
 .register-text {
   text-align: center;
@@ -441,10 +463,11 @@ const handleReset = async () => {
 .register-link {
   text-decoration: none;
   cursor: pointer;
-  color: #ee7652ba;
+  color: var(--first-color);
 }
 .register-link:hover {
-  color: #ee7652ba;
+  color: var(--second-color);
   text-decoration: underline;
+  font-weight: 700;
 }
 </style>

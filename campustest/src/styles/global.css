@@ -8,4 +8,8 @@ html, body {
   font-family: 'Arial', sans-serif;
 
 }
+:root {
+  --first-color: #A755F6;
+  --second-color: #7C3AED;
+}
 

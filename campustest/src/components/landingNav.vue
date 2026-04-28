@@ -15,9 +15,8 @@
 
 <style scoped>
 .landing-container {
-  background: linear-gradient(-45deg, #ee7652ba, #e73c7ec9);
+  background:  #ffffff;
   animation: gradient 15s ease infinite;
-  background-size: 200% 200%;
   height: 100vh;
   overflow: hidden;
 }
@@ -29,27 +28,19 @@ nav {
   margin-bottom: 20px;
   padding: 20px;
   font-size: 20px;
-  color: aliceblue;
+  color: var(--first-color);
+  font-weight: 500;
 }
 a {
-  color: aliceblue;
+  color: var(--first-color);
   text-decoration: none;
   margin-right: 25px;
   border-radius: 10px;
 }
 a:hover {
   text-decoration: underline;
+  color: var(--second-color);
+  font-weight: 700;
 }
 
-@keyframes gradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
 </style>
