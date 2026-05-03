@@ -1054,10 +1054,109 @@ loadFavoriteIds()
 </script>
 
 <style>
+@import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;800&display=swap');
+
+:root {
+  --el-color-primary: #6366f1;
+  --el-color-primary-light-3: #818cf8;
+  --el-color-primary-light-5: #a5b4fc;
+  --el-color-primary-light-7: #c7d2fe;
+  --el-color-primary-light-8: #e0e7ff;
+  --el-color-primary-light-9: #eef2ff;
+  --el-color-primary-dark-2: #4f46e5;
+  --el-border-radius-base: 12px;
+}
+
 body { font-family: 'Noto Sans SC', sans-serif; }
-.page-transition { animation: fadeInUp 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
-@keyframes fadeInUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+.el-message {
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
+}
+
+.select-beauty {
+  width: 100%;
+  height: 44px;
+  padding: 0 40px 0 14px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  color: #374151;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  cursor: pointer;
+  appearance: none;
+  transition: all 0.2s ease;
+}
+
+.select-beauty:hover {
+  border-color: #c7d2fe;
+  background: #ffffff;
+}
+
+.select-beauty:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.18);
+}
+
+.select-arrow {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #9ca3af;
+  transition: color 0.2s ease;
+}
+
+.select-beauty:focus + .select-arrow {
+  color: #6366f1;
+}
+
+.favorite-heart-btn {
+  flex-shrink: 0;
+  height: 36px;
+  width: 36px;
+  border-radius: 9999px;
+  border: 1px solid #e5e7eb;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(4px);
+  font-size: 18px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+  transition: transform 0.18s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.favorite-heart-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.12);
+}
+
+.favorite-heart-btn.is-active {
+  border-color: #fecaca;
+  background: #fff1f2;
+}
+
+.page-transition {
+  animation: fadeInUp 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
 .dialog-enter-active,
 .dialog-leave-active {
