@@ -24,6 +24,7 @@
 
           <el-form-item label="电话号码" prop="phone">
             <el-input v-model="registerForm.phone" placeholder="请输入电话号码" autocomplete="off">
+
               <template #prefix>
                 <i class="fas fa-id-card"></i>
               </template>
@@ -59,6 +60,7 @@
               type="password"
               show-password
               autocomplete="off"
+
             >
               <template #prefix>
                 <i class="fas fa-lock"></i>
@@ -165,9 +167,9 @@ const resetRef = ref()
 const sendingCaptcha = ref(false)
 const captchaCountdown = ref(0)
 
-const openResetDialog = () => {
+// 删除未使用的函数
   showResetDialog.value = true
-}
+
 
 const sendResetCaptcha = async () => {
   if (!resetForm.value.email) return

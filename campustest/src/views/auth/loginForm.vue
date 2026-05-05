@@ -182,6 +182,8 @@ const handleLogin = async () => {
   try {
     await loginRef.value.validate()
     console.log('登录验证通过', loginForm.value)
+    // 登录成功，跳转到学生端界面
+    router.push('/student')
   } catch (error) {
     console.log('登录验证失败', error)
   }
@@ -202,22 +204,34 @@ const resetForm = ref({
   password: '',
   password_confirmation: '',
 })
+
+// 验证密码一致性
+const validateConfirmPassword = (rule: any, value: string, callback: any) => {
+  if (value !== resetForm.value.password) {
+    callback(new Error('两次输入的密码不一致'))
+  } else {
+    callback()
+  }
+}
+
 const resetRules = ref({
   email: [{ type: 'email', message: '请输入有效的邮箱格式', trigger: 'blur' }],
   captcha: [{ required: true, message: '请输入验证码', trigger: 'blur' }],
-  password: [{ min: 6, message: '请输入至少6位新密码', trigger: 'blur' }],
-  password_confirmation: [
-    { required: true, message: '请确认新密码', trigger: 'blur' },
+  password: [
+    { min: 6, message: '请输入至少6位新密码', trigger: 'blur' },
     {
       validator: (rule: any, value: string, callback: any) => {
-        if (value !== resetForm.value.password) {
-          callback(new Error('两次输入的密码不一致'))
-        } else {
-          callback()
+        if (resetForm.value.password_confirmation) {
+          resetRef.value?.validateField('password_confirmation')
         }
+        callback()
       },
       trigger: 'blur',
     },
+  ],
+  password_confirmation: [
+    { required: true, message: '请确认新密码', trigger: 'blur' },
+    { validator: validateConfirmPassword, trigger: 'blur' },
   ],
 })
 
@@ -432,7 +446,7 @@ const handleReset = async () => {
   border: 1px solid var(--first-color, #a755f6) !important;
   color: var(--first-color, #a755f6) !important;
   transition: all 0.2s ease !important;
-   box-shadow: 0 4px 8px rgba(168, 85, 246, 0.119) !important;
+  box-shadow: 0 4px 8px rgba(168, 85, 246, 0.119) !important;
 }
 
 .reset-cancel-btn:hover {
@@ -446,12 +460,12 @@ const handleReset = async () => {
   border: none !important;
   color: white !important;
   transition: all 0.2s ease !important;
-   box-shadow: 0 4px 8px rgba(167, 85, 246, 0.4) !important;
+  box-shadow: 0 4px 8px rgba(167, 85, 246, 0.4) !important;
 }
 
 .reset-confirm-btn:hover {
   background: var(--second-color, #7c3aed) !important;
-  
+
   transform: translateY(-2px);
 }
 
