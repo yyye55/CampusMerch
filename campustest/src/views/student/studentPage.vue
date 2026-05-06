@@ -1,116 +1,12 @@
 <template>
-  <!-- 自定义弹窗 -->
-  <Transition name="dialog">
-    <div
-      v-if="showDialog"
-      class="fixed inset-0 z-50 flex items-center justify-center p-4"
-      @click.self="closeDialog"
-    >
-      <div class="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity"></div>
-      <div
-        class="relative bg-white rounded-2xl max-w-sm w-full shadow-2xl overflow-hidden transform transition-all scale-100"
-      >
-        <!-- 成功弹窗 -->
-        <div v-if="dialogType === 'success'" class="p-6 text-center">
-          <div
-            class="w-16 h-16 mx-auto mb-4 rounded-full bg-green-50 flex items-center justify-center"
-          >
-            <svg
-              class="w-8 h-8 text-green-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M5 13l4 4L19 7"
-              ></path>
-            </svg>
-          </div>
-          <h3 class="text-xl font-bold text-gray-800 mb-2">{{ dialogTitle }}</h3>
-          <p class="text-gray-500 mb-6 text-sm leading-relaxed">{{ dialogMessage }}</p>
-          <button
-            @click="closeDialog"
-            class="w-full py-3 bg-gradient-to-r from-[#A755F6] to-[#7C3AED] text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-purple-500/30 transition-all active:scale-[0.98]"
-          >
-            好的，知道了
-          </button>
-        </div>
-        <!-- 警告弹窗 -->
-        <div v-else-if="dialogType === 'warning'" class="p-6 text-center">
-          <div
-            class="w-16 h-16 mx-auto mb-4 rounded-full bg-yellow-50 flex items-center justify-center"
-          >
-            <svg
-              class="w-8 h-8 text-yellow-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-              ></path>
-            </svg>
-          </div>
-          <h3 class="text-xl font-bold text-gray-800 mb-2">{{ dialogTitle }}</h3>
-          <p class="text-gray-500 mb-6 text-sm leading-relaxed">{{ dialogMessage }}</p>
-          <button
-            @click="closeDialog"
-            class="w-full py-3 bg-gradient-to-r from-[#f59e0b] to-[#fbbf24] text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-yellow-500/30 transition-all active:scale-[0.98]"
-          >
-            好的
-          </button>
-        </div>
-        <!-- 确认弹窗 -->
-        <div v-else-if="dialogType === 'confirm'" class="p-6 text-center">
-          <div
-            class="w-16 h-16 mx-auto mb-4 rounded-full bg-purple-50 flex items-center justify-center"
-          >
-            <svg
-              class="w-8 h-8 text-[#A755F6]"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              ></path>
-            </svg>
-          </div>
-          <h3 class="text-xl font-bold text-gray-800 mb-2">{{ dialogTitle }}</h3>
-          <p class="text-gray-500 mb-6 text-sm leading-relaxed">{{ dialogMessage }}</p>
-          <div class="flex gap-3">
-            <button
-              @click="confirmCancel"
-              class="flex-1 py-3 bg-gray-100 text-gray-600 rounded-xl font-semibold hover:bg-gray-200 transition-all active:scale-[0.98]"
-            >
-              取消
-            </button>
-            <button
-              @click="confirmAction"
-              class="flex-1 py-3 bg-gradient-to-r from-[#6366f1] to-[#8b5cf6] text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-indigo-500/30 transition-all active:scale-[0.98]"
-            >
-              确认
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </Transition>
-
   <div class="student-page">
     <div class="student-container">
       <div class="student-header">
-        <h1 class="student-title">🎨 校园文创预订系统</h1>
-        <p class="student-subtitle">在线筛选、智能校验、可视化弹窗，预订流程更清晰</p>
+        <div class="student-header-left">
+          <h1 class="student-title">🎨 校园文创预订系统</h1>
+          <p class="student-subtitle">在线筛选、智能校验、可视化弹窗，预订流程更清晰</p>
+        </div>
+        <button @click="handleLogout" class="logout-button">🚪 退出登录</button>
       </div>
 
       <div class="stats-grid">
@@ -634,7 +530,10 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
+
+const router = useRouter()
 
 interface Goods {
   id: number
@@ -1212,6 +1111,21 @@ const applyFilter = () => {
 const resetFilter = () => {
   filters.value = { keyword: '', category: '', status: '', minPrice: '', maxPrice: '' }
   currentPage.value = 1
+}
+
+const handleLogout = () => {
+  // 清除本地存储的登录信息
+  localStorage.removeItem('token')
+  localStorage.removeItem('user')
+
+  // 显示退出登录提示
+  ElMessage.success({
+    message: '已成功退出登录！',
+    duration: 2000,
+  })
+
+  // 直接跳转到 introPage 首页
+  router.push('/')
 }
 
 loadFavoriteIds()

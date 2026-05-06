@@ -15,7 +15,7 @@
 
 <style scoped>
 .landing-container {
-  background:  #e4c2f34f;
+  background:   #f9f7ff;
   animation: gradient 15s ease infinite;
   height: 100vh;
   overflow: hidden;
