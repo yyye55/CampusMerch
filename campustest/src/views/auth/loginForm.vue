@@ -172,16 +172,17 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import landingNav from '@/components/landingNav.vue'
-<<<<<<< HEAD
 import { useUserStore } from '@/stores/user'
-=======
-import { login, type LoginData } from '@/api/auth'
->>>>>>> d1a52d1b38fcccf95101b8e451f71b4ac1d5d2a1
 
 const router = useRouter()
 const userStore = useUserStore()
 
-const loginForm = ref<LoginData>({
+interface LoginFormModel {
+  email: string
+  password: string
+}
+
+const loginForm = ref<LoginFormModel>({
   email: '',
   password: '',
 })
@@ -204,66 +205,12 @@ const handleLogin = async () => {
   try {
     await loginRef.value.validate()
     console.log('登录验证通过', loginForm.value)
-<<<<<<< HEAD
     const emailTrim = loginForm.value.email.trim()
     const accessToken = `campus_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 10)}`
     userStore.setSession({ email: emailTrim, accessToken })
-    // 登录成功，跳转到学生端界面
     router.push('/student')
   } catch (error) {
     console.log('登录验证失败', error)
-=======
-
-    loading.value = true
-
-    // 尝试调用登录API，失败则使用模拟数据
-    let response
-    try {
-      response = await login(loginForm.value)
-    } catch (apiError) {
-      console.log('API调用失败，使用模拟数据登录', apiError)
-      // 模拟登录成功的响应数据
-      response = {
-        token: 'mock-token-' + Date.now(),
-        user: {
-          id: 1,
-          username: '测试用户',
-          email: loginForm.value.email,
-          phone: '13800138000',
-          role: 'student',
-        },
-      }
-    }
-
-    // 保存token到本地存储
-    localStorage.setItem('token', response.token)
-    localStorage.setItem('user', JSON.stringify(response.user))
-
-    // 显示登录成功提示
-    ElMessage({
-      message: '登录成功！',
-      type: 'success',
-      duration: 2000,
-      showClose: true,
-    })
-
-    // 跳转到学生端界面
-    setTimeout(() => {
-      router.push('/student')
-    }, 1000)
-  } catch (error: any) {
-    console.log('登录失败', error)
-
-    // 显示登录失败提示
-    ElMessage({
-      message: error.response?.data?.message || '登录失败，请检查输入信息',
-      type: 'error',
-      duration: 3000,
-      showClose: true,
-    })
-  } finally {
-    loading.value = false
->>>>>>> d1a52d1b38fcccf95101b8e451f71b4ac1d5d2a1
   }
 }
 // 处理右上角关闭按钮

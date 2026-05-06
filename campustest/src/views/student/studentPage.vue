@@ -1,5 +1,4 @@
 <template>
-<<<<<<< HEAD
   <!-- 自定义弹窗：Teleport 到 body + 纯 CSS，避免未加载 Tailwind 时布局崩溃 -->
   <Teleport to="body">
     <Transition name="dialog">
@@ -94,16 +93,6 @@
             </el-button>
           </div>
         </div>
-=======
-  <div class="student-page">
-    <div class="student-container">
-      <div class="student-header">
-        <div class="student-header-left">
-          <h1 class="student-title">🎨 校园文创预订系统</h1>
-          <p class="student-subtitle">在线筛选、智能校验、可视化弹窗，预订流程更清晰</p>
-        </div>
-        <button @click="handleLogout" class="logout-button">🚪 退出登录</button>
->>>>>>> d1a52d1b38fcccf95101b8e451f71b4ac1d5d2a1
       </div>
 
       <div class="stats-grid">
@@ -618,13 +607,9 @@
             <p v-if="selectedDesignFile" class="order-detail-file-info">
               已选文件：{{ selectedDesignFile.name }}
             </p>
-<<<<<<< HEAD
             <button type="button" class="order-detail-action-primary" @click="uploadDesign">
               上传文件
             </button>
-=======
-            <button class="detail-upload-button" @click="uploadDesign">上传文件</button>
->>>>>>> d1a52d1b38fcccf95101b8e451f71b4ac1d5d2a1
           </div>
 
           <div v-if="currentOrder.status === 3" class="flex justify-center">
@@ -634,13 +619,9 @@
           </div>
 
           <div v-if="currentOrder.status === 1" class="flex justify-center">
-<<<<<<< HEAD
             <button type="button" class="order-detail-action-danger" @click="cancelCurrentOrder">
               ❌ 取消订单
             </button>
-=======
-            <button class="detail-cancel-button" @click="cancelCurrentOrder">❌ 取消订单</button>
->>>>>>> d1a52d1b38fcccf95101b8e451f71b4ac1d5d2a1
           </div>
         </div>
       </div>
@@ -649,11 +630,7 @@
 </template>
 
 <script setup lang="ts">
-<<<<<<< HEAD
 import { ref, computed, watch, nextTick, onMounted } from 'vue'
-=======
-import { ref, computed, watch } from 'vue'
->>>>>>> d1a52d1b38fcccf95101b8e451f71b4ac1d5d2a1
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/stores/user'
@@ -686,8 +663,6 @@ function handleLogoutClick() {
     { confirmText: '确定' },
   )
 }
-
-const router = useRouter()
 
 interface Goods {
   id: number
@@ -1318,7 +1293,6 @@ const resetFilter = () => {
   currentPage.value = 1
 }
 
-<<<<<<< HEAD
 /** 当前导出用户名（与登录邮箱联动，未登录时为默认文案） */
 function getExportUserDisplayName(): string {
   const email = localStorage.getItem('campus_login_email')
@@ -1622,21 +1596,6 @@ function onClickExportOrders() {
       ElMessage.error('导出失败，请重试')
     })
   })
-=======
-const handleLogout = () => {
-  // 清除本地存储的登录信息
-  localStorage.removeItem('token')
-  localStorage.removeItem('user')
-
-  // 显示退出登录提示
-  ElMessage.success({
-    message: '已成功退出登录！',
-    duration: 2000,
-  })
-
-  // 直接跳转到 introPage 首页
-  router.push('/')
->>>>>>> d1a52d1b38fcccf95101b8e451f71b4ac1d5d2a1
 }
 
 loadFavoriteIds()

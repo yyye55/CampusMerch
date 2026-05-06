@@ -86,7 +86,6 @@
 
 /* ---------- 标题层级 ---------- */
 .student-header {
-<<<<<<< HEAD
   margin-bottom: 1.5rem;
 }
 
@@ -171,17 +170,6 @@
   font-weight: 600 !important;
   margin: 0 !important;
   align-self: center;
-=======
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-}
-
-.student-header-left {
-  text-align: center;
-  flex: 1;
->>>>>>> d1a52d1b38fcccf95101b8e451f71b4ac1d5d2a1
 }
 
 .student-title {
@@ -215,7 +203,6 @@
   letter-spacing: -0.01em;
 }
 
-<<<<<<< HEAD
 .section-heading-badge {
   display: inline-flex;
   align-items: center;
@@ -363,33 +350,6 @@
 }
 
 /* ---------- 统计卡片 ---------- */
-=======
-/* 退出登录按钮 */
-.logout-button {
-  padding: 0.75rem 1.5rem;
-  background: linear-gradient(to right, #a755f6, #7c3aed);
-  color: white;
-  border: none;
-  border-radius: 0.875rem;
-  font-size: 0.875rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s;
-  box-shadow: 0 2px 8px rgba(167, 85, 246, 0.25);
-  white-space: nowrap;
-}
-
-.logout-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(167, 85, 246, 0.35);
-}
-
-.logout-button:active {
-  transform: translateY(0);
-}
-
-/* 统计卡片网格 */
->>>>>>> d1a52d1b38fcccf95101b8e451f71b4ac1d5d2a1
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1024,18 +984,13 @@
 
 /* ---------- 返回按钮 ---------- */
 .detail-back-button {
-<<<<<<< HEAD
   margin-bottom: 1rem;
-=======
-  margin-bottom: 1.25rem;
->>>>>>> d1a52d1b38fcccf95101b8e451f71b4ac1d5d2a1
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
   font-size: 0.875rem;
   font-weight: 600;
-<<<<<<< HEAD
   color: var(--sp-primary);
   background: transparent;
   border: none;
@@ -1049,173 +1004,6 @@
   color: var(--sp-primary-deep);
   background: var(--sp-primary-soft);
   transform: translateX(-2px);
-=======
-  color: white;
-  background: linear-gradient(to right, #a755f6, #7c3aed);
-  border: none;
-  border-radius: 0.875rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(167, 85, 246, 0.25);
-  position: relative;
-  overflow: hidden;
-}
-
-.detail-back-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  transition: left 0.5s ease;
-}
-
-.detail-back-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(167, 85, 246, 0.35);
-}
-
-.detail-back-button:hover::before {
-  left: 100%;
-}
-
-.detail-back-button:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 6px rgba(167, 85, 246, 0.25);
-}
-
-/* 订单详情页面取消订单按钮 */
-.detail-cancel-button {
-  background: linear-gradient(to right, #a755f6, #7c3aed);
-  color: white;
-  padding: 0.625rem 1.5rem;
-  border-radius: 0.75rem;
-  font-size: 0.875rem;
-  font-weight: 600;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(167, 85, 246, 0.25);
-  position: relative;
-  overflow: hidden;
-}
-
-.detail-cancel-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  transition: left 0.5s ease;
-}
-
-.detail-cancel-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(167, 85, 246, 0.35);
-}
-
-.detail-cancel-button:hover::before {
-  left: 100%;
-}
-
-.detail-cancel-button:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 6px rgba(167, 85, 246, 0.25);
-}
-
-/* 订单详情页面上传文件按钮 */
-.detail-upload-button {
-  background: linear-gradient(to right, #a755f6, #7c3aed);
-  color: white;
-  padding: 0.625rem 1.5rem;
-  border-radius: 0.75rem;
-  font-size: 0.875rem;
-  font-weight: 600;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(167, 85, 246, 0.25);
-  position: relative;
-  overflow: hidden;
-}
-
-.detail-upload-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  transition: left 0.5s ease;
-}
-
-.detail-upload-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(167, 85, 246, 0.35);
-}
-
-.detail-upload-button:hover::before {
-  left: 100%;
-}
-
-.detail-upload-button:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 6px rgba(167, 85, 246, 0.25);
-}
-
-/* 订单详情页面选择文件按钮 */
-.detail-file-input {
-  margin-bottom: 1rem;
-  width: 100%;
-  max-width: 20rem;
-  margin-left: auto;
-  margin-right: auto;
-  font-size: 0.875rem;
-  padding: 0.625rem 1rem;
-  border-radius: 0.75rem;
-  border: 2px solid #a755f6;
-  background: white;
-  color: #a755f6;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.detail-file-input:hover {
-  background: #f9f7ff;
-  border-color: #7c3aed;
-}
-
-.detail-file-input:focus {
-  outline: none;
-  border-color: #7c3aed;
-  box-shadow: 0 0 0 3px rgba(167, 85, 246, 0.1);
-}
-
-/* 美化文件选择器按钮 - 使用 WebKit 前缀 */
-.detail-file-input::-webkit-file-upload-button {
-  margin-right: 1rem;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  border: none;
-  font-size: 0.75rem;
-  font-weight: 600;
-  background: linear-gradient(to right, #a755f6, #7c3aed);
-  color: white;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.detail-file-input::-webkit-file-upload-button:hover {
-  background: linear-gradient(to right, #7c3aed, #a755f6);
-  transform: translateY(-1px);
-  box-shadow: 0 2px 6px rgba(167, 85, 246, 0.3);
->>>>>>> d1a52d1b38fcccf95101b8e451f71b4ac1d5d2a1
 }
 
 .detail-back-button:active {
@@ -1409,13 +1197,8 @@
 
 .detail-custom-text {
   font-size: 0.875rem;
-<<<<<<< HEAD
   color: var(--sp-text-body);
   line-height: 1.55;
-=======
-  color: #374151;
-  line-height: 1.5;
->>>>>>> d1a52d1b38fcccf95101b8e451f71b4ac1d5d2a1
 }
 
 .detail-description {
@@ -1881,7 +1664,6 @@
 }
 
 .order-cancel-button {
-<<<<<<< HEAD
   background: #fef2f2;
   color: #dc2626;
   padding: 0.5rem 1rem;
@@ -1896,45 +1678,6 @@
 .order-cancel-button:hover {
   background: #fee2e2;
   transform: scale(1.03);
-=======
-  background: linear-gradient(to right, #a755f6, #7c3aed);
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 0.75rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 6px rgba(167, 85, 246, 0.25);
-  position: relative;
-  overflow: hidden;
-}
-
-.order-cancel-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  transition: left 0.5s ease;
-}
-
-.order-cancel-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(167, 85, 246, 0.35);
-}
-
-.order-cancel-button:hover::before {
-  left: 100%;
-}
-
-.order-cancel-button:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 4px rgba(167, 85, 246, 0.25);
->>>>>>> d1a52d1b38fcccf95101b8e451f71b4ac1d5d2a1
 }
 
 .order-cancel-button:active {
@@ -2175,7 +1918,6 @@
   word-break: break-all;
 }
 
-<<<<<<< HEAD
 .order-detail-upload input[type='file'] {
   font-size: 0.8125rem;
   color: var(--sp-text-muted);
@@ -2242,348 +1984,4 @@
 
 .order-detail-action-danger:active {
   transform: scale(0.96);
-=======
-/* 自定义弹窗动画 */
-.dialog-enter-active,
-.dialog-leave-active {
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.dialog-enter-from,
-.dialog-leave-to {
-  opacity: 0;
-}
-
-.dialog-enter-from .relative,
-.dialog-leave-to .relative {
-  transform: scale(0.85) translateY(10px);
-  opacity: 0;
-}
-
-/* 弹窗遮罩层 - 保持背景界面原样 */
-.dialog-overlay {
-  background: rgba(0, 0, 0, 0.4);
-  z-index: 9999;
-}
-
-/* 弹窗外容器 - 确保完美居中 */
-.dialog-wrapper {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10000;
-}
-
-/* 弹窗容器 */
-.dialog-container {
-  background: linear-gradient(145deg, #ffffff 0%, #faf5ff 100%);
-  border-radius: 1.5rem;
-  box-shadow:
-    0 25px 50px -12px rgba(15, 23, 42, 0.25),
-    0 0 0 1px rgba(167, 85, 246, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
-  overflow: hidden;
-  position: relative;
-  z-index: 10001;
-}
-
-.dialog-container::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #a755f6 0%, #7c3aed 50%, #a755f6 100%);
-  background-size: 200% 100%;
-  animation: shimmer 3s ease-in-out infinite;
-}
-
-@keyframes shimmer {
-  0%,
-  100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 200% 50%;
-  }
-}
-
-/* 弹窗内容区域 */
-.dialog-content {
-  padding: 2rem;
-  position: relative;
-  z-index: 1;
-}
-
-/* 弹窗图标容器 */
-.dialog-icon-container {
-  width: 5rem;
-  height: 5rem;
-  margin: 0 auto 1.5rem;
-  border-radius: 9999px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
-  box-shadow:
-    0 10px 40px rgba(167, 85, 246, 0.2),
-    inset 0 2px 4px rgba(255, 255, 255, 0.8);
-  animation: iconBounce 0.6s ease-out;
-}
-
-@keyframes iconBounce {
-  0% {
-    transform: scale(0.5);
-    opacity: 0;
-  }
-  50% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-.dialog-icon-container::before {
-  content: '';
-  position: absolute;
-  inset: -2px;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, transparent 60%);
-  z-index: 1;
-}
-
-.dialog-icon-container svg {
-  position: relative;
-  z-index: 2;
-  width: 2.5rem;
-  height: 2.5rem;
-  animation: iconPulse 2s ease-in-out infinite;
-}
-
-@keyframes iconPulse {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
-}
-
-/* 成功弹窗 */
-.dialog-success .dialog-icon-container {
-  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 50%, #6ee7b7 100%);
-  box-shadow:
-    0 10px 40px rgba(16, 185, 129, 0.25),
-    inset 0 2px 4px rgba(255, 255, 255, 0.9);
-}
-
-.dialog-success .dialog-icon-container svg {
-  color: #059669;
-  filter: drop-shadow(0 2px 4px rgba(5, 150, 105, 0.2));
-}
-
-/* 警告弹窗 */
-.dialog-warning .dialog-icon-container {
-  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #fcd34d 100%);
-  box-shadow:
-    0 10px 40px rgba(245, 158, 11, 0.25),
-    inset 0 2px 4px rgba(255, 255, 255, 0.9);
-}
-
-.dialog-warning .dialog-icon-container svg {
-  color: #d97706;
-  filter: drop-shadow(0 2px 4px rgba(217, 119, 6, 0.2));
-}
-
-/* 确认弹窗 */
-.dialog-confirm .dialog-icon-container {
-  background: linear-gradient(135deg, #f3e8ff 0%, #ddd6fe 50%, #c4b5fd 100%);
-  box-shadow:
-    0 10px 40px rgba(167, 85, 246, 0.25),
-    inset 0 2px 4px rgba(255, 255, 255, 0.9);
-}
-
-.dialog-confirm .dialog-icon-container svg {
-  color: #a755f6;
-  filter: drop-shadow(0 2px 4px rgba(167, 85, 246, 0.2));
-}
-
-/* 弹窗标题 */
-.dialog-title {
-  font-size: 1.5rem;
-  font-weight: 800;
-  background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 0.75rem;
-  letter-spacing: -0.025em;
-  text-align: center;
-}
-
-/* 弹窗消息 */
-.dialog-message {
-  font-size: 1rem;
-  color: #6b7280;
-  margin-bottom: 2rem;
-  line-height: 1.7;
-  text-align: center;
-  font-weight: 500;
-}
-
-/* 弹窗按钮容器 */
-.dialog-buttons {
-  display: flex;
-  gap: 1rem;
-}
-
-/* 单个按钮样式 */
-.dialog-button {
-  flex: 1;
-  padding: 1rem 1.75rem;
-  border-radius: 1rem;
-  font-size: 0.9375rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  border: none;
-  letter-spacing: 0.01em;
-  text-transform: none;
-  position: relative;
-  overflow: hidden;
-}
-
-.dialog-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  transition: left 0.5s ease;
-}
-
-.dialog-button:hover::before {
-  left: 100%;
-}
-
-/* 主要按钮 - 主题色渐变 */
-.dialog-button-primary {
-  background: linear-gradient(135deg, #a755f6 0%, #7c3aed 50%, #6366f1 100%);
-  background-size: 200% 200%;
-  color: white;
-  box-shadow:
-    0 4px 15px rgba(167, 85, 246, 0.3),
-    0 0 0 1px rgba(167, 85, 246, 0.2);
-  animation: gradientShift 3s ease infinite;
-}
-
-@keyframes gradientShift {
-  0%,
-  100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-.dialog-button-primary:hover {
-  transform: translateY(-3px) scale(1.02);
-  box-shadow:
-    0 12px 30px rgba(167, 85, 246, 0.4),
-    0 0 0 1px rgba(167, 85, 246, 0.3);
-}
-
-.dialog-button-primary:active {
-  transform: translateY(-1px) scale(0.98);
-  box-shadow:
-    0 6px 15px rgba(167, 85, 246, 0.3),
-    0 0 0 1px rgba(167, 85, 246, 0.3);
-}
-
-/* 次要按钮 - 灰色 */
-.dialog-button-secondary {
-  background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
-  color: #6b7280;
-  border: 2px solid #e5e7eb;
-  box-shadow:
-    0 2px 8px rgba(15, 23, 42, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
-}
-
-.dialog-button-secondary:hover {
-  background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
-  border-color: #d1d5db;
-  transform: translateY(-2px);
-  box-shadow:
-    0 6px 15px rgba(15, 23, 42, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
-}
-
-.dialog-button-secondary:active {
-  transform: translateY(0);
-  box-shadow:
-    0 2px 8px rgba(15, 23, 42, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
-}
-
-/* 警告按钮 - 黄色 */
-.dialog-button-warning {
-  background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 50%, #fcd34d 100%);
-  background-size: 200% 200%;
-  color: white;
-  box-shadow:
-    0 4px 15px rgba(245, 158, 11, 0.3),
-    0 0 0 1px rgba(245, 158, 11, 0.2);
-  animation: gradientShift 3s ease infinite;
-}
-
-.dialog-button-warning:hover {
-  transform: translateY(-3px) scale(1.02);
-  box-shadow:
-    0 12px 30px rgba(245, 158, 11, 0.4),
-    0 0 0 1px rgba(245, 158, 11, 0.3);
-}
-
-.dialog-button-warning:active {
-  transform: translateY(-1px) scale(0.98);
-  box-shadow:
-    0 6px 15px rgba(245, 158, 11, 0.3),
-    0 0 0 1px rgba(245, 158, 11, 0.3);
-}
-
-/* 按钮禁用状态 */
-.dialog-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
-.dialog-button-primary:disabled,
-.dialog-button-warning:disabled {
-  animation: none;
-  transform: none !important;
-  box-shadow: none !important;
-}
-
-/* 旋转动画 */
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.animate-spin {
-  animation: spin 1s linear infinite;
->>>>>>> d1a52d1b38fcccf95101b8e451f71b4ac1d5d2a1
 }
