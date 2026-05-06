@@ -94,20 +94,25 @@ import landingNav from '@/components/landingNav.vue'
 const router = useRouter()
 
 const registerForm = ref({
+<<<<<<< HEAD
   username: '',
   phone: '',
   account: '',
+=======
+  name: '',
+  phone: '',
+>>>>>>> d1a52d1b38fcccf95101b8e451f71b4ac1d5d2a1
   email: '',
   password: '',
-  confirmPassword: '',
+  password_confirmation: '',
 })
 
 const registerRules = ref({
-  username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+  name: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
   phone: [{ required: true, message: '请输入电话号码', trigger: 'blur' }],
   email: [{ type: 'email', message: '请输入有效的邮箱格式', trigger: 'blur' }],
   password: [{ min: 6, message: '请输入6位以上密码', trigger: 'blur' }],
-  confirmPassword: [
+  password_confirmation: [
     { required: true, message: '请确认密码', trigger: 'blur' },
     {
       validator: (_rule: FormItemRule, value: string, callback: (error?: Error) => void) => {

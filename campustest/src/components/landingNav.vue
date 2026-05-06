@@ -15,6 +15,7 @@
 
 <style scoped>
 .landing-container {
+<<<<<<< HEAD
   position: relative;
   min-height: 100vh;
   overflow-x: hidden;
@@ -24,6 +25,12 @@
     radial-gradient(ellipse 120% 90% at 0% 0%, rgba(237, 233, 254, 0.95) 0%, transparent 58%),
     radial-gradient(ellipse 110% 85% at 100% 100%, rgba(219, 234, 254, 0.88) 0%, transparent 55%),
     linear-gradient(165deg, #faf5ff 0%, #f3f0ff 35%, #eef2ff 72%, #f8fafc 100%);
+=======
+  background:   #f9f7ff;
+  animation: gradient 15s ease infinite;
+  height: 100vh;
+  overflow: hidden;
+>>>>>>> d1a52d1b38fcccf95101b8e451f71b4ac1d5d2a1
 }
 
 /* 装饰性柔光圆（低透明度 + 模糊，不挡正文） */

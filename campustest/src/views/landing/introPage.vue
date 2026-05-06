@@ -1,5 +1,6 @@
 <template>
   <landingNav>
+<<<<<<< HEAD
     <section class="intro-hero">
       <div class="intro-hero__inner">
         <div class="intro-hero__icon-wrap" aria-hidden="true">
@@ -39,6 +40,14 @@
         <div class="intro-hero__actions">
           <router-link class="intro-hero__cta" to="/login">立即开始</router-link>
         </div>
+=======
+    <section class="hero">
+      <i class="fas fa-palette"></i>
+      <h2>校园文创预订系统</h2>
+      <p>便捷预订 · 智能管理 · 高效流转</p>
+      <div class="hero-btn">
+        <router-link class="primary-btn" to="/login">立即开始</router-link>
+>>>>>>> d1a52d1b38fcccf95101b8e451f71b4ac1d5d2a1
       </div>
     </section>
   </landingNav>
@@ -57,10 +66,16 @@ import landingNav from '@/components/landingNav.vue'
   padding: 2rem 1.25rem 3rem;
   text-align: center;
 }
+<<<<<<< HEAD
 
 .intro-hero__inner {
   max-width: 52rem;
   margin: 0 auto;
+=======
+.fa-palette {
+  font-size: 60px;
+  color: var(--first-color);
+>>>>>>> d1a52d1b38fcccf95101b8e451f71b4ac1d5d2a1
 }
 
 .intro-hero__icon-wrap {
