@@ -162,6 +162,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
 import landingNav from '@/components/landingNav.vue'
 
 const router = useRouter()
@@ -267,10 +268,27 @@ const handleReset = async () => {
   try {
     await resetRef.value.validate()
     console.log('重置密码验证通过', resetForm.value)
+
+    // 显示重置密码成功提示
+    ElMessage({
+      message: '密码重置成功！请使用新密码登录',
+      type: 'success',
+      duration: 3000,
+      showClose: true,
+    })
+
     showResetDialog.value = false
     resetForm.value = { email: '', captcha: '', password: '', password_confirmation: '' }
   } catch (error) {
     console.log('重置密码验证失败', error)
+
+    // 显示重置密码失败提示
+    ElMessage({
+      message: '重置密码失败，请检查输入信息',
+      type: 'error',
+      duration: 3000,
+      showClose: true,
+    })
   }
 }
 </script>

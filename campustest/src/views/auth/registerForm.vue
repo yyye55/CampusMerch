@@ -24,7 +24,6 @@
 
           <el-form-item label="电话号码" prop="phone">
             <el-input v-model="registerForm.phone" placeholder="请输入电话号码" autocomplete="off">
-
               <template #prefix>
                 <i class="fas fa-id-card"></i>
               </template>
@@ -60,7 +59,6 @@
               type="password"
               show-password
               autocomplete="off"
-
             >
               <template #prefix>
                 <i class="fas fa-lock"></i>
@@ -83,6 +81,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
 import landingNav from '@/components/landingNav.vue'
 
 const router = useRouter()
@@ -121,9 +120,31 @@ const handleRegister = async () => {
   try {
     await registerRef.value.validate()
     console.log('注册验证通过', registerForm.value)
+
+    // 显示注册成功提示
+    ElMessage({
+      message: '注册成功！3秒后将自动跳转到登录页面',
+      type: 'success',
+      duration: 3000,
+      showClose: true,
+    })
+
+    // 3秒后自动跳转到登录页面
+    setTimeout(() => {
+      router.push('/login')
+    }, 3000)
+
     // 这里可以添加注册API调用
   } catch (error) {
     console.log('注册验证失败', error)
+
+    // 显示注册失败提示
+    ElMessage({
+      message: '注册失败，请检查输入信息',
+      type: 'error',
+      duration: 3000,
+      showClose: true,
+    })
   }
 }
 // 处理右上角关闭按钮
@@ -168,8 +189,7 @@ const sendingCaptcha = ref(false)
 const captchaCountdown = ref(0)
 
 // 删除未使用的函数
-  showResetDialog.value = true
-
+showResetDialog.value = true
 
 const sendResetCaptcha = async () => {
   if (!resetForm.value.email) return
@@ -378,7 +398,6 @@ const handleReset = async () => {
 .login-link a {
   color: var(--first-color);
   text-decoration: none;
-
 }
 .login-link a:hover {
   text-decoration: underline;

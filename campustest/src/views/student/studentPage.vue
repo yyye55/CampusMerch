@@ -106,81 +106,56 @@
     </div>
   </Transition>
 
-  <div class="min-h-screen bg-[#F9F7FF] relative overflow-hidden">
-    <div
-      class="pointer-events-none absolute -top-28 -left-20 h-72 w-72 rounded-full bg-[#a78bfa]/20 blur-3xl"
-    ></div>
-    <div
-      class="pointer-events-none absolute top-40 -right-20 h-80 w-80 rounded-full bg-[#8b5cf6]/15 blur-3xl"
-    ></div>
-    <div class="max-w-6xl mx-auto px-4 md:px-6 py-8">
-      <div class="text-center mb-6">
-        <h1
-          class="text-[28px] md:text-[32px] font-bold bg-gradient-to-r from-[#A755F6] to-[#7C3AED] bg-clip-text text-transparent mb-2"
-        >
-          🎨 校园文创预订系统
-        </h1>
-        <p class="text-sm text-gray-500">在线筛选、智能校验、可视化弹窗，预订流程更清晰</p>
+  <div class="student-page">
+    <div class="student-container">
+      <div class="student-header">
+        <h1 class="student-title">🎨 校园文创预订系统</h1>
+        <p class="student-subtitle">在线筛选、智能校验、可视化弹窗，预订流程更清晰</p>
       </div>
 
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-          <p class="text-sm text-gray-600 mb-2">在售商品</p>
-          <p class="text-2xl font-bold text-[#A755F6]">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <p class="stat-label">在售商品</p>
+          <p class="stat-value">
             {{ goods.filter((g) => g.inStock).length }}
           </p>
         </div>
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-          <p class="text-sm text-gray-600 mb-2">总商品数</p>
-          <p class="text-2xl font-bold text-[#A755F6]">{{ goods.length }}</p>
+        <div class="stat-card">
+          <p class="stat-label">总商品数</p>
+          <p class="stat-value">{{ goods.length }}</p>
         </div>
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-          <p class="text-sm text-gray-600 mb-2">我的订单</p>
-          <p class="text-2xl font-bold text-[#A755F6]">{{ orders.length }}</p>
+        <div class="stat-card">
+          <p class="stat-label">我的订单</p>
+          <p class="stat-value">{{ orders.length }}</p>
         </div>
-        <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-          <p class="text-sm text-gray-600 mb-2">待处理订单</p>
-          <p class="text-2xl font-bold text-[#A755F6]">{{ pendingOrderCount }}</p>
+        <div class="stat-card">
+          <p class="stat-label">待处理订单</p>
+          <p class="stat-value">{{ pendingOrderCount }}</p>
         </div>
       </div>
 
-      <div class="flex justify-center gap-3 mb-8">
-        <button
-          @click="go('list')"
-          :class="
-            page === 'list'
-              ? 'px-8 py-3 rounded-full font-medium text-white bg-gradient-to-r from-[#A755F6] to-[#7C3AED] shadow-md'
-              : 'px-8 py-3 rounded-full font-medium text-gray-700 bg-white border border-gray-200 hover:border-gray-300 transition-all'
-          "
-        >
+      <div class="tab-container">
+        <button @click="go('list')" :class="page === 'list' ? 'tab-button active' : 'tab-button'">
           🎁 商品大厅
         </button>
         <button
           @click="go('myorder')"
-          :class="
-            page === 'myorder'
-              ? 'px-8 py-3 rounded-full font-medium text-white bg-gradient-to-r from-[#A755F6] to-[#7C3AED] shadow-md'
-              : 'px-8 py-3 rounded-full font-medium text-gray-700 bg-white border border-gray-200 hover:border-gray-300 transition-all'
-          "
+          :class="page === 'myorder' ? 'tab-button active' : 'tab-button'"
         >
           📋 我的订单
         </button>
         <button
           @click="go('favorite')"
-          :class="
-            page === 'favorite'
-              ? 'px-8 py-3 rounded-full font-medium text-white bg-gradient-to-r from-[#A755F6] to-[#7C3AED] shadow-md'
-              : 'px-8 py-3 rounded-full font-medium text-gray-700 bg-white border border-gray-200 hover:border-gray-300 transition-all'
-          "
+          :class="page === 'favorite' ? 'tab-button active' : 'tab-button'"
         >
           ❤️ 我的收藏
         </button>
       </div>
 
       <div v-if="page === 'list'" class="page-transition">
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
-          <div class="flex flex-wrap gap-2 items-center mb-4">
-            <span class="text-sm font-medium text-gray-700 mr-2">📂 分类</span>
+        <div class="filter-container">
+          <div class="filter-group">
+            <span class="filter-label">📂 分类</span>
             <button
               v-for="cat in categories"
               :key="cat.value"
@@ -188,17 +163,13 @@
                 filters.category = cat.value;
                 currentPage = 1
               "
-              :class="
-                filters.category === cat.value
-                  ? 'px-5 py-2 rounded-full text-sm font-medium text-white bg-[#A755F6]'
-                  : 'px-5 py-2 rounded-full text-sm font-medium text-[#A755F6] bg-white border border-gray-200 hover:bg-gray-50 transition-all'
-              "
+              :class="filters.category === cat.value ? 'filter-button active' : 'filter-button'"
             >
               {{ cat.label }}
             </button>
           </div>
-          <div class="flex flex-wrap gap-2 items-center mb-4">
-            <span class="text-sm font-medium text-gray-700 mr-2">📍 状态</span>
+          <div class="filter-group">
+            <span class="filter-label">📍 状态</span>
             <button
               v-for="s in statusFilters"
               :key="s.value"
@@ -206,130 +177,89 @@
                 filters.status = s.value;
                 currentPage = 1
               "
-              :class="
-                filters.status === s.value
-                  ? 'px-5 py-2 rounded-full text-sm font-medium text-white bg-[#A755F6]'
-                  : 'px-5 py-2 rounded-full text-sm font-medium text-[#A755F6] bg-white border border-gray-200 hover:bg-gray-50 transition-all'
-              "
+              :class="filters.status === s.value ? 'filter-button active' : 'filter-button'"
             >
               {{ s.label }}
             </button>
           </div>
-          <div class="flex flex-wrap gap-2 items-center mb-4">
-            <span class="text-sm font-medium text-gray-700 mr-2">💴 价格</span>
+          <div class="filter-group">
+            <span class="filter-label">💴 价格</span>
             <input
               type="number"
               v-model="filters.minPrice"
               placeholder="最低"
-              class="w-24 px-4 py-2 rounded-xl border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:border-[#A755F6] focus:ring-2 focus:ring-[#A755F6]/20"
+              class="price-input"
             />
-            <span class="text-gray-400">—</span>
+            <span class="price-separator">—</span>
             <input
               type="number"
               v-model="filters.maxPrice"
               placeholder="最高"
-              class="w-24 px-4 py-2 rounded-xl border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:border-[#A755F6] focus:ring-2 focus:ring-[#A755F6]/20"
+              class="price-input"
             />
           </div>
-          <div class="flex gap-3">
+          <div class="search-container">
             <input
               type="text"
               v-model="filters.keyword"
               placeholder="🔍 搜索商品名称或描述..."
               @keyup.enter="applyFilter"
-              class="flex-1 px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:border-[#A755F6] focus:ring-2 focus:ring-[#A755F6]/20"
+              class="search-input"
             />
-            <button
-              @click="applyFilter"
-              class="px-7 py-3 rounded-xl font-medium text-white bg-gradient-to-r from-[#A755F6] to-[#7C3AED] shadow-md hover:-translate-y-0.5 hover:shadow-lg transition-all"
-            >
-              搜索
-            </button>
-            <button
-              @click="resetFilter"
-              class="px-7 py-3 rounded-xl font-medium text-[#A755F6] border-2 border-[#A755F6] bg-white hover:bg-purple-50 transition-all"
-            >
-              重置
-            </button>
+            <button @click="applyFilter" class="search-button">搜索</button>
+            <button @click="resetFilter" class="reset-button">重置</button>
           </div>
         </div>
 
-        <div
-          v-if="filteredGoods.length > 0"
-          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-6"
-        >
-          <div
-            v-for="g in paginatedGoods"
-            :key="g.id"
-            class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden cursor-pointer transition-all hover:-translate-y-1 hover:shadow-md"
-            @click="openDetail(g)"
-          >
-            <div class="h-48 overflow-hidden">
-              <img
-                :src="g.pic"
-                class="w-full h-full object-cover transition-transform hover:scale-105"
-              />
+        <div v-if="filteredGoods.length > 0" class="goods-grid">
+          <div v-for="g in paginatedGoods" :key="g.id" class="goods-card" @click="openDetail(g)">
+            <div class="goods-image">
+              <img :src="g.pic" />
             </div>
-            <div class="p-5">
-              <div class="mb-3 flex items-start justify-between gap-3">
-                <div class="flex flex-wrap gap-2">
-                  <span
-                    class="px-2.5 py-1 rounded-lg text-xs font-medium bg-[#F3E8FF] text-[#A755F6]"
-                    >{{ g.categoryText }}</span
-                  >
-                  <span
-                    :class="
-                      g.inStock ? 'bg-[#D1FAE5] text-[#059669]' : 'bg-[#FEE2E2] text-[#DC2626]'
-                    "
-                    class="px-2.5 py-1 rounded-lg text-xs font-medium"
-                  >
+            <div class="goods-content">
+              <div class="goods-header">
+                <div class="goods-tags">
+                  <span class="goods-tag category">{{ g.categoryText }}</span>
+                  <span :class="g.inStock ? 'goods-tag in-stock' : 'goods-tag out-of-stock'">
                     {{ g.statusText }}
                   </span>
                 </div>
                 <button
-                  class="favorite-heart-btn"
-                  :class="{ 'is-active': isFavorite(g.id) }"
+                  class="favorite-button"
+                  :class="{ active: isFavorite(g.id) }"
                   @click.stop="toggleFavorite(g)"
                   :aria-label="isFavorite(g.id) ? '取消收藏' : '收藏商品'"
                 >
                   {{ isFavorite(g.id) ? '❤️' : '🤍' }}
                 </button>
               </div>
-              <h3 class="text-base font-bold text-gray-800 mb-2 leading-tight">{{ g.name }}</h3>
-              <p class="text-xs text-gray-500">{{ g.spec }}</p>
+              <h3 class="goods-name">{{ g.name }}</h3>
+              <p class="goods-spec">{{ g.spec }}</p>
             </div>
           </div>
         </div>
 
-        <div v-else class="bg-white rounded-2xl shadow-sm border border-[#e5e7eb] p-12 text-center">
-          <div class="text-5xl mb-4 opacity-40">🔍</div>
-          <p class="text-sm text-gray-500">没有找到符合条件的商品</p>
+        <div v-else class="empty-state">
+          <div class="empty-icon">🔍</div>
+          <p class="empty-text">没有找到符合条件的商品</p>
         </div>
 
-        <div v-if="filteredGoods.length > 0" class="flex justify-center gap-2 flex-wrap">
-          <button
-            @click="currentPage--"
-            :disabled="currentPage === 1"
-            class="px-4 py-2 rounded-lg text-sm font-medium text-[#A755F6] border border-[#e5e7eb] bg-white hover:bg-[#f3f4f6] disabled:opacity-40 disabled:cursor-not-allowed transition-all"
-          >
+        <div v-if="filteredGoods.length > 0" class="pagination">
+          <button @click="currentPage--" :disabled="currentPage === 1" class="pagination-button">
             ← 上一页
           </button>
           <button
             v-for="p in totalPages"
             :key="p"
             @click="currentPage = p"
-            :class="
-              currentPage === p
-                ? 'px-4 py-2 rounded-lg text-sm font-medium text-white bg-gradient-to-r from-[#A755F6] to-[#7C3AED]'
-                : 'px-4 py-2 rounded-lg text-sm font-medium text-[#A755F6] border border-[#e5e7eb] bg-white hover:bg-[#f3f4f6] transition-all'
-            "
+            :class="currentPage === p ? 'pagination-button active' : 'pagination-button'"
           >
             {{ p }}
           </button>
           <button
             @click="currentPage++"
             :disabled="currentPage === totalPages"
-            class="px-4 py-2 rounded-lg text-sm font-medium text-[#A755F6] border border-[#e5e7eb] bg-white hover:bg-[#f3f4f6] disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+            class="pagination-button"
           >
             下一页 →
           </button>
@@ -337,142 +267,97 @@
       </div>
 
       <div v-if="page === 'detail'" class="page-transition">
-        <button
-          @click="go('list')"
-          class="mb-5 flex items-center gap-1.5 text-sm text-[#A755F6] hover:text-[#7C3AED] font-medium transition-colors"
-        >
-          ← 返回商品大厅
-        </button>
+        <button @click="go('list')" class="detail-back-button">← 返回商品大厅</button>
 
-        <div class="bg-white rounded-2xl shadow-sm border border-[#e5e7eb] overflow-hidden">
-          <div class="md:flex">
-            <div class="md:w-1/2 p-5">
-              <img :src="currentGoods.pic" class="w-full h-64 md:h-80 object-cover rounded-2xl" />
-            </div>
-            <div class="p-5 md:p-6 md:w-1/2">
-              <div class="flex flex-wrap gap-2 mb-4">
-                <span
-                  class="px-2.5 py-1 rounded-lg text-xs font-medium bg-[#F3E8FF] text-[#A755F6]"
-                  >{{ currentGoods.categoryText }}</span
-                >
-                <span
-                  :class="
-                    currentGoods.inStock
-                      ? 'bg-[#D1FAE5] text-[#059669]'
-                      : 'bg-[#FEE2E2] text-[#DC2626]'
-                  "
-                  class="px-2.5 py-1 rounded-lg text-xs font-medium"
-                >
-                  {{ currentGoods.statusText }}
-                </span>
-              </div>
-              <div class="mb-3 flex items-center justify-between gap-3">
-                <h2 class="text-xl font-bold text-gray-800 leading-tight">
-                  {{ currentGoods.name }}
-                </h2>
-                <button
-                  class="favorite-heart-btn !static !h-11 !w-11 !shadow-none"
-                  :class="{ 'is-active': isFavorite(currentGoods.id) }"
-                  @click="toggleFavorite(currentGoods)"
-                  :aria-label="isFavorite(currentGoods.id) ? '取消收藏' : '收藏商品'"
-                >
-                  {{ isFavorite(currentGoods.id) ? '❤️' : '🤍' }}
-                </button>
-              </div>
-              <p
-                class="text-3xl font-bold bg-gradient-to-r from-[#A755F6] to-[#7C3AED] bg-clip-text text-transparent mb-5"
+        <div class="detail-container">
+          <div class="detail-image-section">
+            <img :src="currentGoods.pic" class="detail-image" />
+          </div>
+          <div class="detail-content-section">
+            <div class="detail-tags">
+              <span class="detail-tag category">{{ currentGoods.categoryText }}</span>
+              <span
+                :class="currentGoods.inStock ? 'detail-tag in-stock' : 'detail-tag out-of-stock'"
               >
-                ¥{{ currentGoods.price }}
+                {{ currentGoods.statusText }}
+              </span>
+            </div>
+            <div class="detail-header">
+              <h2 class="detail-title">
+                {{ currentGoods.name }}
+              </h2>
+              <button
+                class="detail-favorite-button"
+                :class="{ active: isFavorite(currentGoods.id) }"
+                @click="toggleFavorite(currentGoods)"
+                :aria-label="isFavorite(currentGoods.id) ? '取消收藏' : '收藏商品'"
+              >
+                {{ isFavorite(currentGoods.id) ? '❤️' : '🤍' }}
+              </button>
+            </div>
+            <p class="detail-price">¥{{ currentGoods.price }}</p>
+
+            <div class="detail-stats-grid">
+              <div class="detail-stat-card">
+                <p class="detail-stat-label">📦 库存</p>
+                <p class="detail-stat-value">{{ currentGoods.stock }} 件</p>
+              </div>
+              <div class="detail-stat-card">
+                <p class="detail-stat-label">🔥 已售</p>
+                <p class="detail-stat-value">{{ currentGoods.sold }} 件</p>
+              </div>
+              <div class="detail-stat-card">
+                <p class="detail-stat-label">📐 规格</p>
+                <p class="detail-stat-value">{{ currentGoods.spec }}</p>
+              </div>
+              <div class="detail-stat-card">
+                <p class="detail-stat-label">📍 状态</p>
+                <p class="detail-stat-value">{{ currentGoods.statusText }}</p>
+              </div>
+            </div>
+
+            <div class="detail-custom-requirement">
+              <p class="detail-custom-label">✂️ 定制要求</p>
+              <p class="detail-custom-text">
+                {{ currentGoods.customRequirement }}
               </p>
+            </div>
 
-              <div class="grid grid-cols-2 gap-3 mb-5">
-                <div class="bg-[#f9fafb] rounded-xl p-3 text-center">
-                  <p class="text-xs text-gray-500 mb-1">📦 库存</p>
-                  <p class="text-sm font-bold text-gray-800">{{ currentGoods.stock }} 件</p>
-                </div>
-                <div class="bg-[#f9fafb] rounded-xl p-3 text-center">
-                  <p class="text-xs text-gray-500 mb-1">🔥 已售</p>
-                  <p class="text-sm font-bold text-gray-800">{{ currentGoods.sold }} 件</p>
-                </div>
-                <div class="bg-[#f9fafb] rounded-xl p-3 text-center">
-                  <p class="text-xs text-gray-500 mb-1">📐 规格</p>
-                  <p class="text-sm font-bold text-gray-800">{{ currentGoods.spec }}</p>
-                </div>
-                <div class="bg-[#f9fafb] rounded-xl p-3 text-center">
-                  <p class="text-xs text-gray-500 mb-1">📍 状态</p>
-                  <p class="text-sm font-bold text-gray-800">{{ currentGoods.statusText }}</p>
-                </div>
-              </div>
+            <p class="detail-description">{{ currentGoods.desc }}</p>
 
-              <div class="bg-[#f9fafb] rounded-xl p-4 mb-5">
-                <p class="text-sm font-medium text-gray-600 mb-2">✂️ 定制要求</p>
-                <p class="text-sm text-gray-700 leading-relaxed">
-                  {{ currentGoods.customRequirement }}
-                </p>
-              </div>
-
-              <p class="text-sm text-gray-600 mb-6 leading-relaxed">{{ currentGoods.desc }}</p>
-
-              <div class="flex gap-3">
-                <button
-                  class="flex-1 py-3 rounded-xl font-medium text-white bg-gradient-to-r from-[#A755F6] to-[#7C3AED] shadow-md hover:-translate-y-0.5 hover:shadow-lg transition-all"
-                  @click="goBook"
-                  v-if="currentGoods.inStock"
-                >
-                  ✨ 立即预订
-                </button>
-                <button
-                  class="py-3 px-6 rounded-xl font-medium text-[#A755F6] border border-[#A755F6] bg-white hover:bg-[#f3f4f6] transition-all"
-                  @click="go('list')"
-                >
-                  返回列表
-                </button>
-              </div>
+            <div class="detail-actions">
+              <button class="detail-book-button" @click="goBook" v-if="currentGoods.inStock">
+                ✨ 立即预订
+              </button>
+              <button class="detail-back-button-secondary" @click="go('list')">返回列表</button>
             </div>
           </div>
         </div>
       </div>
 
       <div v-if="page === 'book'" class="page-transition">
-        <button
-          @click="go('detail')"
-          class="mb-5 flex items-center gap-1.5 text-sm text-[#A755F6] hover:text-[#7C3AED] font-medium transition-colors"
-        >
-          ← 返回商品详情
-        </button>
+        <button @click="go('detail')" class="detail-back-button">← 返回商品详情</button>
 
-        <div class="bg-white rounded-2xl shadow-sm border border-[#e5e7eb] p-6 max-w-2xl mx-auto">
-          <h2 class="text-xl font-semibold text-gray-800 mb-5 flex items-center gap-2">
-            📝 提交预订申请
-          </h2>
+        <div class="book-container">
+          <h2 class="book-title">📝 提交预订申请</h2>
 
-          <div class="bg-[#f9fafb] rounded-xl p-4 mb-5">
-            <p class="text-xs text-gray-500 mb-1">预订商品</p>
-            <p class="text-sm font-bold text-gray-800">
-              {{ currentGoods.name }} - ¥{{ currentGoods.price }}/件
-            </p>
-            <p
-              class="text-xs text-orange-600 mt-1"
-              v-if="currentGoods.minOrder && currentGoods.minOrder > 1"
-            >
+          <div class="book-product-info">
+            <p class="book-product-label">预订商品</p>
+            <p class="book-product-name">{{ currentGoods.name }} - ¥{{ currentGoods.price }}/件</p>
+            <p class="book-warning" v-if="currentGoods.minOrder && currentGoods.minOrder > 1">
               ⚠️ 此商品最低起订量 {{ currentGoods.minOrder }} 件
             </p>
           </div>
 
-          <div class="space-y-4">
-            <div class="grid md:grid-cols-2 gap-4">
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2"
-                  >📦 预订数量 <span class="text-red-500">*</span></label
-                >
-                <div class="flex items-center gap-2">
+          <div class="book-form">
+            <div class="book-form-row">
+              <div class="book-form-group">
+                <label class="book-label">📦 预订数量 <span class="book-required">*</span></label>
+                <div class="book-quantity-controls">
                   <button
                     @click="decrementNum"
-                    class="w-11 h-11 rounded-xl border border-[#e5e7eb] bg-white text-[#6366f1] font-bold hover:bg-[#f3f4f6] transition-all flex items-center justify-center"
+                    class="book-quantity-button"
                     :disabled="bookForm.num <= (currentGoods.minOrder || 1)"
-                    :class="{
-                      'opacity-40 cursor-not-allowed': bookForm.num <= (currentGoods.minOrder || 1),
-                    }"
                   >
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
@@ -488,15 +373,14 @@
                     v-model.number="bookForm.num"
                     :min="currentGoods.minOrder || 1"
                     :max="currentGoods.stock"
-                    class="flex-1 h-11 px-4 rounded-xl border border-[#e5e7eb] bg-[#f9fafb] text-sm text-center font-semibold focus:outline-none focus:border-[#6366f1] focus:ring-2 focus:ring-[#6366f1]/20"
+                    class="book-quantity-input"
                     @blur="validateNum"
                     @input="validateNumInput"
                   />
                   <button
                     @click="incrementNum"
-                    class="w-11 h-11 rounded-xl border border-[#e5e7eb] bg-white text-[#6366f1] font-bold hover:bg-[#f3f4f6] transition-all flex items-center justify-center"
+                    class="book-quantity-button"
                     :disabled="bookForm.num >= currentGoods.stock"
-                    :class="{ 'opacity-40 cursor-not-allowed': bookForm.num >= currentGoods.stock }"
                   >
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
@@ -508,128 +392,66 @@
                     </svg>
                   </button>
                 </div>
-                <p v-if="errors.num" class="text-xs text-red-500 mt-2">{{ errors.num }}</p>
-                <p class="text-xs text-gray-400 mt-1">
+                <p v-if="errors.num" class="book-error">{{ errors.num }}</p>
+                <p class="book-quantity-hint">
                   最低 {{ currentGoods.minOrder || 1 }} 件起订，库存剩余 {{ currentGoods.stock }} 件
                 </p>
               </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2"
-                  >📐 尺寸选择 <span class="text-red-500">*</span></label
-                >
-                <div class="relative">
-                  <select
-                    v-model="bookForm.size"
-                    class="select-beauty"
-                    :class="{ 'text-gray-400': !bookForm.size }"
+              <div class="book-form-group">
+                <label class="book-label">📐 尺寸选择 <span class="book-required">*</span></label>
+                <select v-model="bookForm.size" class="book-select">
+                  <option value="" disabled hidden>请选择尺寸</option>
+                  <option
+                    v-for="s in currentGoods.sizes || ['S', 'M', 'L', 'XL', 'XXL']"
+                    :key="s"
+                    :value="s"
                   >
-                    <option value="" disabled hidden>请选择尺寸</option>
-                    <option
-                      v-for="s in currentGoods.sizes || ['S', 'M', 'L', 'XL']"
-                      :key="s"
-                      :value="s"
-                    >
-                      {{ s }}
-                    </option>
-                  </select>
-                  <div class="select-arrow">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M19 9l-7 7-7-7"
-                      ></path>
-                    </svg>
-                  </div>
-                </div>
-                <p v-if="errors.size" class="text-xs text-red-500 mt-2">{{ errors.size }}</p>
+                    {{ s }}
+                  </option>
+                </select>
+                <p v-if="errors.size" class="book-error">{{ errors.size }}</p>
               </div>
             </div>
 
-            <div class="grid md:grid-cols-2 gap-4">
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2"
-                  >🎨 颜色选择 <span class="text-red-500">*</span></label
-                >
-                <div class="relative">
-                  <select
-                    v-model="bookForm.color"
-                    class="select-beauty"
-                    :class="{ 'text-gray-400': !bookForm.color }"
+            <div class="book-form-row">
+              <div class="book-form-group">
+                <label class="book-label">🎨 颜色选择 <span class="book-required">*</span></label>
+                <select v-model="bookForm.color" class="book-select">
+                  <option value="" disabled hidden>请选择颜色</option>
+                  <option
+                    v-for="c in currentGoods.colors || ['红色', '蓝色', '黑色', '白色']"
+                    :key="c"
+                    :value="c"
                   >
-                    <option value="" disabled hidden>请选择颜色</option>
-                    <option
-                      v-for="c in currentGoods.colors || ['红色', '蓝色', '黑色', '白色']"
-                      :key="c"
-                      :value="c"
-                    >
-                      {{ c }}
-                    </option>
-                  </select>
-                  <div class="select-arrow">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M19 9l-7 7-7-7"
-                      ></path>
-                    </svg>
-                  </div>
-                </div>
-                <p v-if="errors.color" class="text-xs text-red-500 mt-2">{{ errors.color }}</p>
+                    {{ c }}
+                  </option>
+                </select>
+                <p v-if="errors.color" class="book-error">{{ errors.color }}</p>
               </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">📋 定制要求</label>
-                <div class="relative">
-                  <select
-                    v-model="bookForm.custom"
-                    class="select-beauty"
-                    :class="{ 'text-gray-400': !bookForm.custom }"
-                  >
-                    <option value="" disabled hidden>请选择定制要求</option>
-                    <option value="无需定制">无需定制</option>
-                    <option value="需要定制">需要定制</option>
-                  </select>
-                  <div class="select-arrow">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M19 9l-7 7-7-7"
-                      ></path>
-                    </svg>
-                  </div>
-                </div>
+              <div class="book-form-group">
+                <label class="book-label">📋 定制要求</label>
+                <select v-model="bookForm.custom" class="book-select">
+                  <option value="" disabled hidden>请选择定制要求</option>
+                  <option value="无需定制">无需定制</option>
+                  <option value="需要定制">需要定制</option>
+                </select>
               </div>
             </div>
 
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">📝 备注信息</label>
+            <div class="book-form-group">
+              <label class="book-label">📝 备注信息</label>
               <textarea
                 v-model="bookForm.remark"
                 rows="4"
-                class="w-full px-4 py-3 rounded-xl border border-[#e5e7eb] bg-[#f9fafb] text-sm focus:outline-none focus:border-[#6366f1] focus:ring-2 focus:ring-[#6366f1]/20"
+                class="book-textarea"
                 placeholder="请输入其他备注信息..."
               ></textarea>
             </div>
           </div>
 
-          <div class="flex gap-3 mt-6 justify-center">
-            <button
-              class="flex-1 md:flex-none md:w-36 py-3 rounded-xl font-medium text-white bg-gradient-to-r from-[#A755F6] to-[#7C3AED] shadow-md hover:-translate-y-0.5 hover:shadow-lg transition-all"
-              @click="submitOrder"
-            >
-              🚀 提交预订
-            </button>
-            <button
-              class="h-11 w-24 md:w-36 rounded-xl font-medium text-[#A755F6] border border-[#A755F6] bg-white hover:bg-[#f3f4f6] transition-all"
-              @click="go('detail')"
-            >
-              取消
-            </button>
+          <div class="book-actions">
+            <button class="book-submit-button" @click="submitOrder">🚀 提交预订</button>
+            <button class="book-cancel-button" @click="go('detail')">取消</button>
           </div>
         </div>
       </div>
@@ -639,62 +461,46 @@
           📦 我的订单
         </h2>
 
-        <div v-if="orders.length > 0" class="space-y-4">
-          <div
-            v-for="(o, i) in orders"
-            :key="i"
-            class="bg-white rounded-2xl shadow-sm border border-[#e5e7eb] p-5"
-          >
-            <div class="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-4">
-              <div class="flex-1">
-                <h3 class="text-base font-bold text-gray-800 mb-3">{{ o.goodsName }}</h3>
-                <div class="grid grid-cols-2 md:grid-cols-3 gap-2 text-sm text-gray-600">
-                  <p>
-                    📦 数量：<span class="font-semibold">{{ o.num }} 件</span>
-                  </p>
-                  <p v-if="o.size">
-                    📐 尺寸：<span class="font-semibold">{{ o.size }}</span>
-                  </p>
-                  <p v-if="o.color">
-                    🎨 颜色：<span class="font-semibold">{{ o.color }}</span>
-                  </p>
-                  <p v-if="o.custom">
-                    ✂️ 定制：<span class="font-semibold">{{ o.custom }}</span>
-                  </p>
+        <div v-if="orders.length > 0" class="orders-container">
+          <div v-for="(o, i) in orders" :key="i" class="order-card">
+            <div class="order-header">
+              <div class="order-info">
+                <h3 class="order-title">{{ o.goodsName }}</h3>
+                <div class="order-details-grid">
+                  <div class="order-detail-item">
+                    📦 数量：<span class="order-detail-label">{{ o.num }} 件</span>
+                  </div>
+                  <div v-if="o.size" class="order-detail-item">
+                    📐 尺寸：<span class="order-detail-label">{{ o.size }}</span>
+                  </div>
+                  <div v-if="o.color" class="order-detail-item">
+                    🎨 颜色：<span class="order-detail-label">{{ o.color }}</span>
+                  </div>
+                  <div v-if="o.custom" class="order-detail-item">
+                    ✂️ 定制：<span class="order-detail-label">{{ o.custom }}</span>
+                  </div>
                 </div>
               </div>
               <div class="flex items-start gap-3">
-                <span
-                  :class="getStatusClass(o.status)"
-                  class="px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap"
-                >
+                <span :class="'order-status ' + getStatusClass(o.status)">
                   {{ o.statusText }}
                 </span>
               </div>
             </div>
-            <p class="text-sm text-gray-500 mb-4">📝 备注：{{ o.remark || '无' }}</p>
-            <div class="flex gap-2">
-              <button
-                class="bg-[#F3E8FF] text-[#A755F6] px-4 py-2 rounded-xl text-sm font-medium hover:bg-[#E5E7EB] transition-all"
-                @click="openOrderDetail(o)"
-              >
-                查看详情 →
-              </button>
-              <button
-                v-if="o.status === 1"
-                class="bg-[#FEE2E2] text-[#EF4444] px-4 py-2 rounded-xl text-sm font-medium hover:bg-[#FECACA] transition-all"
-                @click="cancelOrder(i)"
-              >
+            <p class="order-remark">📝 备注：{{ o.remark || '无' }}</p>
+            <div class="order-actions">
+              <button class="order-detail-button" @click="openOrderDetail(o)">查看详情 →</button>
+              <button v-if="o.status === 1" class="order-cancel-button" @click="cancelOrder(i)">
                 取消订单
               </button>
             </div>
           </div>
         </div>
 
-        <div v-else class="bg-white rounded-2xl shadow-sm border border-[#e5e7eb] p-12 text-center">
-          <div class="text-5xl mb-4 opacity-40">🛒</div>
-          <p class="text-sm text-gray-500 mb-1">暂无订单</p>
-          <p class="text-xs text-gray-400">快去挑选商品吧～</p>
+        <div v-else class="empty-state">
+          <div class="empty-icon">🛒</div>
+          <p class="empty-text">暂无订单</p>
+          <p class="empty-text">快去挑选商品吧～</p>
         </div>
       </div>
 
@@ -708,103 +514,74 @@
           </span>
         </h2>
 
-        <div
-          v-if="favoriteGoods.length > 0"
-          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
-        >
-          <div
-            v-for="g in favoriteGoods"
-            :key="g.id"
-            class="bg-white rounded-2xl shadow-sm border border-[#e5e7eb] overflow-hidden cursor-pointer transition-all hover:-translate-y-1 hover:shadow-md"
-            @click="openDetail(g)"
-          >
-            <div class="h-48 overflow-hidden">
-              <img
-                :src="g.pic"
-                class="w-full h-full object-cover transition-transform hover:scale-105"
-              />
+        <div v-if="favoriteGoods.length > 0" class="favorites-grid">
+          <div v-for="g in favoriteGoods" :key="g.id" class="favorite-card" @click="openDetail(g)">
+            <div class="favorite-image">
+              <img :src="g.pic" />
             </div>
-            <div class="p-5">
-              <div class="mb-3 flex items-start justify-between gap-3">
-                <div class="flex flex-wrap gap-2">
-                  <span
-                    class="px-2.5 py-1 rounded-lg text-xs font-medium bg-[#F3E8FF] text-[#A755F6]"
-                    >{{ g.categoryText }}</span
-                  >
-                  <span
-                    :class="
-                      g.inStock ? 'bg-[#D1FAE5] text-[#059669]' : 'bg-[#FEE2E2] text-[#DC2626]'
-                    "
-                    class="px-2.5 py-1 rounded-lg text-xs font-medium"
-                  >
+            <div class="favorite-content">
+              <div class="favorite-header">
+                <div class="favorite-tags">
+                  <span class="favorite-tag category">{{ g.categoryText }}</span>
+                  <span :class="g.inStock ? 'favorite-tag in-stock' : 'favorite-tag out-of-stock'">
                     {{ g.statusText }}
                   </span>
                 </div>
                 <button
-                  class="favorite-heart-btn is-active"
+                  class="favorite-heart-button active"
                   @click.stop="toggleFavorite(g)"
                   aria-label="取消收藏"
                 >
                   ❤️
                 </button>
               </div>
-              <h3 class="text-base font-bold text-gray-800 mb-2 leading-tight">{{ g.name }}</h3>
-              <p class="text-xs text-gray-500">{{ g.spec }}</p>
+              <h3 class="favorite-name">{{ g.name }}</h3>
+              <p class="favorite-spec">{{ g.spec }}</p>
             </div>
           </div>
         </div>
 
-        <div v-else class="bg-white rounded-2xl shadow-sm border border-[#e5e7eb] p-12 text-center">
-          <div class="text-5xl mb-4 opacity-40">💗</div>
-          <p class="text-sm text-gray-500 mb-1">还没有收藏商品</p>
-          <p class="text-xs text-gray-400">去商品大厅挑选你喜欢的文创吧～</p>
+        <div v-else class="empty-state">
+          <div class="empty-icon">💗</div>
+          <p class="empty-text">还没有收藏商品</p>
+          <p class="empty-text">去商品大厅挑选你喜欢的文创吧～</p>
         </div>
       </div>
 
       <div v-if="page === 'orderDetail'" class="page-transition">
-        <button
-          @click="go('myorder')"
-          class="mb-5 flex items-center gap-1.5 text-sm text-[#A755F6] hover:text-[#7C3AED] font-medium transition-colors"
-        >
-          ← 返回订单列表
-        </button>
+        <button @click="go('myorder')" class="detail-back-button">← 返回订单列表</button>
 
-        <div class="bg-white rounded-2xl shadow-sm border border-[#e5e7eb] p-6 max-w-2xl mx-auto">
-          <h2 class="text-xl font-semibold text-gray-800 mb-5 flex items-center gap-2">
-            🧾 订单详情
-          </h2>
+        <div class="order-detail-container">
+          <h2 class="order-detail-title">🧾 订单详情</h2>
 
-          <div class="space-y-3 mb-6">
-            <div class="flex items-center gap-2">
-              <span class="text-sm text-gray-500 w-20 font-medium">🎁 商品</span>
-              <span class="text-sm font-semibold text-gray-800">{{ currentOrder.goodsName }}</span>
+          <div class="order-detail-info">
+            <div class="order-detail-item">
+              <span class="order-detail-label">🎁 商品</span>
+              <span class="order-detail-value">{{ currentOrder.goodsName }}</span>
             </div>
-            <div class="flex items-center gap-2">
-              <span class="text-sm text-gray-500 w-20 font-medium">📦 数量</span>
-              <span class="text-sm font-semibold text-gray-800">{{ currentOrder.num }} 件</span>
+            <div class="order-detail-item">
+              <span class="order-detail-label">📦 数量</span>
+              <span class="order-detail-value">{{ currentOrder.num }} 件</span>
             </div>
-            <div v-if="currentOrder.size" class="flex items-center gap-2">
-              <span class="text-sm text-gray-500 w-20 font-medium">📐 尺寸</span>
-              <span class="text-sm font-semibold text-gray-800">{{ currentOrder.size }}</span>
+            <div v-if="currentOrder.size" class="order-detail-item">
+              <span class="order-detail-label">📐 尺寸</span>
+              <span class="order-detail-value">{{ currentOrder.size }}</span>
             </div>
-            <div v-if="currentOrder.color" class="flex items-center gap-2">
-              <span class="text-sm text-gray-500 w-20 font-medium">🎨 颜色</span>
-              <span class="text-sm font-semibold text-gray-800">{{ currentOrder.color }}</span>
+            <div v-if="currentOrder.color" class="order-detail-item">
+              <span class="order-detail-label">🎨 颜色</span>
+              <span class="order-detail-value">{{ currentOrder.color }}</span>
             </div>
-            <div v-if="currentOrder.custom" class="flex items-center gap-2">
-              <span class="text-sm text-gray-500 w-20 font-medium">✂️ 定制</span>
-              <span class="text-sm font-semibold text-gray-800">{{ currentOrder.custom }}</span>
+            <div v-if="currentOrder.custom" class="order-detail-item">
+              <span class="order-detail-label">✂️ 定制</span>
+              <span class="order-detail-value">{{ currentOrder.custom }}</span>
             </div>
-            <div class="flex items-center gap-2">
-              <span class="text-sm text-gray-500 w-20 font-medium">📝 备注</span>
-              <span class="text-sm text-gray-600">{{ currentOrder.remark || '无' }}</span>
+            <div class="order-detail-item">
+              <span class="order-detail-label">📝 备注</span>
+              <span class="order-detail-value">{{ currentOrder.remark || '无' }}</span>
             </div>
-            <div class="flex items-center gap-2">
-              <span class="text-sm text-gray-500 w-20 font-medium">📍 状态</span>
-              <span
-                :class="getStatusClass(currentOrder.status)"
-                class="px-3 py-1.5 rounded-full text-xs font-medium"
-              >
+            <div class="order-detail-item">
+              <span class="order-detail-label">📍 状态</span>
+              <span :class="'order-detail-status ' + getStatusClass(currentOrder.status)">
                 {{ currentOrder.statusText }}
               </span>
             </div>
@@ -812,16 +589,16 @@
 
           <div
             v-if="currentOrder.custom === '需要定制' && currentOrder.status === 1"
-            class="border-2 border-dashed border-[#c4b5fd] rounded-2xl p-6 text-center mb-6 bg-[#F9F7FF]"
+            class="order-detail-upload"
           >
-            <div class="text-4xl mb-3">📤</div>
-            <p class="text-sm font-medium text-[#6366f1] mb-4">上传定制设计稿</p>
+            <div class="order-detail-upload-icon">📤</div>
+            <p class="order-detail-upload-text">上传定制设计稿</p>
             <input
               type="file"
               class="mb-4 w-full max-w-xs mx-auto text-sm"
               @change="handleFileUpload"
             />
-            <p v-if="selectedDesignFile" class="text-xs text-gray-500 mb-3 truncate">
+            <p v-if="selectedDesignFile" class="order-detail-file-info">
               已选文件：{{ selectedDesignFile.name }}
             </p>
             <button
@@ -1442,6 +1219,7 @@ loadFavoriteIds()
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;800&display=swap');
+@import '@/styles/studentPage.css';
 
 :root {
   --first-color: #a755f6;
