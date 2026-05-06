@@ -110,7 +110,7 @@
         <div v-if="filteredGoods.length > 0" class="goods-grid">
           <div v-for="g in paginatedGoods" :key="g.id" class="goods-card" @click="openDetail(g)">
             <div class="goods-image">
-              <img :src="g.pic" />
+              <img :src="g.img" />
             </div>
             <div class="goods-content">
               <div class="goods-header">
@@ -167,7 +167,7 @@
 
         <div class="detail-container">
           <div class="detail-image-section">
-            <img :src="currentGoods.pic" class="detail-image" />
+            <img :src="currentGoods.img" class="detail-image" />
           </div>
           <div class="detail-content-section">
             <div class="detail-tags">
@@ -413,7 +413,7 @@
         <div v-if="favoriteGoods.length > 0" class="favorites-grid">
           <div v-for="g in favoriteGoods" :key="g.id" class="favorite-card" @click="openDetail(g)">
             <div class="favorite-image">
-              <img :src="g.pic" />
+              <img :src="g.img" />
             </div>
             <div class="favorite-content">
               <div class="favorite-header">
@@ -489,20 +489,11 @@
           >
             <div class="order-detail-upload-icon">📤</div>
             <p class="order-detail-upload-text">上传定制设计稿</p>
-            <input
-              type="file"
-              class="mb-4 w-full max-w-xs mx-auto text-sm"
-              @change="handleFileUpload"
-            />
+            <input type="file" class="detail-file-input" @change="handleFileUpload" />
             <p v-if="selectedDesignFile" class="order-detail-file-info">
               已选文件：{{ selectedDesignFile.name }}
             </p>
-            <button
-              class="px-6 py-2.5 rounded-xl font-medium text-white bg-gradient-to-r from-[#A755F6] to-[#7C3AED] shadow-md hover:-translate-y-0.5 hover:shadow-lg transition-all"
-              @click="uploadDesign"
-            >
-              上传文件
-            </button>
+            <button class="detail-upload-button" @click="uploadDesign">上传文件</button>
           </div>
 
           <div v-if="currentOrder.status === 3" class="flex justify-center">
@@ -515,12 +506,7 @@
           </div>
 
           <div v-if="currentOrder.status === 1" class="flex justify-center">
-            <button
-              class="bg-[#FEE2E2] text-[#EF4444] px-6 py-2.5 rounded-xl text-sm font-medium hover:bg-[#FECACA] transition-all"
-              @click="cancelCurrentOrder"
-            >
-              ❌ 取消订单
-            </button>
+            <button class="detail-cancel-button" @click="cancelCurrentOrder">❌ 取消订单</button>
           </div>
         </div>
       </div>
@@ -542,7 +528,7 @@ interface Goods {
   stock: number
   sold: number
   desc: string
-  pic: string
+  img: string
   category: string
   categoryText: string
   inStock: boolean
@@ -605,7 +591,7 @@ const goods = ref([
     stock: 100,
     sold: 256,
     desc: '纯棉圆领文化衫，透气舒适，支持多种印花定制，是校园活动和班级聚会的不二之选。',
-    pic: 'https://picsum.photos/300/200?1',
+    img: '/images/1.png',
     category: 'wenchuang',
     categoryText: '文创产品',
     inStock: true,
@@ -623,7 +609,7 @@ const goods = ref([
     stock: 200,
     sold: 589,
     desc: '校园纪念款金属珐琅徽章，精致工艺，收藏级品质，可定制校徽、社团标志。',
-    pic: 'https://picsum.photos/300/200?2',
+    img: '/images/2.png',
     category: 'wenchuang',
     categoryText: '文创产品',
     inStock: true,
@@ -641,7 +627,7 @@ const goods = ref([
     stock: 150,
     sold: 324,
     desc: '可定制封面校园纪念笔记本，100g道林纸，锁线装订，可平摊书写。',
-    pic: 'https://picsum.photos/300/200?3',
+    img: '/images/3.png',
     category: 'wenchuang',
     categoryText: '文创产品',
     inStock: true,
@@ -659,7 +645,7 @@ const goods = ref([
     stock: 50,
     sold: 87,
     desc: '优质牛津布材质，高清喷印，色彩鲜艳，可反复使用，支持定制尺寸。',
-    pic: 'https://picsum.photos/300/200?4',
+    img: '/images/4.png',
     category: 'wuliao',
     categoryText: '活动物料',
     inStock: true,
@@ -677,7 +663,7 @@ const goods = ref([
     stock: 500,
     sold: 1200,
     desc: '250g白卡纸材质，精致印刷，绳结提手，送礼佳品。',
-    pic: 'https://picsum.photos/300/200?5',
+    img: '/images/5.png',
     category: 'wuliao',
     categoryText: '活动物料',
     inStock: true,
@@ -695,7 +681,7 @@ const goods = ref([
     stock: 0,
     sold: 156,
     desc: '陶瓷马克杯，支持热转印定制，杯身可印刷照片、图案、文字。',
-    pic: 'https://picsum.photos/300/200?6',
+    img: '/images/6.png',
     category: 'wenchuang',
     categoryText: '文创产品',
     inStock: false,
@@ -713,7 +699,7 @@ const goods = ref([
     stock: 80,
     sold: 423,
     desc: '16安加厚帆布，环保耐用，支持丝网印刷，多种颜色可选。',
-    pic: 'https://picsum.photos/300/200?7',
+    img: '/images/7.png',
     category: 'wuliao',
     categoryText: '活动物料',
     inStock: true,
@@ -731,7 +717,7 @@ const goods = ref([
     stock: 300,
     sold: 892,
     desc: '亚克力钥匙扣，双面高清印刷，支持定制任意图案。',
-    pic: 'https://picsum.photos/300/200?8',
+    img: '/images/8.png',
     category: 'wenchuang',
     categoryText: '文创产品',
     inStock: true,
@@ -749,7 +735,7 @@ const goods = ref([
     stock: 9999,
     sold: 2341,
     desc: '157g铜版纸，高清印刷，支持多种尺寸，可覆膜防水。',
-    pic: 'https://picsum.photos/300/200?9',
+    img: '/images/9.png',
     category: 'wuliao',
     categoryText: '活动物料',
     inStock: true,

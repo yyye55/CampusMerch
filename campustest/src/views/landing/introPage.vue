@@ -1,8 +1,8 @@
 <template>
   <landingNav>
     <section class="hero">
-      <i class="fas fa-university"></i>
-      <h2>校园文创与活动物料预订管理系统</h2>
+      <i class="fas fa-palette"></i>
+      <h2>校园文创预订系统</h2>
       <p>便捷预订 · 智能管理 · 高效流转</p>
       <div class="hero-btn">
         <router-link class="primary-btn" to="/login">立即开始</router-link>
@@ -23,7 +23,7 @@ import landingNav from '@/components/landingNav.vue'
   align-items: center;
   height: 80vh;
 }
-.fa-university {
+.fa-palette {
   font-size: 60px;
   color: var(--first-color);
 }
