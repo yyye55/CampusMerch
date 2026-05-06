@@ -1,116 +1,98 @@
 <template>
-  <!-- 自定义弹窗 -->
-  <Transition name="dialog">
-    <div
-      v-if="showDialog"
-      class="fixed inset-0 z-50 flex items-center justify-center p-4"
-      @click.self="closeDialog"
-    >
-      <div class="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity"></div>
+  <!-- 自定义弹窗：Teleport 到 body + 纯 CSS，避免未加载 Tailwind 时布局崩溃 -->
+  <Teleport to="body">
+    <Transition name="dialog">
       <div
-        class="relative bg-white rounded-2xl max-w-sm w-full shadow-2xl overflow-hidden transform transition-all scale-100"
+        v-if="showDialog"
+        class="sp-dialog-overlay"
+        role="dialog"
+        aria-modal="true"
+        @keydown.esc.prevent="closeDialog"
       >
-        <!-- 成功弹窗 -->
-        <div v-if="dialogType === 'success'" class="p-6 text-center">
-          <div
-            class="w-16 h-16 mx-auto mb-4 rounded-full bg-green-50 flex items-center justify-center"
-          >
-            <svg
-              class="w-8 h-8 text-green-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M5 13l4 4L19 7"
-              ></path>
-            </svg>
-          </div>
-          <h3 class="text-xl font-bold text-gray-800 mb-2">{{ dialogTitle }}</h3>
-          <p class="text-gray-500 mb-6 text-sm leading-relaxed">{{ dialogMessage }}</p>
-          <button
-            @click="closeDialog"
-            class="w-full py-3 bg-gradient-to-r from-[#A755F6] to-[#7C3AED] text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-purple-500/30 transition-all active:scale-[0.98]"
-          >
-            好的，知道了
-          </button>
-        </div>
-        <!-- 警告弹窗 -->
-        <div v-else-if="dialogType === 'warning'" class="p-6 text-center">
-          <div
-            class="w-16 h-16 mx-auto mb-4 rounded-full bg-yellow-50 flex items-center justify-center"
-          >
-            <svg
-              class="w-8 h-8 text-yellow-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-              ></path>
-            </svg>
-          </div>
-          <h3 class="text-xl font-bold text-gray-800 mb-2">{{ dialogTitle }}</h3>
-          <p class="text-gray-500 mb-6 text-sm leading-relaxed">{{ dialogMessage }}</p>
-          <button
-            @click="closeDialog"
-            class="w-full py-3 bg-gradient-to-r from-[#f59e0b] to-[#fbbf24] text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-yellow-500/30 transition-all active:scale-[0.98]"
-          >
-            好的
-          </button>
-        </div>
-        <!-- 确认弹窗 -->
-        <div v-else-if="dialogType === 'confirm'" class="p-6 text-center">
-          <div
-            class="w-16 h-16 mx-auto mb-4 rounded-full bg-purple-50 flex items-center justify-center"
-          >
-            <svg
-              class="w-8 h-8 text-[#A755F6]"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              ></path>
-            </svg>
-          </div>
-          <h3 class="text-xl font-bold text-gray-800 mb-2">{{ dialogTitle }}</h3>
-          <p class="text-gray-500 mb-6 text-sm leading-relaxed">{{ dialogMessage }}</p>
-          <div class="flex gap-3">
-            <button
-              @click="confirmCancel"
-              class="flex-1 py-3 bg-gray-100 text-gray-600 rounded-xl font-semibold hover:bg-gray-200 transition-all active:scale-[0.98]"
-            >
-              取消
+        <div class="sp-dialog-backdrop" aria-hidden="true" @click="closeDialog"></div>
+        <div class="sp-dialog-card" @click.stop>
+          <!-- 成功弹窗 -->
+          <div v-if="dialogType === 'success'" class="sp-dialog-body">
+            <div class="sp-dialog-icon sp-dialog-icon--success">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="sp-dialog-icon-svg">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5 13l4 4L19 7"
+                ></path>
+              </svg>
+            </div>
+            <h3 class="sp-dialog-title">{{ dialogTitle }}</h3>
+            <p class="sp-dialog-msg">{{ dialogMessage }}</p>
+            <button type="button" class="sp-dialog-btn sp-dialog-btn--primary sp-dialog-btn--block" @click="closeDialog">
+              好的，知道了
             </button>
-            <button
-              @click="confirmAction"
-              class="flex-1 py-3 bg-gradient-to-r from-[#6366f1] to-[#8b5cf6] text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-indigo-500/30 transition-all active:scale-[0.98]"
-            >
-              确认
+          </div>
+          <!-- 警告弹窗 -->
+          <div v-else-if="dialogType === 'warning'" class="sp-dialog-body">
+            <div class="sp-dialog-icon sp-dialog-icon--warning">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="sp-dialog-icon-svg">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                ></path>
+              </svg>
+            </div>
+            <h3 class="sp-dialog-title">{{ dialogTitle }}</h3>
+            <p class="sp-dialog-msg">{{ dialogMessage }}</p>
+            <button type="button" class="sp-dialog-btn sp-dialog-btn--warning sp-dialog-btn--block" @click="closeDialog">
+              好的
             </button>
+          </div>
+          <!-- 确认弹窗（导出明细、确认收货、取消订单、退出登录等） -->
+          <div v-else-if="dialogType === 'confirm'" class="sp-dialog-body">
+            <div class="sp-dialog-icon sp-dialog-icon--confirm">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="sp-dialog-icon-svg">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                ></path>
+              </svg>
+            </div>
+            <h3 class="sp-dialog-title">{{ dialogTitle }}</h3>
+            <p class="sp-dialog-msg">{{ dialogMessage }}</p>
+            <div class="sp-dialog-actions">
+              <button type="button" class="sp-dialog-btn sp-dialog-btn--ghost" @click="confirmCancel">取消</button>
+              <button type="button" class="sp-dialog-btn sp-dialog-btn--primary" @click="confirmAction">
+                {{ dialogConfirmText }}
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </Transition>
+    </Transition>
+  </Teleport>
 
   <div class="student-page">
     <div class="student-container">
       <div class="student-header">
-        <h1 class="student-title">🎨 校园文创预订系统</h1>
-        <p class="student-subtitle">在线筛选、智能校验、可视化弹窗，预订流程更清晰</p>
+        <div class="student-header-main">
+          <div class="student-header-copy">
+            <h1 class="student-title">🎨 校园文创预订系统</h1>
+          </div>
+          <div class="student-header-actions">
+            <span v-if="userStore.email" class="student-user-meta" :title="userStore.email">
+              <span class="student-user-label">账号</span>
+              <span class="student-user-value">{{ userDisplayShort }}</span>
+            </span>
+            <span v-else class="student-user-meta student-user-meta--guest">
+              <span class="student-user-value">访客模式</span>
+            </span>
+            <el-button class="student-logout-btn" text type="primary" @click="handleLogoutClick">
+              退出登录
+            </el-button>
+          </div>
+        </div>
       </div>
 
       <div class="stats-grid">
@@ -198,16 +180,19 @@
               class="price-input"
             />
           </div>
-          <div class="search-container">
-            <input
-              type="text"
-              v-model="filters.keyword"
-              placeholder="🔍 搜索商品名称或描述..."
-              @keyup.enter="applyFilter"
-              class="search-input"
-            />
-            <button @click="applyFilter" class="search-button">搜索</button>
-            <button @click="resetFilter" class="reset-button">重置</button>
+          <div class="filter-group filter-group--search">
+            <span class="filter-label">🔍 搜索</span>
+            <div class="search-row">
+              <input
+                type="text"
+                v-model="filters.keyword"
+                placeholder="商品名称或描述..."
+                @keyup.enter="applyFilter"
+                class="search-input"
+              />
+              <button type="button" @click="applyFilter" class="search-button">搜索</button>
+              <button type="button" @click="resetFilter" class="reset-button">重置</button>
+            </div>
           </div>
         </div>
 
@@ -235,6 +220,9 @@
               </div>
               <h3 class="goods-name">{{ g.name }}</h3>
               <p class="goods-spec">{{ g.spec }}</p>
+              <p class="goods-price" :class="{ 'goods-price--out': !g.inStock }">
+                ¥{{ formatGoodsCardPrice(g.price) }}
+              </p>
             </div>
           </div>
         </div>
@@ -457,9 +445,35 @@
       </div>
 
       <div v-if="page === 'myorder'" class="page-transition">
-        <h2 class="text-xl font-semibold text-gray-800 mb-5 flex items-center gap-2">
-          📦 我的订单
+        <h2 class="section-heading">
+          <span>📦 我的订单</span>
         </h2>
+
+        <div class="export-toolbar">
+          <div class="export-toolbar__filters">
+            <label class="export-filter-label" for="export-start">起始日期</label>
+            <input
+              id="export-start"
+              v-model="exportStartDate"
+              type="date"
+              class="export-date-input"
+            />
+            <label class="export-filter-label" for="export-end">结束日期</label>
+            <input id="export-end" v-model="exportEndDate" type="date" class="export-date-input" />
+            <button type="button" class="export-clear-filter" @click="clearExportDateFilters">
+              清除筛选
+            </button>
+          </div>
+          <button
+            type="button"
+            class="export-btn"
+            :disabled="exportLoading || orders.length === 0"
+            @click="onClickExportOrders"
+          >
+            <span v-if="exportLoading" class="export-btn__spinner" aria-hidden="true"></span>
+            {{ exportLoading ? '导出中...' : '导出明细' }}
+          </button>
+        </div>
 
         <div v-if="orders.length > 0" class="orders-container">
           <div v-for="(o, i) in orders" :key="i" class="order-card">
@@ -505,13 +519,9 @@
       </div>
 
       <div v-if="page === 'favorite'" class="page-transition">
-        <h2 class="text-xl font-semibold text-gray-800 mb-5 flex items-center gap-2">
-          ❤️ 我的收藏
-          <span
-            class="px-2.5 py-1 rounded-full text-xs font-semibold bg-[#EEF2FF] text-[#A755F6] border border-[#C7D2FE]"
-          >
-            {{ favoriteGoods.length }} 件
-          </span>
+        <h2 class="section-heading">
+          <span>❤️ 我的收藏</span>
+          <span class="section-heading-badge">{{ favoriteGoods.length }} 件</span>
         </h2>
 
         <div v-if="favoriteGoods.length > 0" class="favorites-grid">
@@ -601,28 +611,19 @@
             <p v-if="selectedDesignFile" class="order-detail-file-info">
               已选文件：{{ selectedDesignFile.name }}
             </p>
-            <button
-              class="px-6 py-2.5 rounded-xl font-medium text-white bg-gradient-to-r from-[#A755F6] to-[#7C3AED] shadow-md hover:-translate-y-0.5 hover:shadow-lg transition-all"
-              @click="uploadDesign"
-            >
+            <button type="button" class="order-detail-action-primary" @click="uploadDesign">
               上传文件
             </button>
           </div>
 
           <div v-if="currentOrder.status === 3" class="flex justify-center">
-            <button
-              class="px-8 py-3 rounded-xl font-medium text-white bg-gradient-to-r from-[#059669] to-[#10b981] shadow-md hover:-translate-y-0.5 hover:shadow-lg transition-all"
-              @click="finishOrder"
-            >
+            <button type="button" class="order-detail-action-success" @click="finishOrder">
               ✅ 确认收货
             </button>
           </div>
 
           <div v-if="currentOrder.status === 1" class="flex justify-center">
-            <button
-              class="bg-[#FEE2E2] text-[#EF4444] px-6 py-2.5 rounded-xl text-sm font-medium hover:bg-[#FECACA] transition-all"
-              @click="cancelCurrentOrder"
-            >
+            <button type="button" class="order-detail-action-danger" @click="cancelCurrentOrder">
               ❌ 取消订单
             </button>
           </div>
@@ -633,8 +634,39 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, nextTick, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
+import { useUserStore } from '@/stores/user'
+
+const router = useRouter()
+const userStore = useUserStore()
+
+const userDisplayShort = computed(() => {
+  const e = userStore.email?.trim()
+  if (!e) return ''
+  if (e.length <= 26) return e
+  const at = e.indexOf('@')
+  if (at <= 0) return `${e.slice(0, 18)}…`
+  return `${e.slice(0, 8)}…${e.slice(at)}`
+})
+
+onMounted(() => {
+  userStore.hydrateFromStorage()
+})
+
+function handleLogoutClick() {
+  showConfirmDialog(
+    '退出登录',
+    '确定要退出登录吗？',
+    () => {
+      userStore.logout()
+      ElMessage.success('已退出登录')
+      void router.replace('/')
+    },
+    { confirmText: '确定' },
+  )
+}
 
 interface Goods {
   id: number
@@ -656,6 +688,16 @@ interface Goods {
 }
 
 interface Order {
+  /** 订单编号 */
+  orderNo?: string
+  /** 下单时间（毫秒时间戳） */
+  createdAt?: number
+  /** 单价（元） */
+  unitPrice?: number
+  /** 订单金额（元） */
+  totalAmount?: number
+  /** 支付 / 结算说明 */
+  paymentRecord?: string
   goodsName: string
   num: number
   size: string
@@ -672,6 +714,12 @@ interface BookForm {
   color: string
   custom: string
   remark: string
+}
+
+/** 商品卡片价格：¥XX.XX，取自商品数据 */
+function formatGoodsCardPrice(price: number) {
+  const n = Number(price)
+  return Number.isFinite(n) ? n.toFixed(2) : '0.00'
 }
 
 const page = ref('list')
@@ -871,12 +919,22 @@ const currentOrder = ref<Order>({} as Order)
 const selectedDesignFile = ref<File | null>(null)
 const favoriteIds = ref<number[]>([])
 
+/** 导出订单：可选日期区间（YYYY-MM-DD），空表示不按日期筛选 */
+const exportStartDate = ref('')
+const exportEndDate = ref('')
+const exportLoading = ref(false)
+
 // 弹窗相关
 const showDialog = ref(false)
 const dialogType = ref('success')
 const dialogTitle = ref('')
 const dialogMessage = ref('')
+const dialogConfirmText = ref('确认')
 let pendingConfirmAction: (() => void) | null = null
+
+interface ConfirmDialogOptions {
+  confirmText?: string
+}
 
 const filteredGoods = computed(() => {
   let arr = goods.value
@@ -946,6 +1004,7 @@ watch(currentPage, (newVal) => {
 const closeDialog = () => {
   showDialog.value = false
   pendingConfirmAction = null
+  dialogConfirmText.value = '确认'
 }
 
 // 美化弹窗函数
@@ -967,10 +1026,16 @@ const showWarningDialog = (title: string, message: string) => {
   })
 }
 
-const showConfirmDialog = (title: string, message: string, action: () => void) => {
+const showConfirmDialog = (
+  title: string,
+  message: string,
+  action: () => void,
+  options?: ConfirmDialogOptions,
+) => {
   dialogType.value = 'confirm'
   dialogTitle.value = title
   dialogMessage.value = message
+  dialogConfirmText.value = options?.confirmText ?? '确认'
   pendingConfirmAction = action
   showDialog.value = true
 }
@@ -981,8 +1046,17 @@ const confirmCancel = () => {
 
 const confirmAction = () => {
   showDialog.value = false
-  if (pendingConfirmAction) pendingConfirmAction()
+  const fn = pendingConfirmAction
   pendingConfirmAction = null
+  dialogConfirmText.value = '确认'
+  if (fn) {
+    try {
+      fn()
+    } catch (e) {
+      console.error(e)
+      ElMessage.error('操作失败，请重试')
+    }
+  }
 }
 
 const go = (p: string) => {
@@ -1082,9 +1156,16 @@ const submitOrder = () => {
     return
   }
   if (!validateForm()) return
-  const order = {
+  const unitPrice = currentGoods.value.price
+  const num = bookForm.value.num
+  const order: Order = {
+    orderNo: `CM-${Date.now()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`,
+    createdAt: Date.now(),
+    unitPrice,
+    totalAmount: Math.round(unitPrice * num * 100) / 100,
+    paymentRecord: '待支付（校园文创预订·统一结算）',
     goodsName: currentGoods.value.name,
-    num: bookForm.value.num,
+    num,
     size: bookForm.value.size,
     color: bookForm.value.color,
     custom: bookForm.value.custom,
@@ -1103,18 +1184,19 @@ const submitOrder = () => {
   go('myorder')
 }
 
-const openOrderDetail = (o) => {
+const openOrderDetail = (o: Order) => {
   currentOrder.value = o
   go('orderDetail')
 }
 
-const cancelOrder = (index) => {
+const cancelOrder = (index: number) => {
   if (!orders.value[index] || orders.value[index].status !== 1) {
     showWarningDialog('无法取消', '仅待处理状态订单可以取消。')
     return
   }
   showConfirmDialog('取消订单', '确定要取消这个订单吗？', () => {
     const canceled = orders.value.splice(index, 1)[0]
+    if (!canceled) return
     const item = goods.value.find((g) => g.name === canceled.goodsName)
     if (item) {
       item.stock += canceled.num
@@ -1137,6 +1219,7 @@ const cancelCurrentOrder = () => {
     const index = orders.value.findIndex((o) => o === currentOrder.value)
     if (index > -1) {
       const canceled = orders.value.splice(index, 1)[0]
+      if (!canceled) return
       const item = goods.value.find((g) => g.name === canceled.goodsName)
       if (item) {
         item.stock += canceled.num
@@ -1188,15 +1271,15 @@ const finishOrder = () => {
   })
 }
 
-const getStatusClass = (s) => {
-  const classes = {
-    1: 'bg-[#fef3c7] text-[#d97706]',
-    2: 'bg-[#dbeafe] text-[#2563eb]',
-    3: 'bg-[#f3e8ff] text-[#6366f1]',
-    4: 'bg-[#d1fae5] text-[#059669]',
-    5: 'bg-[#f3f4f6] text-[#6b7280]',
+const getStatusClass = (s: number) => {
+  const classes: Record<number, string> = {
+    1: 'bg-amber-100 text-amber-800 ring-1 ring-amber-200/80',
+    2: 'bg-sky-100 text-sky-800 ring-1 ring-sky-200/80',
+    3: 'bg-indigo-100 text-indigo-800 ring-1 ring-indigo-200/80',
+    4: 'bg-emerald-100 text-emerald-800 ring-1 ring-emerald-200/80',
+    5: 'bg-slate-100 text-slate-600 ring-1 ring-slate-200/80',
   }
-  return classes[s] || 'bg-[#f3f4f6] text-[#6b7280]'
+  return classes[s] ?? 'bg-slate-100 text-slate-600 ring-1 ring-slate-200/80'
 }
 
 const applyFilter = () => {
@@ -1214,6 +1297,311 @@ const resetFilter = () => {
   currentPage.value = 1
 }
 
+/** 当前导出用户名（与登录邮箱联动，未登录时为默认文案） */
+function getExportUserDisplayName(): string {
+  const email = localStorage.getItem('campus_login_email')
+  if (email?.trim()) {
+    const local = email.split('@')[0]?.trim()
+    if (local) return sanitizeFilenameSegment(local)
+  }
+  const name = localStorage.getItem('bangbang_display_name')?.trim()
+  if (name) return sanitizeFilenameSegment(name)
+  return '校园用户'
+}
+
+function sanitizeFilenameSegment(raw: string): string {
+  const s = raw.replace(/[/\\:*?"<>|]/g, '_').trim()
+  return s.slice(0, 48) || '用户'
+}
+
+function pad2(n: number): string {
+  return String(n).padStart(2, '0')
+}
+
+/** YYYY-MM-DD HH:mm:ss */
+function formatDateTime(ms: number): string {
+  const d = new Date(ms)
+  return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())} ${pad2(d.getHours())}:${pad2(d.getMinutes())}:${pad2(d.getSeconds())}`
+}
+
+function safeFiniteNumber(n: unknown, fallback = 0): number {
+  const x = Number(n)
+  return Number.isFinite(x) ? x : fallback
+}
+
+function formatMoney(n: number): string {
+  if (!Number.isFinite(n)) return '0.00'
+  return (Math.round(n * 100) / 100).toFixed(2)
+}
+
+/** 解析 YYYY-MM-DD 为当日 0 点本地时间戳 */
+function parseDateStart(isoDate: string): number | null {
+  if (!isoDate || !/^\d{4}-\d{2}-\d{2}$/.test(isoDate)) return null
+  const parts = isoDate.split('-').map(Number)
+  const y = parts[0]
+  const mo = parts[1]
+  const d = parts[2]
+  if (y == null || mo == null || d == null) return null
+  const t = new Date(y, mo - 1, d, 0, 0, 0, 0).getTime()
+  return Number.isNaN(t) ? null : t
+}
+
+/** 当日 23:59:59.999 */
+function parseDateEnd(isoDate: string): number | null {
+  if (!isoDate || !/^\d{4}-\d{2}-\d{2}$/.test(isoDate)) return null
+  const parts = isoDate.split('-').map(Number)
+  const y = parts[0]
+  const mo = parts[1]
+  const d = parts[2]
+  if (y == null || mo == null || d == null) return null
+  const t = new Date(y, mo - 1, d, 23, 59, 59, 999).getTime()
+  return Number.isNaN(t) ? null : t
+}
+
+function resolvePaymentRecord(o: Order): string {
+  if (o.paymentRecord?.trim()) return o.paymentRecord
+  const map: Record<number, string> = {
+    1: '待支付（校园统一结算）',
+    2: '制作中（未结清）',
+    3: '待收货（物流中）',
+    4: '已完成（已结清）',
+    5: '已取消',
+  }
+  return map[o.status] ?? '—'
+}
+
+/** CSV 单元格转义，兼容 undefined / 数字 / 换行 */
+function escapeCsvField(val: unknown): string {
+  const raw = val == null ? '' : String(val)
+  const normalized = raw.replace(/\r\n/g, '\n').replace(/\r/g, '\n')
+  const inner = normalized.replace(/"/g, '""')
+  if (/[",\n]/.test(inner)) return `"${inner}"`
+  return inner
+}
+
+function buildCsvContent(rows: Order[]): string {
+  const headers = [
+    '订单编号',
+    '商品名称',
+    '预订时间',
+    '单价(元)',
+    '数量',
+    '订单金额(元)',
+    '订单状态',
+    '支付记录',
+    '尺寸',
+    '颜色',
+    '定制',
+    '备注',
+  ]
+  const lines: string[] = [headers.map((h) => escapeCsvField(h)).join(',')]
+  rows.forEach((o, idx) => {
+    const g = goods.value.find((x) => x.name === o.goodsName)
+    const unit = safeFiniteNumber(o.unitPrice ?? g?.price, 0)
+    const num = safeFiniteNumber(o.num, 0)
+    const totalRaw = o.totalAmount ?? unit * num
+    const total = safeFiniteNumber(totalRaw, 0)
+    const orderNo = o.orderNo ?? `LEGACY-${String(idx + 1).padStart(4, '0')}`
+    const timeStr =
+      o.createdAt != null && Number.isFinite(o.createdAt)
+        ? formatDateTime(o.createdAt)
+        : '—'
+    const cells: unknown[] = [
+      orderNo,
+      o.goodsName ?? '',
+      timeStr,
+      formatMoney(unit),
+      String(num),
+      formatMoney(total),
+      o.statusText ?? '',
+      resolvePaymentRecord(o),
+      o.size || '—',
+      o.color || '—',
+      o.custom || '—',
+      o.remark || '无',
+    ]
+    lines.push(cells.map((c) => escapeCsvField(c)).join(','))
+  })
+  return lines.join('\r\n')
+}
+
+/** 触发 CSV 下载（UTF-8 BOM + 延迟 revoke 兼容 Safari；IE 使用 msSaveBlob） */
+function downloadCsvFile(filename: string, csvBody: string) {
+  const bom = '\uFEFF'
+  const blob = new Blob([bom + csvBody], {
+    type: 'text/csv;charset=utf-8',
+  })
+
+  const nav = navigator as Navigator & {
+    msSaveOrOpenBlob?: (blob: Blob, defaultName?: string) => boolean
+    msSaveBlob?: (blob: Blob, defaultName?: string) => boolean
+  }
+
+  if (typeof nav.msSaveOrOpenBlob === 'function') {
+    nav.msSaveOrOpenBlob(blob, filename)
+    return
+  }
+  if (typeof nav.msSaveBlob === 'function') {
+    nav.msSaveBlob(blob, filename)
+    return
+  }
+
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.setAttribute('download', filename)
+  a.rel = 'noopener noreferrer'
+  a.style.display = 'none'
+  a.style.position = 'fixed'
+  a.style.left = '-9999px'
+  a.style.top = '0'
+
+  document.body.appendChild(a)
+  try {
+    if (typeof a.click === 'function') {
+      a.click()
+    } else {
+      throw new Error('browser does not support programmatic click')
+    }
+  } finally {
+    window.setTimeout(() => {
+      try {
+        document.body.removeChild(a)
+      } catch {
+        /* ignore */
+      }
+      URL.revokeObjectURL(url)
+    }, 200)
+  }
+}
+
+function buildExportCsvFilename(): string {
+  const userLabel = getExportUserDisplayName()
+  const today = new Date()
+  const datePart = `${today.getFullYear()}-${pad2(today.getMonth() + 1)}-${pad2(today.getDate())}`
+  return `校园文创订单明细_${userLabel}_${datePart}.csv`
+}
+
+/** 校验导出日期区间（空表示不按日期筛选） */
+function validateExportDateInputs(): boolean {
+  const start = exportStartDate.value.trim()
+  const end = exportEndDate.value.trim()
+  if (!start && !end) return true
+
+  const t0 = start ? parseDateStart(start) : null
+  const t1 = end ? parseDateEnd(end) : null
+  if (start && t0 === null) {
+    showWarningDialog('日期有误', '起始日期格式不正确。')
+    return false
+  }
+  if (end && t1 === null) {
+    showWarningDialog('日期有误', '结束日期格式不正确。')
+    return false
+  }
+  if (t0 != null && t1 != null && t0 > t1) {
+    showWarningDialog('日期有误', '起始日期不能晚于结束日期。')
+    return false
+  }
+  return true
+}
+
+/** 仅导出当前会话「我的订单」列表（单用户前端数据） */
+function getOrdersForExportFiltered(): Order[] {
+  let list = [...orders.value]
+  const start = exportStartDate.value.trim()
+  const end = exportEndDate.value.trim()
+  if (!start && !end) return list
+
+  const t0 = start ? parseDateStart(start) : null
+  const t1 = end ? parseDateEnd(end) : null
+
+  list = list.filter((o) => {
+    if (o.createdAt == null) return false
+    if (t0 != null && o.createdAt < t0) return false
+    if (t1 != null && o.createdAt > t1) return false
+    return true
+  })
+  return list
+}
+
+function clearExportDateFilters() {
+  exportStartDate.value = ''
+  exportEndDate.value = ''
+}
+
+/** 导出流程防抖：防止短时间重复打开确认框或重复触发 */
+let exportButtonLastClickAt = 0
+const EXPORT_BUTTON_DEBOUNCE_MS = 700
+
+async function runExportOrdersCsv() {
+  try {
+    const filtered = getOrdersForExportFiltered()
+    if (filtered.length === 0) {
+      ElMessage.warning(
+        exportStartDate.value || exportEndDate.value
+          ? '所选时间范围内没有可导出的订单'
+          : '当前没有可导出的订单',
+      )
+      return
+    }
+
+    exportLoading.value = true
+    await nextTick()
+    await new Promise<void>((resolve) => {
+      window.setTimeout(() => resolve(), 280)
+    })
+
+    let csv: string
+    try {
+      csv = buildCsvContent(filtered)
+    } catch (e) {
+      console.error('[export] buildCsvContent', e)
+      throw e
+    }
+
+    const filename = buildExportCsvFilename()
+    try {
+      downloadCsvFile(filename, csv)
+    } catch (e) {
+      console.error('[export] downloadCsvFile', e)
+      throw e
+    }
+
+    ElMessage.success('导出成功，文件已下载')
+  } catch (err) {
+    console.error('[export]', err)
+    ElMessage.error('导出失败，请重试')
+  } finally {
+    exportLoading.value = false
+  }
+}
+
+function onClickExportOrders() {
+  if (exportLoading.value) return
+
+  const now = Date.now()
+  if (now - exportButtonLastClickAt < EXPORT_BUTTON_DEBOUNCE_MS) {
+    return
+  }
+  exportButtonLastClickAt = now
+
+  if (orders.value.length === 0) {
+    showWarningDialog('暂无订单', '当前没有可导出的订单记录。')
+    return
+  }
+  if (!validateExportDateInputs()) return
+
+  const useRange = Boolean(exportStartDate.value.trim() || exportEndDate.value.trim())
+  const msg = useRange ? '是否确认导出所选时间范围内的订单明细？' : '是否确认导出全部订单明细？'
+  showConfirmDialog('导出明细', msg, () => {
+    void runExportOrdersCsv().catch((err) => {
+      console.error('[export] unhandled', err)
+      exportLoading.value = false
+      ElMessage.error('导出失败，请重试')
+    })
+  })
+}
+
 loadFavoriteIds()
 </script>
 
@@ -1222,16 +1610,16 @@ loadFavoriteIds()
 @import '@/styles/studentPage.css';
 
 :root {
-  --first-color: #a755f6;
-  --second-color: #7c3aed;
-  --el-color-primary: #a755f6;
-  --el-color-primary-light-3: #c4b5fd;
-  --el-color-primary-light-5: #d8b4fe;
-  --el-color-primary-light-7: #e9d5ff;
-  --el-color-primary-light-8: #f3e8ff;
-  --el-color-primary-light-9: #faf5ff;
-  --el-color-primary-dark-2: #7c3aed;
-  --el-border-radius-base: 12px;
+  --first-color: #6366f1;
+  --second-color: #4f46e5;
+  --el-color-primary: #6366f1;
+  --el-color-primary-light-3: #a5b4fc;
+  --el-color-primary-light-5: #c7d2fe;
+  --el-color-primary-light-7: #e0e7ff;
+  --el-color-primary-light-8: #eef2ff;
+  --el-color-primary-light-9: #f5f3ff;
+  --el-color-primary-dark-2: #4f46e5;
+  --el-border-radius-base: 14px;
 }
 
 body {
@@ -1266,8 +1654,8 @@ body {
 
 .select-beauty:focus {
   outline: none;
-  border-color: #a755f6;
-  box-shadow: 0 0 0 3px rgba(167, 85, 246, 0.18);
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
 }
 
 .select-arrow {
@@ -1281,7 +1669,7 @@ body {
 }
 
 .select-beauty:focus + .select-arrow {
-  color: #a755f6;
+  color: #6366f1;
 }
 
 .favorite-heart-btn {
@@ -1314,29 +1702,176 @@ body {
   background: #fff1f2;
 }
 
-.page-transition {
-  animation: fadeInUp 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+/* ---------- Teleport 弹窗（不依赖 Tailwind 工具类，避免样式失效） ---------- */
+.sp-dialog-overlay {
+  position: fixed !important;
+  inset: 0;
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  padding-bottom: max(1rem, env(safe-area-inset-bottom, 0px));
+  box-sizing: border-box;
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.sp-dialog-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.48);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.sp-dialog-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 22rem;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid rgba(199, 210, 254, 0.85);
+  box-shadow:
+    0 24px 60px -12px rgba(79, 70, 229, 0.28),
+    0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+  overflow: hidden;
+}
+
+.sp-dialog-body {
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.sp-dialog-icon {
+  width: 4rem;
+  height: 4rem;
+  margin: 0 auto 1rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sp-dialog-icon-svg {
+  width: 2rem;
+  height: 2rem;
+}
+
+.sp-dialog-icon--success {
+  background: #ecfdf5;
+  color: #059669;
+  box-shadow: 0 0 0 1px #a7f3d0;
+}
+
+.sp-dialog-icon--warning {
+  background: #fffbeb;
+  color: #d97706;
+  box-shadow: 0 0 0 1px #fde68a;
+}
+
+.sp-dialog-icon--confirm {
+  background: #eef2ff;
+  color: #6366f1;
+  box-shadow: 0 0 0 1px #c7d2fe;
+}
+
+.sp-dialog-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.sp-dialog-msg {
+  font-size: 0.875rem;
+  color: #64748b;
+  line-height: 1.55;
+  margin-bottom: 1.25rem;
+}
+
+.sp-dialog-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: stretch;
+}
+
+.sp-dialog-actions .sp-dialog-btn {
+  flex: 1;
+  min-width: 0;
+}
+
+.sp-dialog-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  border-radius: 14px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.2s ease,
+    filter 0.2s ease,
+    background 0.2s ease;
+}
+
+.sp-dialog-btn--block {
+  width: 100%;
+}
+
+.sp-dialog-btn--primary {
+  color: #fff;
+  background: linear-gradient(135deg, #6366f1 0%, #7c3aed 50%, #8b5cf6 100%);
+  box-shadow: 0 6px 18px rgba(99, 102, 241, 0.32);
+}
+
+.sp-dialog-btn--primary:hover {
+  filter: brightness(1.05);
+  box-shadow: 0 10px 24px rgba(99, 102, 241, 0.38);
+}
+
+.sp-dialog-btn--warning {
+  color: #fff;
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  box-shadow: 0 6px 18px rgba(245, 158, 11, 0.35);
+}
+
+.sp-dialog-btn--ghost {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+}
+
+.sp-dialog-btn--ghost:hover {
+  background: #e2e8f0;
+}
+
+.sp-dialog-btn:active {
+  transform: scale(0.97);
 }
 
 .dialog-enter-active,
 .dialog-leave-active {
-  transition: all 0.2s ease;
+  transition: opacity 0.2s ease;
+}
+
+.dialog-enter-active .sp-dialog-card,
+.dialog-leave-active .sp-dialog-card {
+  transition: transform 0.2s ease;
 }
 
 .dialog-enter-from,
 .dialog-leave-to {
   opacity: 0;
-  transform: scale(0.97);
+}
+
+.dialog-enter-from .sp-dialog-card,
+.dialog-leave-to .sp-dialog-card {
+  transform: scale(0.96) translateY(8px);
 }
 </style>

@@ -1,13 +1,14 @@
 <template>
   <landingNav>
-    <div class="container">
-      <div class="login-container">
-        <!-- 右上角关闭/取消按钮 -->
-        <div class="close-icon" @click="handleClose">
+    <div class="auth-layout">
+      <div class="auth-card">
+        <button type="button" class="auth-close" aria-label="关闭" @click="handleClose">
           <i class="fas fa-times"></i>
-        </div>
+        </button>
 
-        <h1>登录</h1>
+        <p class="auth-eyebrow">CampusMerch</p>
+        <h1 class="auth-title">登录</h1>
+        <p class="auth-desc">使用邮箱登录，进入校园文创预订</p>
         <el-form
           :model="loginForm"
           label-position="top"
@@ -150,9 +151,9 @@
             <el-button type="primary" class="login-submit-btn" @click="handleLogin">登录</el-button>
           </el-form-item>
         </el-form>
-        <div class="register-text">
+        <div class="auth-footer-text">
           暂无账号？
-          <router-link class="register-link" to="/register">注册账号</router-link>
+          <router-link to="/register">注册账号</router-link>
         </div>
       </div>
     </div>
@@ -164,8 +165,10 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import landingNav from '@/components/landingNav.vue'
+import { useUserStore } from '@/stores/user'
 
 const router = useRouter()
+const userStore = useUserStore()
 
 const loginForm = ref({
   email: '',
@@ -183,6 +186,9 @@ const handleLogin = async () => {
   try {
     await loginRef.value.validate()
     console.log('登录验证通过', loginForm.value)
+    const emailTrim = loginForm.value.email.trim()
+    const accessToken = `campus_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 10)}`
+    userStore.setSession({ email: emailTrim, accessToken })
     // 登录成功，跳转到学生端界面
     router.push('/student')
   } catch (error) {
@@ -294,212 +300,183 @@ const handleReset = async () => {
 </script>
 
 <style scoped>
-.container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+@import '@/styles/authPage.css';
 
-  height: 80vh;
-}
-
-/* 登录容器 */
-.login-container {
-  position: relative; /* 必须，为了让关闭按钮绝对定位 */
-  background-color: rgba(255, 255, 255, 0.893);
-  padding: 40px 40px 30px;
-  border-radius: 20px; /* 要求的 20px 圆角 */
-  width: 320px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.167);
-}
-
-/* 右上角关闭按钮 */
-.close-icon {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  width: 30px;
-  height: 30px;
-  background-color: #f0f2f5;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  z-index: 10;
-}
-.close-icon i {
-  color: #909399;
-  font-size: 14px;
-}
-.close-icon:hover {
-  background-color: #e4e7ed;
-}
-.login-container h1 {
-  text-align: center;
-  margin-bottom: 30px;
-  color: var(--first-color);
+:deep(.el-form-item) {
+  margin-bottom: 1.125rem;
 }
 
 :deep(.el-form-item__label) {
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 8px !important;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--sp-text-title, #0f172a);
+  margin-bottom: 0.375rem !important;
   padding: 0 !important;
 }
 
-/* 输入框通用圆角 */
 :deep(.el-input__wrapper) {
-  width: 100%;
-  min-height: 40px;
-  padding: 0 12px !important;
-  border-radius: 10px !important;
-  background-color: #ffffff !important;
-  transition: all 0.2s ease !important;
+  min-height: 2.75rem;
+  padding: 0 0.875rem !important;
+  border-radius: 14px !important;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%) !important;
+  border: 1px solid rgba(226, 232, 240, 0.95) !important;
+  box-shadow: none !important;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease !important;
+}
+
+:deep(.el-input__wrapper:hover) {
+  border-color: rgba(199, 210, 254, 0.95) !important;
 }
 
 :deep(.el-input__wrapper.is-focus) {
-  box-shadow: 0 0 0 1px var(--first-color) inset !important;
+  border-color: var(--first-color) !important;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.14) !important;
 }
 
-/* 记住我 + 忘记密码 */
+:deep(.el-input__prefix) {
+  color: var(--sp-text-muted);
+}
+
 .remember-forgot-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 14px;
-  margin: 6px 0 20px;
+  font-size: 0.8125rem;
+  margin: 0.25rem 0 1.25rem;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 0.5rem;
+}
+
+:deep(.remember-check.el-checkbox) {
+  --el-checkbox-text-color: var(--sp-text-muted);
+  font-weight: 500;
 }
 
 .forgot-link {
   text-decoration: none;
   cursor: pointer;
-  color: #667085;
-}
-.forgot-link:hover {
-  color: var(--first-color);
-  text-decoration: underline;
-  font-weight: 700;
-}
-
-/* 登录按钮 */
-.login-submit-btn {
-  height: 40px;
-  width: 100%;
-  background: var(--first-color) !important;
-  border: none !important;
-  border-radius: 10px !important;
-  font-size: 15px !important;
-  font-weight: 600 !important;
-  box-shadow: 0 4px 8px rgba(167, 85, 246, 0.4) !important;
-  transition: all 0.2s ease !important;
-  color: white !important;
-}
-.login-submit-btn:hover {
-  cursor: pointer;
-  transform: translateY(-2px);
-  background: var(--second-color) !important;
-}
-
-/* 弹窗样式 */
-:deep(.reset-dialog) {
-  border-radius: 20px !important;
-  overflow: hidden;
-}
-
-.reset-header-tip {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 20px;
-  border-radius: 20px; /* 要求的圆角 */
-}
-.reset-header-tip h2 {
-  font-size: 24px;
   font-weight: 600;
   color: var(--first-color);
 }
+.forgot-link:hover {
+  color: var(--second-color);
+  text-decoration: underline;
+}
 
-/* 验证码行 70% : 30% 比例 */
+.login-submit-btn {
+  height: 2.875rem;
+  width: 100%;
+  border: none !important;
+  border-radius: 14px !important;
+  font-size: 0.9375rem !important;
+  font-weight: 700 !important;
+  color: #fff !important;
+  background: linear-gradient(135deg, #6366f1 0%, #7c3aed 50%, #8b5cf6 100%) !important;
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.32) !important;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease !important;
+}
+.login-submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(99, 102, 241, 0.38) !important;
+}
+.login-submit-btn:active {
+  transform: scale(0.97);
+}
+
+/* 重置密码弹窗 */
+:deep(.reset-dialog.el-dialog) {
+  border-radius: 16px !important;
+  overflow: hidden;
+  border: 1px solid rgba(99, 102, 241, 0.12);
+  box-shadow: 0 24px 60px -12px rgba(79, 70, 229, 0.22) !important;
+}
+
+.reset-header-tip {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+.reset-header-tip h2 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #6366f1 0%, #7c3aed 45%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
 .input-with-button {
   display: flex;
-  gap: 10px;
+  gap: 0.5rem;
   width: 100%;
+  align-items: stretch;
 }
 .input-with-button .el-input {
-  flex: 7; /* 占 70% */
+  flex: 7;
 }
 .input-with-button .el-button {
-  flex: 3; /* 占 30% */
-  height: 40px;
-  border-radius: 10px !important;
-  padding: 0 !important; /* 比例较窄，取消内边距防止文字溢出 */
-  font-size: 13px;
-  background: var(--first-color) !important;
+  flex: 3;
+  min-height: 2.75rem;
+  border-radius: 14px !important;
+  padding: 0 0.25rem !important;
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
   border: none !important;
-  color: white !important;
-  transition: all 0.2s ease !important;
+  color: #fff !important;
+  background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%) !important;
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.28) !important;
+  transition: transform 0.2s ease !important;
 }
-
 .input-with-button .el-button:hover {
-  background: var(--second-color) !important;
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
+.input-with-button .el-button:active {
+  transform: scale(0.97);
 }
 
-/* 弹窗底部按钮 */
 .dialog-footer {
   display: flex;
   justify-content: center;
-  gap: 15px;
-  padding-bottom: 10px;
+  gap: 0.75rem;
+  padding-top: 0.25rem;
 }
 .dialog-footer .el-button {
-  height: 40px;
-  padding: 0 30px;
-  border-radius: 10px !important;
-  font-size: 15px;
-}
-.reset-cancel-btn {
-  border: 1px solid var(--first-color, #a755f6) !important;
-  color: var(--first-color, #a755f6) !important;
-  transition: all 0.2s ease !important;
-  box-shadow: 0 4px 8px rgba(168, 85, 246, 0.119) !important;
+  min-height: 2.75rem;
+  padding: 0 1.5rem;
+  border-radius: 14px !important;
+  font-size: 0.9375rem;
+  font-weight: 700;
 }
 
+.reset-cancel-btn {
+  border: 2px solid rgba(199, 210, 254, 0.95) !important;
+  color: var(--first-color) !important;
+  background: #fff !important;
+}
 .reset-cancel-btn:hover {
-  background: var(--first-color, #a755f6) !important;
-  color: white !important;
-  transform: translateY(-2px);
+  background: var(--sp-primary-soft, #eef2ff) !important;
+  transform: translateY(-1px);
+}
+.reset-cancel-btn:active {
+  transform: scale(0.97);
 }
 
 .reset-confirm-btn {
-  background: var(--first-color, #a755f6) !important;
   border: none !important;
-  color: white !important;
-  transition: all 0.2s ease !important;
-  box-shadow: 0 4px 8px rgba(167, 85, 246, 0.4) !important;
+  color: #fff !important;
+  background: linear-gradient(135deg, #6366f1 0%, #7c3aed 50%, #8b5cf6 100%) !important;
+  box-shadow: 0 6px 18px rgba(99, 102, 241, 0.28) !important;
 }
-
 .reset-confirm-btn:hover {
-  background: var(--second-color, #7c3aed) !important;
-
   transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(99, 102, 241, 0.35) !important;
 }
-
-.register-text {
-  text-align: center;
-  font-size: 14px;
-  color: #667085;
-}
-.register-link {
-  text-decoration: none;
-  cursor: pointer;
-  color: var(--first-color);
-}
-.register-link:hover {
-  color: var(--second-color);
-  text-decoration: underline;
-  font-weight: 700;
+.reset-confirm-btn:active {
+  transform: scale(0.97);
 }
 </style>
