@@ -110,7 +110,7 @@
 .nav-link--solid {
   color: #fff !important;
   border: none;
-  background: linear-gradient(135deg, #6366f1 0%, #7c3aed 48%, #8b5cf6 100%);
+  background: linear-gradient(135deg, #4f6ae8 0%, #5b62f0 50%, #6366f1 100%);
   box-shadow:
     0 6px 20px rgba(99, 102, 241, 0.32),
     0 2px 8px rgba(79, 70, 229, 0.12);

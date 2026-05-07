@@ -12,12 +12,12 @@ body {
   font-family: 'Noto Sans SC', system-ui, -apple-system, sans-serif;
 }
 :root {
-  --first-color: #6366f1;
-  --second-color: #4f46e5;
-  --sp-primary: #6366f1;
-  --sp-primary-deep: #4f46e5;
+  --first-color: #4f6ae8;
+  --second-color: #3d52c4;
+  --sp-primary: #4f6ae8;
+  --sp-primary-deep: #3d52c4;
   --sp-primary-soft: #eef2ff;
-  --sp-border: rgba(99, 102, 241, 0.14);
+  --sp-border: rgba(79, 106, 232, 0.16);
   --sp-text-title: #0f172a;
   --sp-text-muted: #64748b;
 }
