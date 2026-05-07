@@ -182,9 +182,18 @@ const handleLogin = async () => {
   try {
     await loginRef.value.validate()
     loading.value = true
+
+    const email = loginForm.value.email.trim()
+    const password = loginForm.value.password
     const accessToken = `campus_${Date.now().toString(36)}`
-    userStore.setSession({ email: loginForm.value.email.trim(), accessToken })
-    router.push('/student')
+
+    userStore.setSession({ email, accessToken })
+
+    if (email === userStore.ADMIN.email && password === userStore.ADMIN.password) {
+      router.push('/admin')
+    } else {
+      router.push('/student')
+    }
   } catch (err) {
     console.error('Login validation failed')
   } finally {

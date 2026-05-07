@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
+
 const router = createRouter({
   history: createWebHistory('/'),
   routes: [
@@ -23,6 +24,11 @@ const router = createRouter({
       name: 'student',
       component: () => import('@/views/student/studentPage.vue'),
     },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: () => import('@/views/admin/adminPage.vue'),
+    }
   ]
 })
 
