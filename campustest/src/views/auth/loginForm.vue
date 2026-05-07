@@ -5,10 +5,10 @@
         <button type="button" class="auth-close" aria-label="关闭" @click="handleClose">
           <i class="fas fa-times"></i>
         </button>
-
-        <p class="auth-eyebrow">CampusMerch</p>
         <h1 class="auth-title">登录</h1>
         <p class="auth-desc">使用邮箱登录，进入校园文创预订</p>
+
+        <!-- 登录表单 -->
         <el-form
           :model="loginForm"
           label-position="top"
@@ -40,112 +40,9 @@
 
           <div class="remember-forgot-row">
             <el-checkbox class="remember-check">记住我</el-checkbox>
+            <!-- 点击直接触发弹窗 -->
             <a class="forgot-link" @click="openResetDialog">忘记密码?</a>
           </div>
-
-          <!-- 忘记密码弹窗 -->
-          <el-dialog
-            v-model="showResetDialog"
-            width="440px"
-            align-center
-            class="reset-dialog"
-            :close-on-click-modal="false"
-          >
-            <!-- 头部引导文案 -->
-            <div class="reset-header-tip">
-              <h2>重置密码</h2>
-            </div>
-
-            <div class="reset-content">
-              <el-form
-                :model="resetForm"
-                label-position="top"
-                :rules="resetRules"
-                ref="resetRef"
-                :hide-required-asterisk="true"
-              >
-                <el-form-item label="邮箱" prop="email">
-                  <div class="input-with-button">
-                    <el-input
-                      v-model="resetForm.email"
-                      placeholder="请输入注册时的邮箱"
-                      autocomplete="off"
-                      class="email-input"
-                    >
-                      <template #prefix>
-                        <i class="fas fa-envelope"></i>
-                      </template>
-                    </el-input>
-                    <el-button
-                      class="reset-captcha-btn"
-                      type="primary"
-                      @click="sendResetCaptcha"
-                      :disabled="sendingCaptcha || captchaCountdown > 0 || !resetForm.email"
-                    >
-                      {{
-                        captchaCountdown > 0
-                          ? `${captchaCountdown}s`
-                          : sendingCaptcha
-                            ? '...'
-                            : '发送验证码'
-                      }}
-                    </el-button>
-                  </div>
-                </el-form-item>
-
-                <el-form-item label="验证码" prop="captcha">
-                  <el-input
-                    v-model="resetForm.captcha"
-                    placeholder="请输入邮箱收到的验证码"
-                    autocomplete="off"
-                  >
-                    <template #prefix>
-                      <i class="fas fa-key"></i>
-                    </template>
-                  </el-input>
-                </el-form-item>
-
-                <el-form-item label="新密码" prop="password">
-                  <el-input
-                    v-model="resetForm.password"
-                    placeholder="请输入至少6位新密码"
-                    type="password"
-                    show-password
-                    autocomplete="off"
-                  >
-                    <template #prefix>
-                      <i class="fas fa-lock"></i>
-                    </template>
-                  </el-input>
-                </el-form-item>
-
-                <el-form-item label="确认新密码" prop="password_confirmation">
-                  <el-input
-                    v-model="resetForm.password_confirmation"
-                    placeholder="请再次确认新密码"
-                    type="password"
-                    show-password
-                    autocomplete="off"
-                  >
-                    <template #prefix>
-                      <i class="fas fa-lock"></i>
-                    </template>
-                  </el-input>
-                </el-form-item>
-              </el-form>
-            </div>
-
-            <template #footer>
-              <div class="dialog-footer">
-                <el-button @click="showResetDialog = false" class="reset-cancel-btn"
-                  >取消</el-button
-                >
-                <el-button type="primary" @click="handleReset" class="reset-confirm-btn"
-                  >确认重置</el-button
-                >
-              </div>
-            </template>
-          </el-dialog>
 
           <el-form-item>
             <el-button
@@ -158,11 +55,94 @@
             </el-button>
           </el-form-item>
         </el-form>
+
         <div class="auth-footer-text">
           暂无账号？
           <router-link to="/register">注册账号</router-link>
         </div>
       </div>
+
+      <!-- 忘记密码弹窗 (优化无滚动条版本) -->
+      <el-dialog
+        v-model="showResetDialog"
+        width="420px"
+        align-center
+        class="reset-dialog-no-scroll"
+        :close-on-click-modal="false"
+        :destroy-on-close="true"
+        :show-close="false"
+      >
+        <div class="reset-header-tip">
+          <h2 class="reset-title">重置密码</h2>
+          <p>验证邮箱后即可设置新密码</p>
+        </div>
+
+        <div class="reset-content">
+          <el-form
+            :model="resetForm"
+            label-position="top"
+            :rules="resetRules"
+            ref="resetRef"
+            :hide-required-asterisk="true"
+          >
+            <el-form-item label="邮箱" prop="email" class="compact-form-item">
+              <div class="input-with-button">
+                <el-input v-model="resetForm.email" placeholder="注册邮箱" autocomplete="off">
+                  <template #prefix>
+                    <i class="fas fa-envelope"></i>
+                  </template>
+                </el-input>
+                <el-button
+                  class="reset-captcha-btn"
+                  @click="sendResetCaptcha"
+                  :disabled="sendingCaptcha || captchaCountdown > 0 || !resetForm.email"
+                >
+                  {{
+                    captchaCountdown > 0 ? `${captchaCountdown}s` : sendingCaptcha ? '...' : '发送'
+                  }}
+                </el-button>
+              </div>
+            </el-form-item>
+
+            <el-form-item label="验证码" prop="captcha" class="compact-form-item">
+              <el-input v-model="resetForm.captcha" placeholder="请输入6位验证码">
+                <template #prefix><i class="fas fa-key"></i></template>
+              </el-input>
+            </el-form-item>
+
+            <el-form-item label="新密码" prop="password" class="compact-form-item">
+              <el-input
+                v-model="resetForm.password"
+                placeholder="至少6位新密码"
+                type="password"
+                show-password
+              >
+                <template #prefix><i class="fas fa-lock"></i></template>
+              </el-input>
+            </el-form-item>
+
+            <el-form-item label="确认密码" prop="password_confirmation" class="compact-form-item">
+              <el-input
+                v-model="resetForm.password_confirmation"
+                placeholder="再次输入以确认"
+                type="password"
+                show-password
+              >
+                <template #prefix><i class="fas fa-lock"></i></template>
+              </el-input>
+            </el-form-item>
+          </el-form>
+        </div>
+
+        <template #footer>
+          <div class="dialog-footer">
+            <el-button @click="showResetDialog = false" class="reset-cancel-btn">取消</el-button>
+            <el-button type="primary" @click="handleReset" class="reset-confirm-btn"
+              >确认重置</el-button
+            >
+          </div>
+        </template>
+      </el-dialog>
     </div>
   </landingNav>
 </template>
@@ -176,53 +156,59 @@ import { useUserStore } from '@/stores/user'
 
 const router = useRouter()
 const userStore = useUserStore()
+const loginRef = ref()
+const resetRef = ref()
+const loading = ref(false)
 
-interface LoginFormModel {
-  email: string
-  password: string
-}
-
-const loginForm = ref<LoginFormModel>({
+// 登录相关
+const loginForm = ref({
   email: '',
   password: '',
 })
-const rules = ref({
+
+const rules = {
   email: [
     { required: true, message: '请输入邮箱', trigger: 'blur' },
-    { type: 'email', message: '请输入有效的邮箱格式', trigger: 'blur' },
+    { type: 'email', message: '邮箱格式不正确', trigger: 'blur' },
   ],
   password: [
     { required: true, message: '请输入密码', trigger: 'blur' },
-    { min: 6, message: '请输入6位以上密码', trigger: 'blur' },
+    { min: 6, message: '密码不少于6位', trigger: 'blur' },
   ],
-})
-
-const loginRef = ref()
-const loading = ref(false)
+}
 
 const handleLogin = async () => {
   if (!loginRef.value) return
   try {
     await loginRef.value.validate()
-    console.log('登录验证通过', loginForm.value)
-    const emailTrim = loginForm.value.email.trim()
-    const accessToken = `campus_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 10)}`
-    userStore.setSession({ email: emailTrim, accessToken })
-    router.push('/student')
-  } catch (error) {
-    console.log('登录验证失败', error)
+    loading.value = true
+
+    const email = loginForm.value.email.trim()
+    const password = loginForm.value.password
+    const accessToken = `campus_${Date.now().toString(36)}`
+
+    userStore.setSession({ email, accessToken })
+
+    if (email === userStore.ADMIN.email && password === userStore.ADMIN.password) {
+      router.push('/admin')
+    } else {
+      router.push('/student')
+    }
+  } catch (err) {
+    console.error('Login validation failed')
+  } finally {
+    loading.value = false
   }
 }
-// 处理右上角关闭按钮
+
 const handleClose = () => {
-  // 关闭弹窗
-  showResetDialog.value = false
-  // 跳转到 introPage 界面
   router.push('/')
 }
 
-// 忘记密码相关
+// 忘记密码逻辑
 const showResetDialog = ref(false)
+const sendingCaptcha = ref(false)
+const captchaCountdown = ref(0)
 const resetForm = ref({
   email: '',
   captcha: '',
@@ -230,50 +216,33 @@ const resetForm = ref({
   password_confirmation: '',
 })
 
-// 验证密码一致性
+const openResetDialog = () => {
+  showResetDialog.value = true
+}
+
 const validateConfirmPassword = (rule: any, value: string, callback: any) => {
   if (value !== resetForm.value.password) {
-    callback(new Error('两次输入的密码不一致'))
+    callback(new Error('两次密码不一致'))
   } else {
     callback()
   }
 }
 
-const resetRules = ref({
-  email: [{ type: 'email', message: '请输入有效的邮箱格式', trigger: 'blur' }],
+const resetRules = {
+  email: [{ required: true, type: 'email', message: '邮箱格式不正确', trigger: 'blur' }],
   captcha: [{ required: true, message: '请输入验证码', trigger: 'blur' }],
-  password: [
-    { min: 6, message: '请输入至少6位新密码', trigger: 'blur' },
-    {
-      validator: (rule: any, value: string, callback: any) => {
-        if (resetForm.value.password_confirmation) {
-          resetRef.value?.validateField('password_confirmation')
-        }
-        callback()
-      },
-      trigger: 'blur',
-    },
-  ],
+  password: [{ required: true, min: 6, message: '密码至少6位', trigger: 'blur' }],
   password_confirmation: [
-    { required: true, message: '请确认新密码', trigger: 'blur' },
+    { required: true, message: '请确认密码', trigger: 'blur' },
     { validator: validateConfirmPassword, trigger: 'blur' },
   ],
-})
-
-const resetRef = ref()
-const sendingCaptcha = ref(false)
-const captchaCountdown = ref(0)
-
-const openResetDialog = () => {
-  showResetDialog.value = true
 }
 
 const sendResetCaptcha = async () => {
   if (!resetForm.value.email) return
   try {
-    await resetRef.value.validateField('email')
     sendingCaptcha.value = true
-    console.log('发送验证码到:', resetForm.value.email)
+    // 模拟发送
     captchaCountdown.value = 60
     const timer = setInterval(() => {
       captchaCountdown.value--
@@ -282,8 +251,9 @@ const sendResetCaptcha = async () => {
         sendingCaptcha.value = false
       }
     }, 1000)
+    ElMessage.success('验证码已发送至邮箱')
   } catch (error) {
-    console.log('邮箱格式错误', error)
+    sendingCaptcha.value = false
   }
 }
 
@@ -291,28 +261,10 @@ const handleReset = async () => {
   if (!resetRef.value) return
   try {
     await resetRef.value.validate()
-    console.log('重置密码验证通过', resetForm.value)
-
-    // 显示重置密码成功提示
-    ElMessage({
-      message: '密码重置成功！请使用新密码登录',
-      type: 'success',
-      duration: 3000,
-      showClose: true,
-    })
-
+    ElMessage.success('密码重置成功！请登录')
     showResetDialog.value = false
-    resetForm.value = { email: '', captcha: '', password: '', password_confirmation: '' }
   } catch (error) {
-    console.log('重置密码验证失败', error)
-
-    // 显示重置密码失败提示
-    ElMessage({
-      message: '重置密码失败，请检查输入信息',
-      type: 'error',
-      duration: 3000,
-      showClose: true,
-    })
+    ElMessage.error('请检查输入信息')
   }
 }
 </script>
@@ -320,6 +272,7 @@ const handleReset = async () => {
 <style scoped>
 @import '@/styles/authPage.css';
 
+/* --- 通用 Element 样式覆盖 --- */
 :deep(.el-form-item) {
   margin-bottom: 1.125rem;
 }
@@ -327,174 +280,159 @@ const handleReset = async () => {
 :deep(.el-form-item__label) {
   font-size: 0.8125rem;
   font-weight: 700;
-  color: var(--sp-text-title, #0f172a);
-  margin-bottom: 0.375rem !important;
+  color: #0f172a;
+  margin-bottom: 4px !important;
   padding: 0 !important;
+  line-height: 1.5;
 }
 
 :deep(.el-input__wrapper) {
   min-height: 2.75rem;
-  padding: 0 0.875rem !important;
-  border-radius: 14px !important;
-  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%) !important;
-  border: 1px solid rgba(226, 232, 240, 0.95) !important;
+  border-radius: 12px !important;
+  background: #f8fafc !important;
   box-shadow: none !important;
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease !important;
-}
-
-:deep(.el-input__wrapper:hover) {
-  border-color: rgba(199, 210, 254, 0.95) !important;
+  border: 1px solid #e2e8f0 !important;
 }
 
 :deep(.el-input__wrapper.is-focus) {
-  border-color: var(--first-color) !important;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.14) !important;
+  border-color: #6366f1 !important;
+  background: #fff !important;
 }
 
-:deep(.el-input__prefix) {
-  color: var(--sp-text-muted);
-}
-
+/* --- 登录特定样式 --- */
 .remember-forgot-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.8125rem;
-  margin: 0.25rem 0 1.25rem;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-:deep(.remember-check.el-checkbox) {
-  --el-checkbox-text-color: var(--sp-text-muted);
-  font-weight: 500;
+  margin-bottom: 1.25rem;
 }
 
 .forgot-link {
-  text-decoration: none;
-  cursor: pointer;
+  font-size: 0.8125rem;
   font-weight: 600;
-  color: var(--first-color);
-}
-.forgot-link:hover {
-  color: var(--second-color);
-  text-decoration: underline;
+  color: #6366f1;
+  cursor: pointer;
 }
 
 .login-submit-btn {
-  height: 2.875rem;
   width: 100%;
-  border: none !important;
+  height: 2.875rem;
   border-radius: 14px !important;
-  font-size: 0.9375rem !important;
+  background: linear-gradient(135deg, #6366f1 0%, #7c3aed 50%, #8b5cf6 100%) !important;
+  border: none !important;
+  font-size: 1rem !important;
   font-weight: 700 !important;
   color: #fff !important;
-  background: linear-gradient(135deg, #6366f1 0%, #7c3aed 50%, #8b5cf6 100%) !important;
   box-shadow: 0 6px 20px rgba(99, 102, 241, 0.32) !important;
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease !important;
 }
+
 .login-submit-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 10px 28px rgba(99, 102, 241, 0.38) !important;
 }
+
 .login-submit-btn:active {
   transform: scale(0.97);
 }
 
-/* 重置密码弹窗 */
-:deep(.reset-dialog.el-dialog) {
-  border-radius: 16px !important;
-  overflow: hidden;
-  border: 1px solid rgba(99, 102, 241, 0.12);
-  box-shadow: 0 24px 60px -12px rgba(79, 70, 229, 0.22) !important;
+/* --- 弹窗专项优化：防止滚动条 --- */
+:deep(.reset-dialog-no-scroll) {
+  border-radius: 20px !important;
+  overflow: hidden !important; /* 核心：禁止溢出 */
+}
+
+:deep(.reset-dialog-no-scroll .el-dialog__body) {
+  padding: 10px 28px !important; /* 缩小内边距 */
+}
+
+:deep(.reset-dialog-no-scroll .el-dialog__header) {
+  padding-bottom: 0 !important;
+  margin-right: 0 !important;
 }
 
 .reset-header-tip {
   text-align: center;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
 }
-.reset-header-tip h2 {
-  font-size: 1.25rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  background: linear-gradient(135deg, #6366f1 0%, #7c3aed 45%, #8b5cf6 100%);
+
+.reset-header-tip h2,
+.reset-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  background: linear-gradient(135deg, #6366f1, #a855f7);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
+.reset-header-tip p {
+  font-size: 0.8125rem;
+  color: #64748b;
+  margin: 0;
+}
+
+/* 压缩弹窗内的表单间距 */
+.compact-form-item {
+  margin-bottom: 12px !important;
+}
+
 .input-with-button {
   display: flex;
-  gap: 0.5rem;
-  width: 100%;
-  align-items: stretch;
+  gap: 8px;
 }
-.input-with-button .el-input {
-  flex: 7;
-}
-.input-with-button .el-button {
-  flex: 3;
-  min-height: 2.75rem;
-  border-radius: 14px !important;
-  padding: 0 0.25rem !important;
+
+.reset-captcha-btn {
+  flex: 0 0 80px; /* 固定宽度防止抖动 */
+  height: 2.75rem;
+  border-radius: 10px !important;
+  background: #f1f5f9 !important;
+  color: #6366f1 !important;
+  border: 1px solid #e2e8f0 !important;
   font-size: 0.75rem !important;
-  font-weight: 700 !important;
-  border: none !important;
-  color: #fff !important;
-  background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%) !important;
-  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.28) !important;
-  transition: transform 0.2s ease !important;
-}
-.input-with-button .el-button:hover {
-  filter: brightness(1.05);
-  transform: translateY(-1px);
-}
-.input-with-button .el-button:active {
-  transform: scale(0.97);
+  padding: 0 !important;
 }
 
 .dialog-footer {
   display: flex;
+  gap: 12px;
   justify-content: center;
-  gap: 0.75rem;
-  padding-top: 0.25rem;
+  padding-bottom: 8px;
 }
-.dialog-footer .el-button {
-  min-height: 2.75rem;
-  padding: 0 1.5rem;
-  border-radius: 14px !important;
-  font-size: 0.9375rem;
-  font-weight: 700;
+
+.reset-cancel-btn,
+.reset-confirm-btn {
+  flex: 1;
+  height: 2.75rem;
+  border-radius: 12px !important;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
 }
 
 .reset-cancel-btn {
-  border: 2px solid rgba(199, 210, 254, 0.95) !important;
-  color: var(--first-color) !important;
-  background: #fff !important;
+  background: white !important;
+  border: 2px solid #e2e8f0 !important;
+  color: #64748b !important;
 }
+
 .reset-cancel-btn:hover {
-  background: var(--sp-primary-soft, #eef2ff) !important;
-  transform: translateY(-1px);
-}
-.reset-cancel-btn:active {
-  transform: scale(0.97);
+  border-color: #6366f1 !important;
+  color: #6366f1 !important;
+  background: #f5f3ff !important;
 }
 
 .reset-confirm-btn {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
   border: none !important;
-  color: #fff !important;
-  background: linear-gradient(135deg, #6366f1 0%, #7c3aed 50%, #8b5cf6 100%) !important;
-  box-shadow: 0 6px 18px rgba(99, 102, 241, 0.28) !important;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
 }
+
 .reset-confirm-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(99, 102, 241, 0.35) !important;
-}
-.reset-confirm-btn:active {
-  transform: scale(0.97);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
 }
 </style>

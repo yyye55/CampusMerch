@@ -6,7 +6,6 @@
           <i class="fas fa-times"></i>
         </button>
 
-        <p class="auth-eyebrow">CampusMerch</p>
         <h1 class="auth-title">注册</h1>
         <p class="auth-desc">创建账号，预订校园文创与活动物料</p>
 
@@ -57,7 +56,7 @@
 
           <el-form-item label="确认密码" prop="confirmPassword">
             <el-input
-              v-model="registerForm.confirmPassword"
+              v-model="registerForm.password_confirmation"
               placeholder="请再次输入密码"
               type="password"
               show-password
@@ -94,7 +93,11 @@ import landingNav from '@/components/landingNav.vue'
 const router = useRouter()
 
 const registerForm = ref({
+<<<<<<< HEAD
   username: '',
+=======
+  name: '',
+>>>>>>> b50897ecb81934a3a570354c23893323d4644736
   phone: '',
   email: '',
   password: '',
@@ -207,7 +210,7 @@ const handleClose = () => {
   width: 100%;
   border: none !important;
   border-radius: 14px !important;
-  font-size: 0.9375rem !important;
+  font-size: 1rem !important;
   font-weight: 700 !important;
   color: #fff !important;
   background: linear-gradient(135deg, #6366f1 0%, #7c3aed 50%, #8b5cf6 100%) !important;

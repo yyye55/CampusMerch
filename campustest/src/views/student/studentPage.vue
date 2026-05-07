@@ -25,7 +25,11 @@
             </div>
             <h3 class="sp-dialog-title">{{ dialogTitle }}</h3>
             <p class="sp-dialog-msg">{{ dialogMessage }}</p>
-            <button type="button" class="sp-dialog-btn sp-dialog-btn--primary sp-dialog-btn--block" @click="closeDialog">
+            <button
+              type="button"
+              class="sp-dialog-btn sp-dialog-btn--primary sp-dialog-btn--block"
+              @click="closeDialog"
+            >
               好的，知道了
             </button>
           </div>
@@ -43,7 +47,11 @@
             </div>
             <h3 class="sp-dialog-title">{{ dialogTitle }}</h3>
             <p class="sp-dialog-msg">{{ dialogMessage }}</p>
-            <button type="button" class="sp-dialog-btn sp-dialog-btn--warning sp-dialog-btn--block" @click="closeDialog">
+            <button
+              type="button"
+              class="sp-dialog-btn sp-dialog-btn--warning sp-dialog-btn--block"
+              @click="closeDialog"
+            >
               好的
             </button>
           </div>
@@ -62,8 +70,18 @@
             <h3 class="sp-dialog-title">{{ dialogTitle }}</h3>
             <p class="sp-dialog-msg">{{ dialogMessage }}</p>
             <div class="sp-dialog-actions">
-              <button type="button" class="sp-dialog-btn sp-dialog-btn--ghost" @click="confirmCancel">取消</button>
-              <button type="button" class="sp-dialog-btn sp-dialog-btn--primary" @click="confirmAction">
+              <button
+                type="button"
+                class="sp-dialog-btn sp-dialog-btn--ghost"
+                @click="confirmCancel"
+              >
+                取消
+              </button>
+              <button
+                type="button"
+                class="sp-dialog-btn sp-dialog-btn--primary"
+                @click="confirmAction"
+              >
                 {{ dialogConfirmText }}
               </button>
             </div>
@@ -1426,9 +1444,7 @@ function buildCsvContent(rows: Order[]): string {
     const total = safeFiniteNumber(totalRaw, 0)
     const orderNo = o.orderNo ?? `LEGACY-${String(idx + 1).padStart(4, '0')}`
     const timeStr =
-      o.createdAt != null && Number.isFinite(o.createdAt)
-        ? formatDateTime(o.createdAt)
-        : '—'
+      o.createdAt != null && Number.isFinite(o.createdAt) ? formatDateTime(o.createdAt) : '—'
     const cells: unknown[] = [
       orderNo,
       o.goodsName ?? '',
