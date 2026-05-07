@@ -160,7 +160,7 @@
               v-for="cat in categories"
               :key="cat.value"
               @click="
-                filters.category = cat.value
+                filters.category = cat.value;
                 currentPage = 1
               "
               :class="filters.category === cat.value ? 'filter-button active' : 'filter-button'"
@@ -174,7 +174,7 @@
               v-for="s in statusFilters"
               :key="s.value"
               @click="
-                filters.status = s.value
+                filters.status = s.value;
                 currentPage = 1
               "
               :class="filters.status === s.value ? 'filter-button active' : 'filter-button'"

@@ -1,11 +1,6 @@
 <template>
   <div class="landing-container">
-    <nav class="nav-bar">
-      <div class="nav-action">
-        <router-link to="/login" class="loginBtn">登录</router-link>
-        <router-link to="/register" class="registerBtn">注册</router-link>
-      </div>
-    </nav>
+
 
       <slot></slot>
 
