@@ -26,23 +26,7 @@
         </div>
 
         <!-- 特色功能卡片 -->
-        <div class="feature-cards">
-          <div class="feature-card">
-            <div class="feature-icon">📦</div>
-            <h3>一键预订</h3>
-            <p>多种文创产品快速下单</p>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon">🎨</div>
-            <h3>定制服务</h3>
-            <p>支持个性化设计定制</p>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon">📊</div>
-            <h3>智能管理</h3>
-            <p>订单状态实时追踪</p>
-          </div>
-        </div>
+
       </div>
     </section>
   </landingNav>
@@ -478,69 +462,5 @@ import landingNav from '@/components/landingNav.vue'
   transform: translateX(5px);
 }
 
-/* 特色功能卡片 */
-.feature-cards {
-  display: flex;
-  gap: 24px;
-  flex-wrap: wrap;
-  justify-content: center;
-  animation: fadeInUp 0.8s ease-out 0.8s both;
-}
 
-.feature-card {
-  background: rgba(255, 255, 255, 0.824);
-  border: 1px solid rgba(99, 102, 241, 0.2);
-  border-radius: 20px;
-  padding: 30px;
-  width: 200px;
-  backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
-}
-
-.feature-card:hover {
-  transform: translateY(-10px);
-  background: white;
-  border-color: rgba(99, 102, 241, 0.4);
-  box-shadow: 0 20px 40px rgba(99, 102, 241, 0.2);
-}
-
-.feature-icon {
-  font-size: 40px;
-  margin-bottom: 16px;
-}
-
-.feature-card h3 {
-  color: #1e1b4b;
-  font-size: 18px;
-  font-weight: 700;
-  margin: 0 0 8px 0;
-}
-
-.feature-card p {
-  color: #6b7280;
-  font-size: 14px;
-  margin: 0;
-  letter-spacing: 0;
-}
-
-/* 响应式 */
-@media (max-width: 768px) {
-  .title-text {
-    font-size: 36px;
-  }
-
-  .hero-subtitle {
-    font-size: 16px;
-    letter-spacing: 2px;
-  }
-
-  .feature-cards {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .feature-card {
-    width: 80%;
-  }
-}
 </style>
