@@ -1,27 +1,55 @@
 import request from '@/utils/request'
 
-// 登录接口
-export function login(data: { email: string; password: string }) {
-  return request.post('/login', data)
-}
-
-// 注册接口
-export function register(data: {
-  name: string
+export interface LoginData {
   email: string
   password: string
-  password_confirmation: string
+}
+
+export interface RegisterData {
+  username: string
+  email: string
   phone: string
-}) {
-  return request.post('/register', data)
+  password: string
+  password_confirmation: string
 }
 
-// 登出接口
-export function logout() {
-  return request.post('/logout')
+export interface AuthResponse {
+  token: string
+  user: {
+    id: number
+    username: string
+    email: string
+    phone: string
+    role: string
+  }
 }
 
-// 获取当前用户信息
-export function getCurrentUser() {
-  return request.get('/me')
+// 登录
+export const login = (data: LoginData) => {
+  return request.post<AuthResponse>('/auth/login', data)
+}
+
+// 注册
+export const register = (data: RegisterData) => {
+  return request.post<AuthResponse>('/auth/register', data)
+}
+
+// 登出
+export const logout = () => {
+  return request.post('/auth/logout')
+}
+
+// 发送验证码
+export const sendCaptcha = (email: string) => {
+  return request.post('/auth/captcha', { email })
+}
+
+// 重置密码
+export const resetPassword = (data: {
+  email: string
+  captcha: string
+  password: string
+  password_confirmation: string
+}) => {
+  return request.post('/auth/reset-password', data)
 }

@@ -7,7 +7,6 @@
         class="sp-dialog-overlay"
         role="dialog"
         aria-modal="true"
-        @keydown.esc.prevent="closeDialog"
       >
         <div class="sp-dialog-backdrop" aria-hidden="true" @click="closeDialog"></div>
         <div class="sp-dialog-card" @click.stop>
@@ -85,6 +84,18 @@
                 {{ dialogConfirmText }}
               </button>
             </div>
+          </div>
+          <!-- 兜底：避免 dialogType 未匹配时只剩全屏遮罩、底层按钮全部点不到 -->
+          <div v-else class="sp-dialog-body">
+            <h3 class="sp-dialog-title">提示</h3>
+            <p class="sp-dialog-msg">对话框状态异常，请关闭后重试。</p>
+            <button
+              type="button"
+              class="sp-dialog-btn sp-dialog-btn--primary sp-dialog-btn--block"
+              @click="closeDialog"
+            >
+              关闭
+            </button>
           </div>
         </div>
       </div>
@@ -214,7 +225,7 @@
           </div>
         </div>
 
-        <div v-if="filteredGoods.length > 0" class="goods-grid">
+        <div v-if="filteredGoods.length > 0" class="goods-grid goods-grid--list-page">
           <div v-for="g in paginatedGoods" :key="g.id" class="goods-card" @click="openDetail(g)">
             <div class="goods-image">
               <img :src="g.img" />
@@ -251,20 +262,27 @@
         </div>
 
         <div v-if="filteredGoods.length > 0" class="pagination">
-          <button @click="currentPage--" :disabled="currentPage === 1" class="pagination-button">
+          <button
+            v-if="showPaginationPrev"
+            type="button"
+            @click="currentPage--"
+            class="pagination-button"
+          >
             ← 上一页
           </button>
           <button
             v-for="p in totalPages"
             :key="p"
+            type="button"
             @click="currentPage = p"
             :class="currentPage === p ? 'pagination-button active' : 'pagination-button'"
           >
             {{ p }}
           </button>
           <button
+            v-if="showPaginationNext"
+            type="button"
             @click="currentPage++"
-            :disabled="currentPage === totalPages"
             class="pagination-button"
           >
             下一页 →
@@ -272,192 +290,201 @@
         </div>
       </div>
 
-      <div v-if="page === 'detail'" class="page-transition">
-        <button @click="go('list')" class="detail-back-button">← 返回商品大厅</button>
+      <div v-if="page === 'detail'" class="page-transition detail-page">
+        <button type="button" @click="go('list')" class="detail-back-button">← 返回商品大厅</button>
 
-        <div class="detail-container">
-          <div class="detail-image-section">
-            <img :src="currentGoods.img" class="detail-image" />
-          </div>
-          <div class="detail-content-section">
-            <div class="detail-tags">
-              <span class="detail-tag category">{{ currentGoods.categoryText }}</span>
-              <span
-                :class="currentGoods.inStock ? 'detail-tag in-stock' : 'detail-tag out-of-stock'"
-              >
-                {{ currentGoods.statusText }}
-              </span>
-            </div>
-            <div class="detail-header">
-              <h2 class="detail-title">
-                {{ currentGoods.name }}
-              </h2>
-              <button
-                class="detail-favorite-button"
-                :class="{ active: isFavorite(currentGoods.id) }"
-                @click="toggleFavorite(currentGoods)"
-                :aria-label="isFavorite(currentGoods.id) ? '取消收藏' : '收藏商品'"
-              >
-                {{ isFavorite(currentGoods.id) ? '❤️' : '🤍' }}
-              </button>
-            </div>
-            <p class="detail-price">¥{{ currentGoods.price }}</p>
-
-            <div class="detail-stats-grid">
-              <div class="detail-stat-card">
-                <p class="detail-stat-label">📦 库存</p>
-                <p class="detail-stat-value">{{ currentGoods.stock }} 件</p>
+        <div class="detail-page-layout">
+          <div class="detail-page-sidebar">
+            <section class="detail-summary-card" aria-label="商品信息">
+              <div class="detail-image-frame detail-image-frame--side">
+                <img
+                  :src="currentGoods.img"
+                  class="detail-image"
+                  :alt="currentGoods.name || '商品图片'"
+                />
               </div>
-              <div class="detail-stat-card">
-                <p class="detail-stat-label">🔥 已售</p>
-                <p class="detail-stat-value">{{ currentGoods.sold }} 件</p>
+
+              <div class="detail-tags">
+                <span class="detail-tag category">{{ currentGoods.categoryText }}</span>
+                <span
+                  :class="currentGoods.inStock ? 'detail-tag in-stock' : 'detail-tag out-of-stock'"
+                >
+                  {{ currentGoods.statusText }}
+                </span>
               </div>
-              <div class="detail-stat-card">
-                <p class="detail-stat-label">📐 规格</p>
-                <p class="detail-stat-value">{{ currentGoods.spec }}</p>
+
+              <div class="detail-header">
+                <h2 class="detail-title">{{ currentGoods.name }}</h2>
+                <button
+                  type="button"
+                  class="detail-favorite-button"
+                  :class="{ active: isFavorite(currentGoods.id) }"
+                  @click="toggleFavorite(currentGoods)"
+                  :aria-label="isFavorite(currentGoods.id) ? '取消收藏' : '收藏商品'"
+                >
+                  {{ isFavorite(currentGoods.id) ? '❤️' : '🤍' }}
+                </button>
               </div>
-              <div class="detail-stat-card">
-                <p class="detail-stat-label">📍 状态</p>
-                <p class="detail-stat-value">{{ currentGoods.statusText }}</p>
-              </div>
-            </div>
 
-            <div class="detail-custom-requirement">
-              <p class="detail-custom-label">✂️ 定制要求</p>
-              <p class="detail-custom-text">
-                {{ currentGoods.customRequirement }}
-              </p>
-            </div>
+              <p class="detail-price">¥{{ currentGoods.price }}</p>
 
-            <p class="detail-description">{{ currentGoods.desc }}</p>
-
-            <div class="detail-actions">
-              <button class="detail-book-button" @click="goBook" v-if="currentGoods.inStock">
-                ✨ 立即预订
-              </button>
-              <button class="detail-back-button-secondary" @click="go('list')">返回列表</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div v-if="page === 'book'" class="page-transition">
-        <button @click="go('detail')" class="detail-back-button">← 返回商品详情</button>
-
-        <div class="book-container">
-          <h2 class="book-title">📝 提交预订申请</h2>
-
-          <div class="book-product-info">
-            <p class="book-product-label">预订商品</p>
-            <p class="book-product-name">{{ currentGoods.name }} - ¥{{ currentGoods.price }}/件</p>
-            <p class="book-warning" v-if="currentGoods.minOrder && currentGoods.minOrder > 1">
-              ⚠️ 此商品最低起订量 {{ currentGoods.minOrder }} 件
-            </p>
-          </div>
-
-          <div class="book-form">
-            <div class="book-form-row">
-              <div class="book-form-group">
-                <label class="book-label">📦 预订数量 <span class="book-required">*</span></label>
-                <div class="book-quantity-controls">
-                  <button
-                    @click="decrementNum"
-                    class="book-quantity-button"
-                    :disabled="bookForm.num <= (currentGoods.minOrder || 1)"
-                  >
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M20 12H4"
-                      ></path>
-                    </svg>
-                  </button>
-                  <input
-                    type="number"
-                    v-model.number="bookForm.num"
-                    :min="currentGoods.minOrder || 1"
-                    :max="currentGoods.stock"
-                    class="book-quantity-input"
-                    @blur="validateNum"
-                    @input="validateNumInput"
-                  />
-                  <button
-                    @click="incrementNum"
-                    class="book-quantity-button"
-                    :disabled="bookForm.num >= currentGoods.stock"
-                  >
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M12 4v16m8-8H4"
-                      ></path>
-                    </svg>
-                  </button>
+              <div class="detail-stats-grid detail-stats-grid--compact">
+                <div class="detail-stat-card">
+                  <p class="detail-stat-label">📦 库存</p>
+                  <p class="detail-stat-value">{{ currentGoods.stock }} 件</p>
                 </div>
-                <p v-if="errors.num" class="book-error">{{ errors.num }}</p>
-                <p class="book-quantity-hint">
-                  最低 {{ currentGoods.minOrder || 1 }} 件起订，库存剩余 {{ currentGoods.stock }} 件
-                </p>
+                <div class="detail-stat-card">
+                  <p class="detail-stat-label">🔥 已售</p>
+                  <p class="detail-stat-value">{{ currentGoods.sold }} 件</p>
+                </div>
+                <div class="detail-stat-card">
+                  <p class="detail-stat-label">📐 规格</p>
+                  <p class="detail-stat-value">{{ currentGoods.spec }}</p>
+                </div>
+                <div class="detail-stat-card">
+                  <p class="detail-stat-label">📍 状态</p>
+                  <p class="detail-stat-value">{{ currentGoods.statusText }}</p>
+                </div>
               </div>
-              <div class="book-form-group">
-                <label class="book-label">📐 尺寸选择 <span class="book-required">*</span></label>
-                <select v-model="bookForm.size" class="book-select">
-                  <option value="" disabled hidden>请选择尺寸</option>
-                  <option
-                    v-for="s in currentGoods.sizes || ['S', 'M', 'L', 'XL', 'XXL']"
-                    :key="s"
-                    :value="s"
-                  >
-                    {{ s }}
-                  </option>
-                </select>
-                <p v-if="errors.size" class="book-error">{{ errors.size }}</p>
-              </div>
-            </div>
 
-            <div class="book-form-row">
-              <div class="book-form-group">
-                <label class="book-label">🎨 颜色选择 <span class="book-required">*</span></label>
-                <select v-model="bookForm.color" class="book-select">
-                  <option value="" disabled hidden>请选择颜色</option>
-                  <option
-                    v-for="c in currentGoods.colors || ['红色', '蓝色', '黑色', '白色']"
-                    :key="c"
-                    :value="c"
-                  >
-                    {{ c }}
-                  </option>
-                </select>
-                <p v-if="errors.color" class="book-error">{{ errors.color }}</p>
-              </div>
-              <div class="book-form-group">
-                <label class="book-label">📋 定制要求</label>
-                <select v-model="bookForm.custom" class="book-select">
-                  <option value="" disabled hidden>请选择定制要求</option>
-                  <option value="无需定制">无需定制</option>
-                  <option value="需要定制">需要定制</option>
-                </select>
-              </div>
-            </div>
+              <p
+                v-if="currentGoods.minOrder && currentGoods.minOrder > 1"
+                class="book-warning detail-min-order-warning"
+              >
+                ⚠️ 此商品最低起订量 {{ currentGoods.minOrder }} 件
+              </p>
 
-            <div class="book-form-group">
-              <label class="book-label">📝 备注信息</label>
-              <textarea
-                v-model="bookForm.remark"
-                rows="4"
-                class="book-textarea"
-                placeholder="请输入其他备注信息..."
-              ></textarea>
-            </div>
+              <div class="detail-custom-requirement">
+                <p class="detail-custom-label">✂️ 定制要求</p>
+                <p class="detail-custom-text">{{ currentGoods.customRequirement }}</p>
+              </div>
+
+              <div class="detail-description-wrap">
+                <p class="detail-description-label">商品说明</p>
+                <p class="detail-description">{{ currentGoods.desc }}</p>
+              </div>
+            </section>
           </div>
 
-          <div class="book-actions">
-            <button class="book-submit-button" @click="submitOrder">🚀 提交预订</button>
-            <button class="book-cancel-button" @click="go('detail')">取消</button>
+          <div class="detail-page-main">
+            <template v-if="currentGoods.inStock">
+              <section class="detail-book-card" aria-label="预订表单">
+                <p class="book-product-label detail-book-card-label">规格与预订</p>
+                <div class="book-form detail-book-form">
+                  <div class="book-form-row detail-book-form-row-pair">
+                    <div class="book-form-group">
+                      <label class="book-label">📦 预订数量 <span class="book-required">*</span></label>
+                      <div class="book-quantity-controls">
+                        <button
+                          type="button"
+                          @click="decrementNum"
+                          class="book-quantity-button"
+                          :disabled="bookForm.num <= (currentGoods.minOrder || 1)"
+                        >
+                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M20 12H4"
+                            ></path>
+                          </svg>
+                        </button>
+                        <input
+                          type="number"
+                          v-model.number="bookForm.num"
+                          :min="currentGoods.minOrder || 1"
+                          :max="currentGoods.stock"
+                          class="book-quantity-input"
+                          @blur="validateNum"
+                          @input="validateNumInput"
+                        />
+                        <button
+                          type="button"
+                          @click="incrementNum"
+                          class="book-quantity-button"
+                          :disabled="bookForm.num >= currentGoods.stock"
+                        >
+                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M12 4v16m8-8H4"
+                            ></path>
+                          </svg>
+                        </button>
+                      </div>
+                      <p v-if="errors.num" class="book-error">{{ errors.num }}</p>
+                      <p class="book-quantity-hint">
+                        最低 {{ currentGoods.minOrder || 1 }} 件起订，库存剩余 {{ currentGoods.stock }} 件
+                      </p>
+                    </div>
+                    <div class="book-form-group">
+                      <label class="book-label">📐 尺寸选择 <span class="book-required">*</span></label>
+                      <select v-model="bookForm.size" class="book-select">
+                        <option value="" disabled hidden>请选择尺寸</option>
+                        <option
+                          v-for="s in currentGoods.sizes || ['S', 'M', 'L', 'XL', 'XXL']"
+                          :key="s"
+                          :value="s"
+                        >
+                          {{ s }}
+                        </option>
+                      </select>
+                      <p v-if="errors.size" class="book-error">{{ errors.size }}</p>
+                    </div>
+                  </div>
+
+                  <div class="book-form-row detail-book-form-row-pair">
+                    <div class="book-form-group">
+                      <label class="book-label">🎨 颜色选择 <span class="book-required">*</span></label>
+                      <select v-model="bookForm.color" class="book-select">
+                        <option value="" disabled hidden>请选择颜色</option>
+                        <option
+                          v-for="c in currentGoods.colors || ['红色', '蓝色', '黑色', '白色']"
+                          :key="c"
+                          :value="c"
+                        >
+                          {{ c }}
+                        </option>
+                      </select>
+                      <p v-if="errors.color" class="book-error">{{ errors.color }}</p>
+                    </div>
+                    <div class="book-form-group">
+                      <label class="book-label">📋 定制要求</label>
+                      <select v-model="bookForm.custom" class="book-select">
+                        <option value="" disabled hidden>请选择定制要求</option>
+                        <option value="无需定制">无需定制</option>
+                        <option value="需要定制">需要定制</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="book-form-group">
+                    <label class="book-label">📝 备注信息</label>
+                    <textarea
+                      v-model="bookForm.remark"
+                      rows="3"
+                      class="book-textarea"
+                      placeholder="请输入其他备注信息..."
+                    ></textarea>
+                  </div>
+                </div>
+
+                <div class="detail-book-actions">
+                  <button type="button" class="book-submit-button" @click="submitOrder">
+                    ✨ 立即预订
+                  </button>
+                  <button type="button" class="book-cancel-button" @click="go('list')">取消</button>
+                </div>
+              </section>
+            </template>
+
+            <div v-else class="detail-book-card detail-book-card--out-of-stock">
+              <p class="detail-out-of-stock-text">该商品目前缺货，暂时无法预订</p>
+              <button type="button" class="book-cancel-button" @click="go('list')">返回列表</button>
+            </div>
           </div>
         </div>
       </div>
@@ -668,7 +695,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, nextTick, onMounted } from 'vue'
+import { ref, computed, watch, nextTick, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/stores/user'
@@ -683,10 +710,6 @@ const userDisplayShort = computed(() => {
   const at = e.indexOf('@')
   if (at <= 0) return `${e.slice(0, 18)}…`
   return `${e.slice(0, 8)}…${e.slice(at)}`
-})
-
-onMounted(() => {
-  userStore.hydrateFromStorage()
 })
 
 function handleLogoutClick() {
@@ -757,8 +780,11 @@ function formatGoodsCardPrice(price: number) {
 }
 
 const page = ref('list')
+/** 商品大厅每页条数（2 行×4 列 = 8） */
+const GOODS_LIST_PAGE_SIZE = 8
+
 const currentPage = ref(1)
-const pageSize = ref(6)
+const pageSize = ref(GOODS_LIST_PAGE_SIZE)
 
 const categories = [
   { value: '', label: '全部' },
@@ -967,7 +993,7 @@ const exportLoading = ref(false)
 
 // 弹窗相关
 const showDialog = ref(false)
-const dialogType = ref('success')
+const dialogType = ref<'success' | 'warning' | 'confirm'>('confirm')
 const dialogTitle = ref('')
 const dialogMessage = ref('')
 const dialogConfirmText = ref('确认')
@@ -1009,6 +1035,19 @@ const paginatedGoods = computed(() => {
   return filteredGoods.value.slice(start, start + pageSize.value)
 })
 
+/** 仅多页时显示；不在第 1 页时显示上一页 */
+const showPaginationPrev = computed(
+  () => totalPages.value > 1 && currentPage.value > 1,
+)
+
+/** 仅当本页满页且仍有后续页时显示下一页 */
+const showPaginationNext = computed(
+  () =>
+    totalPages.value > 1 &&
+    paginatedGoods.value.length === pageSize.value &&
+    currentPage.value < totalPages.value,
+)
+
 const loadFavoriteIds = () => {
   try {
     const raw = localStorage.getItem('bangbang_favorite_ids')
@@ -1042,11 +1081,36 @@ watch(currentPage, (newVal) => {
   if (newVal > totalPages.value) currentPage.value = totalPages.value
 })
 
+/** 筛选/搜索条件变化时回到第 1 页（与 filteredGoods 计算结果联动） */
+watch(
+  filters,
+  () => {
+    currentPage.value = 1
+  },
+  { deep: true },
+)
+
 const closeDialog = () => {
   showDialog.value = false
   pendingConfirmAction = null
   dialogConfirmText.value = '确认'
 }
+
+function onGlobalKeydown(e: KeyboardEvent) {
+  if (e.key !== 'Escape') return
+  if (!showDialog.value) return
+  e.preventDefault()
+  closeDialog()
+}
+
+onMounted(() => {
+  userStore.updateFromStorage()
+  document.addEventListener('keydown', onGlobalKeydown, true)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('keydown', onGlobalKeydown, true)
+})
 
 // 美化弹窗函数
 const showSuccessDialog = (title: string, message: string) => {
@@ -1119,14 +1183,6 @@ const openDetail = (g: Goods) => {
   go('detail')
 }
 
-const goBook = () => {
-  if (!currentGoods.value.inStock) {
-    showWarningDialog('提示', '该商品暂时缺货！')
-    return
-  }
-  go('book')
-}
-
 const validateNum = () => {
   const minOrder = currentGoods.value.minOrder || 1
   let num = Number(bookForm.value.num)
@@ -1187,6 +1243,11 @@ const validateForm = () => {
     errors.value.color = '请选择颜色'
     valid = false
   }
+  
+  if (!valid) {
+    ElMessage.warning('请填写所有必填项')
+  }
+  
   return valid
 }
 
@@ -1743,179 +1804,4 @@ body {
   background: #fff1f2;
 }
 
-/* ---------- Teleport 弹窗（不依赖 Tailwind 工具类，避免样式失效） ---------- */
-.sp-dialog-overlay {
-  position: fixed !important;
-  inset: 0;
-  z-index: 100000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-  padding-bottom: max(1rem, env(safe-area-inset-bottom, 0px));
-  box-sizing: border-box;
-}
-
-.sp-dialog-backdrop {
-  position: absolute;
-  inset: 0;
-  background: rgba(15, 23, 42, 0.48);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-}
-
-.sp-dialog-card {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  max-width: 22rem;
-  margin: 0 auto;
-  background: rgba(255, 255, 255, 0.96);
-  border-radius: 18px;
-  border: 1px solid rgba(15, 23, 42, 0.06);
-  box-shadow:
-    0 4px 24px rgba(15, 23, 42, 0.06),
-    0 24px 60px -20px rgba(79, 70, 229, 0.2),
-    0 0 0 1px rgba(255, 255, 255, 0.5) inset;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  overflow: hidden;
-}
-
-.sp-dialog-body {
-  padding: 1.5rem;
-  text-align: center;
-}
-
-.sp-dialog-icon {
-  width: 4rem;
-  height: 4rem;
-  margin: 0 auto 1rem;
-  border-radius: 9999px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.sp-dialog-icon-svg {
-  width: 2rem;
-  height: 2rem;
-}
-
-.sp-dialog-icon--success {
-  background: #ecfdf5;
-  color: #059669;
-  box-shadow: 0 0 0 1px #a7f3d0;
-}
-
-.sp-dialog-icon--warning {
-  background: #fffbeb;
-  color: #d97706;
-  box-shadow: 0 0 0 1px #fde68a;
-}
-
-.sp-dialog-icon--confirm {
-  background: #eef2ff;
-  color: #4f6ae8;
-  box-shadow: 0 0 0 1px #c7d2fe;
-}
-
-.sp-dialog-title {
-  font-size: 1.125rem;
-  font-weight: 700;
-  color: #0f172a;
-  margin-bottom: 0.5rem;
-  letter-spacing: -0.02em;
-}
-
-.sp-dialog-msg {
-  font-size: 0.875rem;
-  color: #64748b;
-  line-height: 1.55;
-  margin-bottom: 1.25rem;
-}
-
-.sp-dialog-actions {
-  display: flex;
-  gap: 0.75rem;
-  justify-content: stretch;
-}
-
-.sp-dialog-actions .sp-dialog-btn {
-  flex: 1;
-  min-width: 0;
-}
-
-.sp-dialog-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 2.75rem;
-  padding: 0 1rem;
-  border-radius: 14px;
-  font-size: 0.9375rem;
-  font-weight: 600;
-  cursor: pointer;
-  border: none;
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.2s ease,
-    filter 0.2s ease,
-    background 0.2s ease;
-}
-
-.sp-dialog-btn--block {
-  width: 100%;
-}
-
-.sp-dialog-btn--primary {
-  color: #fff;
-  background: linear-gradient(135deg, #4f6ae8 0%, #5b62f0 50%, #6366f1 100%);
-  box-shadow: 0 6px 18px rgba(79, 106, 232, 0.2);
-}
-
-.sp-dialog-btn--primary:hover {
-  filter: brightness(1.04);
-  box-shadow: 0 10px 24px rgba(79, 106, 232, 0.26);
-}
-
-.sp-dialog-btn--warning {
-  color: #fff;
-  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-  box-shadow: 0 6px 18px rgba(245, 158, 11, 0.35);
-}
-
-.sp-dialog-btn--ghost {
-  background: #f1f5f9;
-  color: #475569;
-  border: 1px solid #e2e8f0;
-}
-
-.sp-dialog-btn--ghost:hover {
-  background: #e2e8f0;
-}
-
-.sp-dialog-btn:active {
-  transform: scale(0.97);
-}
-
-.dialog-enter-active,
-.dialog-leave-active {
-  transition: opacity 0.2s ease;
-}
-
-.dialog-enter-active .sp-dialog-card,
-.dialog-leave-active .sp-dialog-card {
-  transition: transform 0.2s ease;
-}
-
-.dialog-enter-from,
-.dialog-leave-to {
-  opacity: 0;
-}
-
-.dialog-enter-from .sp-dialog-card,
-.dialog-leave-to .sp-dialog-card {
-  transform: scale(0.96) translateY(8px);
-}
 </style>

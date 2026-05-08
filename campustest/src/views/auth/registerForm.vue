@@ -16,8 +16,8 @@
           ref="registerRef"
           :hide-required-asterisk="true"
         >
-          <el-form-item label="用户名" prop="name">
-            <el-input v-model="registerForm.name" placeholder="请输入用户名" autocomplete="off">
+          <el-form-item label="用户名" prop="username">
+            <el-input v-model="registerForm.username" placeholder="请输入用户名" autocomplete="off">
               <template #prefix>
                 <i class="fas fa-user"></i>
               </template>
@@ -54,9 +54,9 @@
             </el-input>
           </el-form-item>
 
-          <el-form-item label="确认密码" prop="password_confirmation">
+          <el-form-item label="确认密码" prop="confirmPassword">
             <el-input
-              v-model="registerForm.password_confirmation"
+              v-model="registerForm.confirmPassword"
               placeholder="请再次输入密码"
               type="password"
               show-password
@@ -94,15 +94,15 @@ import { register } from '@/api/auth'
 const router = useRouter()
 
 const registerForm = ref({
-  name: '',
+  username: '',
   phone: '',
   email: '',
   password: '',
-  password_confirmation: '',
+  confirmPassword: '',
 })
 
 const registerRules = ref({
-  name: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+  username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
   phone: [{ required: true, message: '请输入电话号码', trigger: 'blur' }],
   email: [
     { required: true, message: '请输入邮箱', trigger: 'blur' },
@@ -112,7 +112,7 @@ const registerRules = ref({
     { required: true, message: '请输入密码', trigger: 'blur' },
     { min: 6, message: '请输入6位以上密码', trigger: 'blur' },
   ],
-  password_confirmation: [
+  confirmPassword: [
     { required: true, message: '请确认密码', trigger: 'blur' },
     {
       validator: (_rule: FormItemRule, value: string, callback: (error?: Error) => void) => {
@@ -133,12 +133,27 @@ const handleRegister = async () => {
   if (!registerRef.value) return
   try {
     await registerRef.value.validate()
-    ElMessage.success('注册成功！即将跳转到登录页面')
+    console.log('注册验证通过', registerForm.value)
+
+    ElMessage({
+      message: '注册成功！3秒后将自动跳转到登录页面',
+      type: 'success',
+      duration: 3000,
+      showClose: true,
+    })
+
     setTimeout(() => {
       router.push('/login')
-    }, 1500)
-  } catch (err) {
-    ElMessage.error('注册失败')
+    }, 3000)
+  } catch (error) {
+    console.log('注册验证失败', error)
+
+    ElMessage({
+      message: '注册失败，请检查输入信息',
+      type: 'error',
+      duration: 3000,
+      showClose: true,
+    })
   }
 }
 
