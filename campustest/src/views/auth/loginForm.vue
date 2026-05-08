@@ -153,6 +153,7 @@ import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import landingNav from '@/components/landingNav.vue'
 import { useUserStore } from '@/stores/user'
+import { login } from '@/api/auth'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -180,24 +181,33 @@ const rules = {
 const handleLogin = async () => {
   if (!loginRef.value) return
   try {
+    // 验证表单，通过了才会继续
     await loginRef.value.validate()
+    //打开加载状态
     loading.value = true
 
-    const email = loginForm.value.email.trim()
-    const password = loginForm.value.password
-    const accessToken = `campus_${Date.now().toString(36)}`
+    // 调用登录接口
+    const res = await login({
+      email: loginForm.value.email.trim(),
+      password: loginForm.value.password,
+    })
 
-    userStore.setSession({ email, accessToken })
+    // 保存登录信息
+    userStore.setSession({
+      email: loginForm.value.email.trim(),
+      accessToken: res.data.token,
+    })
 
-    if (email === userStore.ADMIN.email && password === userStore.ADMIN.password) {
-      ElMessage.success('管理员登录成功！')
+    // 根据邮箱判断跳转
+    if (loginForm.value.email.trim() === 'admin@example.com') {
       router.push('/admin')
     } else {
-      ElMessage.success('学生登录成功！')
       router.push('/student')
     }
-  } catch (err) {
-    console.error('Login validation failed')
+
+    ElMessage.success('登录成功！')
+  } catch (err: any) {
+    ElMessage.error(err.response?.data?.message || '登录失败')
   } finally {
     loading.value = false
   }

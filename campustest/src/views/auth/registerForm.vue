@@ -89,6 +89,7 @@ import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import type { FormItemRule } from 'element-plus'
 import landingNav from '@/components/landingNav.vue'
+import { register } from '@/api/auth'
 
 const router = useRouter()
 

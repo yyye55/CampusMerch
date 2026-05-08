@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 const request = axios.create({
-  baseURL: 'http://127.0.0.1:8000/api', // 后端基础地址
+  baseURL: '/api', // 相对路径，Vite代理会转发到后端
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
@@ -19,7 +19,6 @@ request.interceptors.request.use(
   },
   (err) => Promise.reject(err),
 )
-
 
 // 响应拦截器：统一处理返回
 request.interceptors.response.use(
