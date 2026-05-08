@@ -792,7 +792,7 @@
 <script setup>
 import { ref, computed, onMounted, reactive, onUnmounted } from 'vue'
 import { ElMessage } from 'element-plus'
-import { api } from './api.js'
+import { api } from './api.ts'
 
 // ============ 状态 ============
 const activeTab = ref('dashboard')
