@@ -21,19 +21,23 @@ interface ApiResponse<T = unknown> {
 async function request<T = unknown>(
   method: string,
   url: string,
-  data?: BodyInit | null,
+  data?: unknown,
   options: RequestOptions = {}
 ): Promise<T> {
   const { headers = {}, responseType } = options
+  const headersInit: Record<string, string> = {
+    'Content-Type': 'application/json',
+    ...headers,
+  }
   const config: RequestInit = {
     method,
-    headers: { 'Content-Type': 'application/json', ...headers }
+    headers: headersInit,
   }
 
   if (data instanceof FormData) {
     config.body = data
-    delete config.headers['Content-Type']
-  } else if (data) {
+    delete headersInit['Content-Type']
+  } else if (data != null && data !== '') {
     config.body = JSON.stringify(data)
   }
 

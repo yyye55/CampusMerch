@@ -56,7 +56,7 @@
 
           <el-form-item label="确认密码" prop="confirmPassword">
             <el-input
-              v-model="registerForm.password_confirmation"
+              v-model="registerForm.confirmPassword"
               placeholder="请再次输入密码"
               type="password"
               show-password
@@ -93,7 +93,7 @@ import landingNav from '@/components/landingNav.vue'
 const router = useRouter()
 
 const registerForm = ref({
-  name: '',
+  username: '',
   phone: '',
   email: '',
   password: '',
