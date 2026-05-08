@@ -2,10 +2,10 @@
   <div class="min-h-screen overflow-x-hidden" style="background: #F0F8FF; color: #2C3E50;">
 
     <!-- ===== 顶部导航栏 ===== -->
-    <header class="fixed top-0 left-0 right-0 z-50 h-16 flex items-center justify-between px-6" style="background: #FFFFFF; box-shadow: 0 2px 12px rgba(34, 184, 207, 0.08); border-bottom: 1px solid rgba(34, 184, 207, 0.08);">
+    <header class="fixed top-0 left-0 right-0 z-50 h-16 flex items-center justify-between px-6" style="background: #FFFFFF; box-shadow: 0 2px 12px rgba(139, 92, 246, 0.08); border-bottom: 1px solid rgba(139, 92, 246, 0.08);">
       <!-- Logo -->
       <div class="flex items-center gap-3">
-        <div class="w-9 h-9 rounded-xl flex items-center justify-center shadow-md" style="background: linear-gradient(135deg, #22B8CF, #1A9EB8); box-shadow: 0 4px 16px rgba(34, 184, 207, 0.25);">
+        <div class="w-9 h-9 rounded-xl flex items-center justify-center shadow-md" style="background: linear-gradient(135deg, #8B5CF6, #7C3AED); box-shadow: 0 4px 16px rgba(139, 92, 246, 0.25);">
           <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
           </svg>
@@ -17,15 +17,15 @@
       </div>
 
       <!-- Tab 导航 -->
-      <nav class="hidden md:flex items-center gap-1 p-1 rounded-xl" style="background: rgba(34, 184, 207, 0.05); border: 1px solid rgba(34, 184, 207, 0.08);">
+      <nav class="hidden md:flex items-center gap-1 p-1 rounded-xl" style="background: rgba(139, 92, 246, 0.05); border: 1px solid rgba(139, 92, 246, 0.08);">
         <button
           v-for="tab in adminTabs" :key="tab.value"
           @click="navigate(tab.value)"
           class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-1.5"
           :style="activeTab === tab.value
-            ? 'background: linear-gradient(135deg, #22B8CF, #1A9EB8); color: #FFFFFF; box-shadow: 0 2px 10px rgba(34, 184, 207, 0.2);'
+            ? 'background: linear-gradient(135deg, #8B5CF6, #7C3AED); color: #FFFFFF; box-shadow: 0 2px 10px rgba(139, 92, 246, 0.2);'
             : 'color: #546E7A;'"
-          @mouseenter="activeTab !== tab.value ? $event.currentTarget.style.background = 'rgba(34, 184, 207, 0.08)' : ''"
+          @mouseenter="activeTab !== tab.value ? $event.currentTarget.style.background = 'rgba(139, 92, 246, 0.08)' : ''"
           @mouseleave="activeTab !== tab.value ? $event.currentTarget.style.background = 'transparent' : ''"
         >
           <span v-html="tab.icon"></span>
@@ -39,8 +39,8 @@
           <p class="text-xs" style="color: #90A4AE;">{{ currentDate }}</p>
           <p class="text-xs" style="color: #90A4AE; opacity: 0.6;">{{ currentTime }}</p>
         </div>
-        <button @click="refresh" class="w-9 h-9 rounded-xl flex items-center justify-center transition-all hover:scale-105 active:scale-95" style="background: rgba(34, 184, 207, 0.05); border: 1px solid rgba(34, 184, 207, 0.1);" title="刷新数据">
-          <svg :class="['w-4 h-4', refreshing ? 'animate-spin' : '']" style="color: #22B8CF;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <button @click="refresh" class="w-9 h-9 rounded-xl flex items-center justify-center transition-all hover:scale-105 active:scale-95" style="background: rgba(139, 92, 246, 0.05); border: 1px solid rgba(139, 92, 246, 0.1);" title="刷新数据">
+          <svg :class="['w-4 h-4', refreshing ? 'animate-spin' : '']" style="color: #8B5CF6;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
           </svg>
         </button>
@@ -48,16 +48,16 @@
     </header>
 
     <!-- ===== 移动端底部 Tab ===== -->
-    <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 h-16 flex items-center justify-around safe-area-pb" style="background: #FFFFFF; box-shadow: 0 -2px 12px rgba(34, 184, 207, 0.08); border-top: 1px solid rgba(34, 184, 207, 0.08);">
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 h-16 flex items-center justify-around safe-area-pb" style="background: #FFFFFF; box-shadow: 0 -2px 12px rgba(139, 92, 246, 0.08); border-top: 1px solid rgba(139, 92, 246, 0.08);">
       <button
         v-for="tab in adminTabs" :key="tab.value"
         @click="navigate(tab.value)"
         :class="['flex flex-col items-center gap-0.5 px-4 py-2 transition-all', activeTab === tab.value ? '' : '']"
-        :style="activeTab === tab.value ? 'color: #22B8CF;' : 'color: #90A4AE;'"
+        :style="activeTab === tab.value ? 'color: #8B5CF6;' : 'color: #90A4AE;'"
       >
         <span class="text-lg" v-html="tab.icon"></span>
         <span class="text-[10px] font-medium">{{ tab.label }}</span>
-        <div v-if="activeTab === tab.value" class="w-1 h-1 rounded-full mt-0.5" style="background: #22B8CF;"></div>
+        <div v-if="activeTab === tab.value" class="w-1 h-1 rounded-full mt-0.5" style="background: #8B5CF6;"></div>
       </button>
     </nav>
 
@@ -68,7 +68,7 @@
       <div v-if="activeTab === 'dashboard'" class="page-transition max-w-7xl mx-auto px-4 md:px-6 py-6 space-y-5">
 
         <!-- 欢迎横幅 -->
-        <div class="relative overflow-hidden rounded-2xl p-6 md:p-8" style="background: linear-gradient(135deg, #1A9EB8, #22B8CF); box-shadow: 0 8px 32px rgba(34, 184, 207, 0.2);">
+        <div class="relative overflow-hidden rounded-2xl p-6 md:p-8" style="background: linear-gradient(135deg, #7C3AED, #8B5CF6); box-shadow: 0 8px 32px rgba(139, 92, 246, 0.2);">
           <!-- 噪点纹理 -->
           <div class="absolute inset-0 pointer-events-none opacity-20" style="background-image: url(&quot;data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.4'/%3E%3C/svg%3E&quot;);"></div>
           <div class="absolute -top-8 -right-8 w-64 h-64 rounded-full opacity-15 blur-3xl" style="background: rgba(255, 255, 255, 0.3);"></div>
@@ -107,10 +107,10 @@
           <div
             v-for="(stat, idx) in statCards" :key="idx"
             class="group relative overflow-hidden rounded-xl p-5 cursor-default transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
-            style="background: #FFFFFF; border: 1px solid rgba(34, 184, 207, 0.08); box-shadow: 0 2px 8px rgba(34, 184, 207, 0.08);"
+            style="background: #FFFFFF; border: 1px solid rgba(139, 92, 246, 0.08); box-shadow: 0 2px 8px rgba(139, 92, 246, 0.08);"
             :style="'--accent: ' + stat.accentColor"
-            @mouseenter="$event.currentTarget.style.boxShadow = '0 8px 24px rgba(34, 184, 207, 0.15)'; $event.currentTarget.style.borderColor = 'rgba(34, 184, 207, 0.2)';"
-            @mouseleave="$event.currentTarget.style.boxShadow = '0 2px 8px rgba(34, 184, 207, 0.08)'; $event.currentTarget.style.borderColor = 'rgba(34, 184, 207, 0.08)';"
+            @mouseenter="$event.currentTarget.style.boxShadow = '0 8px 24px rgba(139, 92, 246, 0.15)'; $event.currentTarget.style.borderColor = 'rgba(139, 92, 246, 0.2)';"
+            @mouseleave="$event.currentTarget.style.boxShadow = '0 2px 8px rgba(139, 92, 246, 0.08)'; $event.currentTarget.style.borderColor = 'rgba(139, 92, 246, 0.08)';"
           >
             <!-- 渐变标题栏 -->
             <div class="absolute top-0 left-0 right-0 h-1 rounded-t-xl" :style="{ background: 'linear-gradient(90deg, ' + stat.accentColor + ', ' + stat.accentColor2 + ')' }"></div>
@@ -132,17 +132,17 @@
         <!-- 订单状态 + 库存预警 -->
         <div class="grid md:grid-cols-5 gap-4">
           <!-- 订单状态分布 -->
-          <div class="md:col-span-3 rounded-xl p-5 transition-all duration-300" style="background: #FFFFFF; border: 1px solid rgba(34, 184, 207, 0.08); box-shadow: 0 2px 8px rgba(34, 184, 207, 0.05);">
+          <div class="md:col-span-3 rounded-xl p-5 transition-all duration-300" style="background: #FFFFFF; border: 1px solid rgba(139, 92, 246, 0.08); box-shadow: 0 2px 8px rgba(139, 92, 246, 0.05);">
             <h3 class="text-sm font-bold mb-5 flex items-center gap-2" style="color: #2C3E50;">
-              <span class="w-2 h-2 rounded-full" style="background: #4CAF50; box-shadow: 0 0 8px rgba(76, 175, 80, 0.4);"></span>
+              <span class="w-2 h-2 rounded-full" style="background: #A855F7; box-shadow: 0 0 8px rgba(168, 85, 247, 0.4);"></span>
               订单状态分布
             </h3>
 
             <!-- 步骤卡片横向 -->
             <div class="relative flex justify-between">
               <!-- 连接线 -->
-              <div class="absolute top-5 left-[calc(10%/2)] right-[calc(10%/2)] h-0.5" style="background: rgba(34, 184, 207, 0.12); top: 20px; height: 2px;"></div>
-              <div class="absolute top-5 left-[calc(10%/2)] h-0.5 transition-all duration-500" :style="{ width: completedLineWidth + '%', top: '20px', height: '2px', background: 'linear-gradient(90deg, #22B8CF, #4CAF50)' }"></div>
+              <div class="absolute top-5 left-[calc(10%/2)] right-[calc(10%/2)] h-0.5" style="background: rgba(139, 92, 246, 0.12); top: 20px; height: 2px;"></div>
+              <div class="absolute top-5 left-[calc(10%/2)] h-0.5 transition-all duration-500" :style="{ width: completedLineWidth + '%', top: '20px', height: '2px', background: 'linear-gradient(90deg, #8B5CF6, #A855F7)' }"></div>
 
               <div
                 v-for="(step, i) in orderSteps" :key="i"
@@ -166,15 +166,15 @@
                   </svg>
                 </div>
                 <div class="text-center">
-                  <p class="text-[10px] font-medium" :style="getStepClass(step.status, i).includes('active') || getStepClass(step.status, i).includes('completed') ? 'color: #22B8CF;' : 'color: #90A4AE;'">{{ step.label }}</p>
-                  <p class="text-sm font-bold" :style="getStepClass(step.status, i).includes('active') || getStepClass(step.status, i).includes('completed') ? 'color: #22B8CF;' : 'color: #90A4AE; opacity: 0.5;'">{{ step.count }}</p>
+                  <p class="text-[10px] font-medium" :style="getStepClass(step.status, i).includes('active') || getStepClass(step.status, i).includes('completed') ? 'color: #8B5CF6;' : 'color: #90A4AE;'">{{ step.label }}</p>
+                  <p class="text-sm font-bold" :style="getStepClass(step.status, i).includes('active') || getStepClass(step.status, i).includes('completed') ? 'color: #8B5CF6;' : 'color: #90A4AE; opacity: 0.5;'">{{ step.count }}</p>
                 </div>
               </div>
             </div>
           </div>
 
           <!-- 库存预警 -->
-          <div class="md:col-span-2 rounded-xl p-5 transition-all duration-300" style="background: #FFFFFF; border: 1px solid rgba(34, 184, 207, 0.08); box-shadow: 0 2px 8px rgba(34, 184, 207, 0.05);">
+          <div class="md:col-span-2 rounded-xl p-5 transition-all duration-300" style="background: #FFFFFF; border: 1px solid rgba(139, 92, 246, 0.08); box-shadow: 0 2px 8px rgba(139, 92, 246, 0.05);">
             <h3 class="text-sm font-bold mb-4 flex items-center gap-2" style="color: #2C3E50;">
               <svg class="w-4 h-4" style="color: #EF5350;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
@@ -187,8 +187,8 @@
             <div v-if="lowStockGoods.length === 0" class="text-center py-6">
               <div class="mb-3 flex justify-center">
                 <svg class="w-20 h-20" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="32" cy="32" r="28" fill="rgba(76, 175, 80, 0.08)" stroke="rgba(76, 175, 80, 0.2)" stroke-width="2"/>
-                  <path d="M20 32l8 8 16-16" stroke="#4CAF50" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                  <circle cx="32" cy="32" r="28" fill="rgba(168, 85, 247, 0.08)" stroke="rgba(168, 85, 247, 0.2)" stroke-width="2"/>
+                  <path d="M20 32l8 8 16-16" stroke="#A855F7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </div>
               <p style="font-size: 13px; color: #546E7A; font-weight: 500;">库存充足，订单顺利</p>
@@ -200,9 +200,9 @@
               <div
                 v-for="item in lowStockGoods" :key="item.id"
                 class="flex items-center gap-3 p-2.5 rounded-xl transition-all duration-200 cursor-pointer group"
-                style="background: rgba(34, 184, 207, 0.03);"
+                style="background: rgba(139, 92, 246, 0.03);"
                 @mouseenter="$event.currentTarget.style.background = item.stock <= 5 ? 'rgba(239, 83, 80, 0.06)' : 'rgba(255, 183, 77, 0.06)'; $event.currentTarget.style.borderColor = item.stock <= 5 ? 'rgba(239, 83, 80, 0.15)' : 'rgba(255, 183, 77, 0.15)';"
-                @mouseleave="$event.currentTarget.style.background = 'rgba(34, 184, 207, 0.03)'; $event.currentTarget.style.borderColor = 'transparent';"
+                @mouseleave="$event.currentTarget.style.background = 'rgba(139, 92, 246, 0.03)'; $event.currentTarget.style.borderColor = 'transparent';"
                 @click="navigate('products'); editProduct(item)"
               >
                 <div class="w-8 h-8 rounded-lg flex items-center justify-center text-sm flex-shrink-0" :style="{ background: item.stock <= 5 ? 'rgba(239, 83, 80, 0.1)' : 'rgba(255, 183, 77, 0.1)', color: item.stock <= 5 ? '#EF5350' : '#FFB74D' }">
@@ -213,13 +213,13 @@
                 <div class="flex-1 min-w-0">
                   <p class="text-xs font-medium truncate" style="color: #2C3E50;">{{ item.name }}</p>
                   <div class="flex items-center gap-2 mt-1">
-                    <div class="flex-1 h-1 rounded-full overflow-hidden" style="background: rgba(34, 184, 207, 0.08);">
+                    <div class="flex-1 h-1 rounded-full overflow-hidden" style="background: rgba(139, 92, 246, 0.08);">
                       <div class="h-full rounded-full" :style="{ width: Math.min(item.stock / 20 * 100, 100) + '%', background: item.stock <= 5 ? '#EF5350' : '#FFB74D' }"></div>
                     </div>
                     <span class="text-[10px] font-bold" :style="{ color: item.stock <= 5 ? '#EF5350' : '#FFB74D' }">{{ item.stock }}件</span>
                   </div>
                 </div>
-                <span class="opacity-0 group-hover:opacity-100 transition-opacity text-xs font-medium" style="color: #22B8CF;">编辑</span>
+                <span class="opacity-0 group-hover:opacity-100 transition-opacity text-xs font-medium" style="color: #8B5CF6;">编辑</span>
               </div>
             </div>
           </div>
@@ -233,9 +233,9 @@
             @click="shortcut.action"
             :disabled="shortcut.disabled"
             class="group relative overflow-hidden rounded-xl p-4 text-left transition-all duration-300 hover:-translate-y-1"
-            style="background: #FFFFFF; border: 1px solid rgba(34, 184, 207, 0.1); box-shadow: 0 2px 8px rgba(34, 184, 207, 0.05);"
+            style="background: #FFFFFF; border: 1px solid rgba(139, 92, 246, 0.1); box-shadow: 0 2px 8px rgba(139, 92, 246, 0.05);"
             @mouseenter="$event.currentTarget.style.borderColor = shortcut.hoverColor + '40'; $event.currentTarget.style.boxShadow = '0 6px 20px ' + shortcut.hoverColor + '15';"
-            @mouseleave="$event.currentTarget.style.borderColor = 'rgba(34, 184, 207, 0.1)'; $event.currentTarget.style.boxShadow = '0 2px 8px rgba(34, 184, 207, 0.05)';"
+            @mouseleave="$event.currentTarget.style.borderColor = 'rgba(139, 92, 246, 0.1)'; $event.currentTarget.style.boxShadow = '0 2px 8px rgba(139, 92, 246, 0.05)';"
           >
             <div class="w-9 h-9 rounded-xl flex items-center justify-center mb-3 transition-transform duration-300 group-hover:scale-110" :style="{ background: shortcut.hoverColor + '15', color: shortcut.hoverColor }">
               <span class="text-xl" v-html="shortcut.icon"></span>
@@ -251,12 +251,12 @@
 
         <!-- 返回 + 标题 -->
         <div class="flex items-center gap-3 mb-2">
-          <button @click="navigate('dashboard')" class="w-8 h-8 rounded-lg flex items-center justify-center transition-all hover:scale-105" style="background: #FFFFFF; border: 1px solid rgba(34, 184, 207, 0.1); box-shadow: 0 2px 6px rgba(34, 184, 207, 0.05);">
+          <button @click="navigate('dashboard')" class="w-8 h-8 rounded-lg flex items-center justify-center transition-all hover:scale-105" style="background: #FFFFFF; border: 1px solid rgba(139, 92, 246, 0.1); box-shadow: 0 2px 6px rgba(139, 92, 246, 0.05);">
             <svg class="w-4 h-4" style="color: #546E7A;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
           </button>
           <div>
             <h2 class="text-lg font-bold flex items-center gap-2" style="color: #2C3E50;">
-              <svg class="w-5 h-5" fill="none" style="color: #22B8CF;" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              <svg class="w-5 h-5" fill="none" style="color: #8B5CF6;" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
               订单管理
             </h2>
             <p class="text-xs" style="color: #90A4AE;">共 {{ orderTotal }} 条订单</p>
@@ -264,7 +264,7 @@
         </div>
 
         <!-- 筛选栏 -->
-        <div class="rounded-xl p-4 transition-all duration-300" style="background: #FFFFFF; border: 1px solid rgba(34, 184, 207, 0.08); box-shadow: 0 2px 8px rgba(34, 184, 207, 0.05);">
+        <div class="rounded-xl p-4 transition-all duration-300" style="background: #FFFFFF; border: 1px solid rgba(139, 92, 246, 0.08); box-shadow: 0 2px 8px rgba(139, 92, 246, 0.05);">
           <!-- 胶囊标签 -->
           <div class="flex flex-wrap gap-2 mb-3">
             <button
@@ -273,10 +273,10 @@
               @click="orderFilter = s.value; orderPage = 1; loadOrders()"
               :class="['px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 flex items-center gap-1.5',]"
               :style="orderFilter === s.value
-                ? 'background: linear-gradient(135deg, #22B8CF, #1A9EB8); color: white; box-shadow: 0 2px 8px rgba(34, 184, 207, 0.2);'
-                : 'background: rgba(34, 184, 207, 0.05); color: #546E7A; border: 1px solid rgba(34, 184, 207, 0.08);'"
-              @mouseenter="orderFilter !== s.value ? $event.currentTarget.style.background = 'rgba(34, 184, 207, 0.1)' : ''"
-              @mouseleave="orderFilter !== s.value ? $event.currentTarget.style.background = 'rgba(34, 184, 207, 0.05)' : ''"
+                ? 'background: linear-gradient(135deg, #8B5CF6, #7C3AED); color: white; box-shadow: 0 2px 8px rgba(139, 92, 246, 0.2);'
+                : 'background: rgba(139, 92, 246, 0.05); color: #546E7A; border: 1px solid rgba(139, 92, 246, 0.08);'"
+              @mouseenter="orderFilter !== s.value ? $event.currentTarget.style.background = 'rgba(139, 92, 246, 0.1)' : ''"
+              @mouseleave="orderFilter !== s.value ? $event.currentTarget.style.background = 'rgba(139, 92, 246, 0.05)' : ''"
             >
               <span v-html="s.icon"></span>
               {{ s.label }}
@@ -290,16 +290,16 @@
                 type="text" v-model="orderKeyword"
                 placeholder="搜索商品名称、备注..."
                 class="w-full pl-9 pr-4 py-2.5 rounded-xl text-sm transition-all"
-                style="background: #F0F8FF; border: 1px solid rgba(34, 184, 207, 0.1); color: #2C3E50;"
-                @focus="$event.target.style.borderColor='rgba(34, 184, 207, 0.4)'; $event.target.style.background='#FFFFFF'; $event.target.style.boxShadow='0 0 0 3px rgba(34, 184, 207, 0.1)';"
-                @blur="$event.target.style.borderColor='rgba(34, 184, 207, 0.1)'; $event.target.style.background='#F0F8FF'; $event.target.style.boxShadow='none';"
+                style="background: #F0F8FF; border: 1px solid rgba(139, 92, 246, 0.1); color: #2C3E50;"
+                @focus="$event.target.style.borderColor='rgba(139, 92, 246, 0.4)'; $event.target.style.background='#FFFFFF'; $event.target.style.boxShadow='0 0 0 3px rgba(139, 92, 246, 0.1)';"
+                @blur="$event.target.style.borderColor='rgba(139, 92, 246, 0.1)'; $event.target.style.background='#F0F8FF'; $event.target.style.boxShadow='none';"
                 @keyup.enter="orderPage = 1; loadOrders()"
               >
             </div>
             <button
               @click="orderPage = 1; loadOrders()"
               class="px-5 py-2.5 rounded-xl text-sm font-medium text-white transition-all hover:scale-105 active:scale-95 hover:shadow-md"
-              style="background: linear-gradient(135deg, #22B8CF, #1A9EB8); box-shadow: 0 4px 12px rgba(34, 184, 207, 0.2);">
+              style="background: linear-gradient(135deg, #8B5CF6, #7C3AED); box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);">
               搜索
             </button>
             <button
@@ -314,7 +314,7 @@
 
         <!-- 上传进度 Toast -->
         <Transition name="toast">
-          <div v-if="uploadingOrderId" class="flex items-center gap-3 rounded-xl px-4 py-3 text-sm" style="background: rgba(76, 175, 80, 0.08); border: 1px solid rgba(76, 175, 80, 0.15); color: #4CAF50;">
+          <div v-if="uploadingOrderId" class="flex items-center gap-3 rounded-xl px-4 py-3 text-sm" style="background: rgba(168, 85, 247, 0.08); border: 1px solid rgba(168, 85, 247, 0.15); color: #A855F7;">
             <div class="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
             设计稿上传中...
           </div>
@@ -345,15 +345,15 @@
           <div
             v-for="o in paginatedOrders" :key="o.id"
             class="rounded-xl p-5 transition-all duration-300 group"
-            style="background: #FFFFFF; border: 1px solid rgba(34, 184, 207, 0.08); box-shadow: 0 2px 8px rgba(34, 184, 207, 0.04);"
-            @mouseenter="$event.currentTarget.style.boxShadow='0 8px 24px rgba(34, 184, 207, 0.1)'; $event.currentTarget.style.borderColor='rgba(34, 184, 207, 0.15)';"
-            @mouseleave="$event.currentTarget.style.boxShadow='0 2px 8px rgba(34, 184, 207, 0.04)'; $event.currentTarget.style.borderColor='rgba(34, 184, 207, 0.08)';"
+            style="background: #FFFFFF; border: 1px solid rgba(139, 92, 246, 0.08); box-shadow: 0 2px 8px rgba(139, 92, 246, 0.04);"
+            @mouseenter="$event.currentTarget.style.boxShadow='0 8px 24px rgba(139, 92, 246, 0.1)'; $event.currentTarget.style.borderColor='rgba(139, 92, 246, 0.15)';"
+            @mouseleave="$event.currentTarget.style.boxShadow='0 2px 8px rgba(139, 92, 246, 0.04)'; $event.currentTarget.style.borderColor='rgba(139, 92, 246, 0.08)';"
           >
             <!-- 头部 -->
             <div class="flex items-start justify-between mb-4">
               <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl flex items-center justify-center text-lg" style="background: rgba(34, 184, 207, 0.08); border: 1px solid rgba(34, 184, 207, 0.12);">
-                  <svg class="w-5 h-5" style="color: #22B8CF;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center text-lg" style="background: rgba(139, 92, 246, 0.08); border: 1px solid rgba(139, 92, 246, 0.12);">
+                  <svg class="w-5 h-5" style="color: #8B5CF6;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
                 </div>
                 <div>
                   <h3 class="text-sm font-bold" style="color: #2C3E50;">{{ o.goodsName }}</h3>
@@ -365,45 +365,45 @@
 
             <!-- 详情网格 -->
             <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
-              <div class="rounded-lg px-3 py-2" style="background: rgba(34, 184, 207, 0.03);">
+              <div class="rounded-lg px-3 py-2" style="background: rgba(139, 92, 246, 0.03);">
                 <p class="text-[10px] mb-0.5" style="color: #90A4AE;">数量</p>
                 <p class="text-sm font-bold" style="color: #2C3E50;">{{ o.num }} 件</p>
               </div>
-              <div v-if="o.size" class="rounded-lg px-3 py-2" style="background: rgba(34, 184, 207, 0.03);">
+              <div v-if="o.size" class="rounded-lg px-3 py-2" style="background: rgba(139, 92, 246, 0.03);">
                 <p class="text-[10px] mb-0.5" style="color: #90A4AE;">尺寸</p>
                 <p class="text-sm font-bold" style="color: #2C3E50;">{{ o.size }}</p>
               </div>
-              <div v-if="o.color" class="rounded-lg px-3 py-2" style="background: rgba(34, 184, 207, 0.03);">
+              <div v-if="o.color" class="rounded-lg px-3 py-2" style="background: rgba(139, 92, 246, 0.03);">
                 <p class="text-[10px] mb-0.5" style="color: #90A4AE;">颜色</p>
                 <p class="text-sm font-bold" style="color: #2C3E50;">{{ o.color }}</p>
               </div>
-              <div v-if="o.custom" class="rounded-lg px-3 py-2" style="background: rgba(34, 184, 207, 0.03);">
+              <div v-if="o.custom" class="rounded-lg px-3 py-2" style="background: rgba(139, 92, 246, 0.03);">
                 <p class="text-[10px] mb-0.5" style="color: #90A4AE;">定制</p>
                 <p class="text-sm font-bold" style="color: #2C3E50;">{{ o.custom }}</p>
               </div>
             </div>
 
             <!-- 备注 -->
-            <p v-if="o.remark" class="text-xs mb-4 rounded-lg px-3 py-2" style="color: #546E7A; background: rgba(34, 184, 207, 0.03);">备注：{{ o.remark }}</p>
+            <p v-if="o.remark" class="text-xs mb-4 rounded-lg px-3 py-2" style="color: #546E7A; background: rgba(139, 92, 246, 0.03);">备注：{{ o.remark }}</p>
 
             <!-- 设计稿 -->
             <div v-if="o.designFile" class="mb-4">
-              <a :href="o.designFile" target="_blank" class="inline-flex items-center gap-1.5 text-xs rounded-lg px-3 py-1.5 transition-all" style="color: #4CAF50; background: rgba(76, 175, 80, 0.06); border: 1px solid rgba(76, 175, 80, 0.12);">
+              <a :href="o.designFile" target="_blank" class="inline-flex items-center gap-1.5 text-xs rounded-lg px-3 py-1.5 transition-all" style="color: #A855F7; background: rgba(168, 85, 247, 0.06); border: 1px solid rgba(168, 85, 247, 0.12);">
                 查看设计稿
                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
               </a>
             </div>
 
             <!-- 操作 -->
-            <div class="flex flex-wrap gap-2 pt-3" style="border-top: 1px solid rgba(34, 184, 207, 0.06);">
+            <div class="flex flex-wrap gap-2 pt-3" style="border-top: 1px solid rgba(139, 92, 246, 0.06);">
               <div v-if="o.custom === '需要定制' && o.status === 1" class="w-full">
-                <div class="rounded-xl p-3" style="background: rgba(76, 175, 80, 0.04); border: 1px dashed rgba(76, 175, 80, 0.2);">
-                  <p class="text-xs font-medium mb-2" style="color: #4CAF50;">为该订单上传定制设计稿</p>
+                <div class="rounded-xl p-3" style="background: rgba(168, 85, 247, 0.04); border: 1px dashed rgba(168, 85, 247, 0.2);">
+                  <p class="text-xs font-medium mb-2" style="color: #A855F7;">为该订单上传定制设计稿</p>
                   <div class="flex flex-wrap gap-2 items-center">
                     <input type="file" :ref="el => fileInputs[o.id] = el" accept=".jpg,.jpeg,.png,.gif,.webp,.pdf" class="text-xs flex-1 min-w-[150px]" style="color: #546E7A;">
                     <button @click="submitDesign(o)" :disabled="!fileInputs[o.id]?.files[0] || uploadingOrderId === o.id"
                       class="px-4 py-1.5 rounded-lg text-xs font-medium text-white transition-all hover:scale-105 disabled:opacity-40 disabled:cursor-not-allowed"
-                      style="background: linear-gradient(135deg, #22B8CF, #1A9EB8);">
+                      style="background: linear-gradient(135deg, #8B5CF6, #7C3AED);">
                       {{ uploadingOrderId === o.id ? '上传中...' : '上传设计稿' }}
                     </button>
                   </div>
@@ -413,7 +413,7 @@
               <template v-if="o.status === 2">
                 <button @click="reviewOrder(o, 'approve')" :disabled="reviewingId === o.id"
                   class="px-4 py-2 rounded-xl text-xs font-bold text-white transition-all hover:scale-105 disabled:opacity-50"
-                  style="background: linear-gradient(135deg, #4CAF50, #388E3C); box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);">
+                  style="background: linear-gradient(135deg, #A855F7, #388E3C); box-shadow: 0 4px 12px rgba(168, 85, 247, 0.2);">
                   通过审核
                 </button>
                 <button @click="reviewOrder(o, 'reject')" :disabled="reviewingId === o.id"
@@ -423,9 +423,9 @@
                 </button>
                 <div class="flex items-center gap-1.5 ml-1">
                   <input type="number" v-model.number="o.adjustNum" :placeholder="'原:' + o.num"
-                    class="w-20 px-2 py-1.5 rounded-lg text-xs transition-all" style="background: rgba(34, 184, 207, 0.05); border: 1px solid rgba(34, 184, 207, 0.1); color: #2C3E50;"
-                    @focus="$event.target.style.borderColor='rgba(34, 184, 207, 0.4)'; $event.target.style.boxShadow='0 0 0 3px rgba(34, 184, 207, 0.1)';"
-                    @blur="$event.target.style.borderColor='rgba(34, 184, 207, 0.1)'; $event.target.style.boxShadow='none';"
+                    class="w-20 px-2 py-1.5 rounded-lg text-xs transition-all" style="background: rgba(139, 92, 246, 0.05); border: 1px solid rgba(139, 92, 246, 0.1); color: #2C3E50;"
+                    @focus="$event.target.style.borderColor='rgba(139, 92, 246, 0.4)'; $event.target.style.boxShadow='0 0 0 3px rgba(139, 92, 246, 0.1)';"
+                    @blur="$event.target.style.borderColor='rgba(139, 92, 246, 0.1)'; $event.target.style.boxShadow='none';"
                   >
                   <span class="text-[10px]" style="color: #90A4AE;">调整数量</span>
                 </div>
@@ -433,7 +433,7 @@
 
               <button v-if="o.status === 3" @click="completeOrder(o)" :disabled="completingId === o.id"
                 class="px-4 py-2 rounded-xl text-xs font-bold text-white transition-all hover:scale-105 disabled:opacity-50"
-                style="background: linear-gradient(135deg, #4CAF50, #388E3C); box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);">
+                style="background: linear-gradient(135deg, #A855F7, #388E3C); box-shadow: 0 4px 12px rgba(168, 85, 247, 0.2);">
                 确认核销
               </button>
             </div>
@@ -441,15 +441,15 @@
         </div>
 
         <!-- 空状态 -->
-        <div v-else class="rounded-xl p-16 text-center transition-all duration-300" style="background: #FFFFFF; border: 1px solid rgba(34, 184, 207, 0.08); box-shadow: 0 2px 8px rgba(34, 184, 207, 0.05);">
+        <div v-else class="rounded-xl p-16 text-center transition-all duration-300" style="background: #FFFFFF; border: 1px solid rgba(139, 92, 246, 0.08); box-shadow: 0 2px 8px rgba(139, 92, 246, 0.05);">
           <div class="mb-6 flex justify-center">
             <svg class="w-32 h-32" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
               <!-- 纸张 -->
-              <rect x="24" y="28" width="80" height="72" rx="8" fill="rgba(34, 184, 207, 0.05)" stroke="rgba(34, 184, 207, 0.12)" stroke-width="2"/>
+              <rect x="24" y="28" width="80" height="72" rx="8" fill="rgba(139, 92, 246, 0.05)" stroke="rgba(139, 92, 246, 0.12)" stroke-width="2"/>
               <!-- 横线 -->
-              <line x1="36" y1="50" x2="92" y2="50" stroke="rgba(34, 184, 207, 0.15)" stroke-width="2" stroke-linecap="round"/>
-              <line x1="36" y1="62" x2="80" y2="62" stroke="rgba(34, 184, 207, 0.1)" stroke-width="2" stroke-linecap="round"/>
-              <line x1="36" y1="74" x2="72" y2="74" stroke="rgba(34, 184, 207, 0.08)" stroke-width="2" stroke-linecap="round"/>
+              <line x1="36" y1="50" x2="92" y2="50" stroke="rgba(139, 92, 246, 0.15)" stroke-width="2" stroke-linecap="round"/>
+              <line x1="36" y1="62" x2="80" y2="62" stroke="rgba(139, 92, 246, 0.1)" stroke-width="2" stroke-linecap="round"/>
+              <line x1="36" y1="74" x2="72" y2="74" stroke="rgba(139, 92, 246, 0.08)" stroke-width="2" stroke-linecap="round"/>
               <!-- 铅笔 -->
               <path d="M88 88L96 96L92 100L84 92L88 88Z" fill="rgba(255, 183, 77, 0.3)" stroke="rgba(255, 183, 77, 0.5)" stroke-width="1.5" stroke-linejoin="round"/>
               <line x1="80" y1="96" x2="84" y2="92" stroke="rgba(255, 183, 77, 0.4)" stroke-width="1.5" stroke-linecap="round"/>
@@ -459,7 +459,7 @@
           <p style="font-size: 12px; color: #90A4AE; margin-bottom: 16px;">等待用户下单后，这里会展示订单信息</p>
           <button @click="orderKeyword = ''; orderFilter = 'all'; orderPage = 1; loadOrders()"
             class="px-6 py-2.5 rounded-xl text-sm font-medium transition-all hover:scale-105 active:scale-95"
-            style="background: linear-gradient(135deg, #22B8CF, #1A9EB8); color: white; box-shadow: 0 4px 14px rgba(34, 184, 207, 0.2);">
+            style="background: linear-gradient(135deg, #8B5CF6, #7C3AED); color: white; box-shadow: 0 4px 14px rgba(139, 92, 246, 0.2);">
             清除筛选
           </button>
         </div>
@@ -468,14 +468,14 @@
         <div v-if="orderTotal > orderPageSize" class="flex justify-center gap-2 flex-wrap">
           <button @click="orderPage--; loadOrders()" :disabled="orderPage === 1"
             class="px-4 py-2 rounded-lg text-sm font-medium transition-all disabled:opacity-30 disabled:cursor-not-allowed"
-            style="background: #FFFFFF; color: #546E7A; border: 1px solid rgba(34, 184, 207, 0.1);">上一页</button>
+            style="background: #FFFFFF; color: #546E7A; border: 1px solid rgba(139, 92, 246, 0.1);">上一页</button>
           <div class="px-4 py-2 rounded-lg text-sm font-medium"
-            style="background: rgba(34, 184, 207, 0.08); color: #22B8CF; border: 1px solid rgba(34, 184, 207, 0.15);">
+            style="background: rgba(139, 92, 246, 0.08); color: #8B5CF6; border: 1px solid rgba(139, 92, 246, 0.15);">
             第 {{ orderPage }} / {{ totalPages }} 页
           </div>
           <button @click="orderPage++; loadOrders()" :disabled="orderPage >= totalPages"
             class="px-4 py-2 rounded-lg text-sm font-medium transition-all disabled:opacity-30 disabled:cursor-not-allowed"
-            style="background: #FFFFFF; color: #546E7A; border: 1px solid rgba(34, 184, 207, 0.1);">下一页</button>
+            style="background: #FFFFFF; color: #546E7A; border: 1px solid rgba(139, 92, 246, 0.1);">下一页</button>
         </div>
       </div>
 
@@ -485,12 +485,12 @@
         <!-- 标题 + 操作 -->
         <div class="flex items-center justify-between mb-2">
           <div class="flex items-center gap-3">
-            <button @click="navigate('dashboard')" class="w-8 h-8 rounded-lg flex items-center justify-center transition-all hover:scale-105" style="background: #FFFFFF; border: 1px solid rgba(34, 184, 207, 0.1); box-shadow: 0 2px 6px rgba(34, 184, 207, 0.05);">
+            <button @click="navigate('dashboard')" class="w-8 h-8 rounded-lg flex items-center justify-center transition-all hover:scale-105" style="background: #FFFFFF; border: 1px solid rgba(139, 92, 246, 0.1); box-shadow: 0 2px 6px rgba(139, 92, 246, 0.05);">
               <svg class="w-4 h-4" style="color: #546E7A;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
             </button>
             <div>
               <h2 class="text-lg font-bold flex items-center gap-2" style="color: #2C3E50;">
-                <svg class="w-5 h-5" style="color: #22B8CF;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-5 h-5" style="color: #8B5CF6;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
                 </svg>
                 商品管理
@@ -509,7 +509,7 @@
             </button>
             <button @click="openAddProduct"
               class="px-4 py-2 rounded-xl text-sm font-bold text-white transition-all flex items-center gap-1.5 hover:scale-105 active:scale-95"
-              style="background: linear-gradient(135deg, #22B8CF, #1A9EB8); box-shadow: 0 4px 14px rgba(34, 184, 207, 0.2);">
+              style="background: linear-gradient(135deg, #8B5CF6, #7C3AED); box-shadow: 0 4px 14px rgba(139, 92, 246, 0.2);">
               添加商品
             </button>
           </div>
@@ -533,30 +533,30 @@
           <div
             v-for="g in productsPage" :key="g.id"
             class="group rounded-xl overflow-hidden transition-all duration-300"
-            style="background: #FFFFFF; border: 1px solid rgba(34, 184, 207, 0.08); box-shadow: 0 2px 8px rgba(34, 184, 207, 0.04);"
-            :style="'--stock-color: ' + (g.stock <= 5 ? '#EF5350' : g.stock <= 10 ? '#FFB74D' : '#4CAF50')"
-            @mouseenter="$event.currentTarget.style.boxShadow='0 8px 24px rgba(34, 184, 207, 0.12)'; $event.currentTarget.style.borderColor='rgba(34, 184, 207, 0.15)'; $event.currentTarget.style.transform='translateY(-2px)';"
-            @mouseleave="$event.currentTarget.style.boxShadow='0 2px 8px rgba(34, 184, 207, 0.04)'; $event.currentTarget.style.borderColor='rgba(34, 184, 207, 0.08)'; $event.currentTarget.style.transform='translateY(0)';"
+            style="background: #FFFFFF; border: 1px solid rgba(139, 92, 246, 0.08); box-shadow: 0 2px 8px rgba(139, 92, 246, 0.04);"
+            :style="'--stock-color: ' + (g.stock <= 5 ? '#EF5350' : g.stock <= 10 ? '#FFB74D' : '#A855F7')"
+            @mouseenter="$event.currentTarget.style.boxShadow='0 8px 24px rgba(139, 92, 246, 0.12)'; $event.currentTarget.style.borderColor='rgba(139, 92, 246, 0.15)'; $event.currentTarget.style.transform='translateY(-2px)';"
+            @mouseleave="$event.currentTarget.style.boxShadow='0 2px 8px rgba(139, 92, 246, 0.04)'; $event.currentTarget.style.borderColor='rgba(139, 92, 246, 0.08)'; $event.currentTarget.style.transform='translateY(0)';"
           >
             <!-- 图片 -->
-            <div class="relative h-36 overflow-hidden" style="background: rgba(34, 184, 207, 0.02);">
+            <div class="relative h-36 overflow-hidden" style="background: rgba(139, 92, 246, 0.02);">
               <img v-if="g.pic" :src="g.pic" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" @error="g.pic = ''">
-              <div v-else class="w-full h-full flex items-center justify-center" style="background: rgba(34, 184, 207, 0.03);">
+              <div v-else class="w-full h-full flex items-center justify-center" style="background: rgba(139, 92, 246, 0.03);">
                 <svg class="w-12 h-12" viewBox="0 0 48 48" fill="none">
-                  <rect x="4" y="4" width="40" height="40" rx="4" fill="rgba(34, 184, 207, 0.05)" stroke="rgba(34, 184, 207, 0.1)" stroke-width="1.5"/>
-                  <rect x="8" y="8" width="32" height="32" rx="3" fill="rgba(34, 184, 207, 0.03)" stroke="rgba(34, 184, 207, 0.06)" stroke-width="1"/>
-                  <text x="24" y="30" text-anchor="middle" fill="rgba(34, 184, 207, 0.3)" font-size="11" font-weight="bold">文创</text>
+                  <rect x="4" y="4" width="40" height="40" rx="4" fill="rgba(139, 92, 246, 0.05)" stroke="rgba(139, 92, 246, 0.1)" stroke-width="1.5"/>
+                  <rect x="8" y="8" width="32" height="32" rx="3" fill="rgba(139, 92, 246, 0.03)" stroke="rgba(139, 92, 246, 0.06)" stroke-width="1"/>
+                  <text x="24" y="30" text-anchor="middle" fill="rgba(139, 92, 246, 0.3)" font-size="11" font-weight="bold">文创</text>
                 </svg>
               </div>
               <!-- 分类 -->
               <div class="absolute top-2 left-2">
                 <span class="px-2 py-0.5 rounded-full text-[10px] font-medium backdrop-blur-sm border"
-                  :style="g.category === 'wenchuang' ? 'background: rgba(34, 184, 207, 0.1); color: #22B8CF; border-color: rgba(34, 184, 207, 0.15);' : 'background: rgba(255, 183, 77, 0.1); color: #FFB74D; border-color: rgba(255, 183, 77, 0.15);'">
+                  :style="g.category === 'wenchuang' ? 'background: rgba(139, 92, 246, 0.1); color: #8B5CF6; border-color: rgba(139, 92, 246, 0.15);' : 'background: rgba(168, 85, 247, 0.1); color: #A855F7; border-color: rgba(168, 85, 247, 0.15);'">
                   {{ g.categoryText }}
                 </span>
               </div>
               <!-- 库存条 -->
-              <div class="absolute bottom-0 left-0 right-0 h-1.5" style="background: rgba(34, 184, 207, 0.06);">
+              <div class="absolute bottom-0 left-0 right-0 h-1.5" style="background: rgba(139, 92, 246, 0.06);">
                 <div class="h-full transition-all duration-700" :style="{ width: Math.min(g.stock / 100 * 100, 100) + '%', background: 'linear-gradient(90deg, var(--stock-color), var(--stock-color)aa)' }"></div>
               </div>
             </div>
@@ -565,7 +565,7 @@
             <div class="p-4">
               <div class="flex items-start justify-between gap-2 mb-2">
                 <h3 class="text-sm font-bold truncate flex-1" style="color: #2C3E50;">{{ g.name }}</h3>
-                <span class="text-sm font-bold flex-shrink-0" style="color: #22B8CF;">¥{{ g.price }}</span>
+                <span class="text-sm font-bold flex-shrink-0" style="color: #8B5CF6;">¥{{ g.price }}</span>
               </div>
               <p class="text-xs truncate mb-3" style="color: #90A4AE;">{{ g.spec || g.desc || '暂无规格描述' }}</p>
 
@@ -576,7 +576,7 @@
                     <span>库存</span>
                     <span class="font-bold" :style="{ color: g.stock <= 5 ? '#EF5350' : g.stock <= 10 ? '#FFB74D' : '#546E7A' }">{{ g.stock }}</span>
                   </div>
-                  <div class="h-1.5 rounded-full overflow-hidden" style="background: rgba(34, 184, 207, 0.06);">
+                  <div class="h-1.5 rounded-full overflow-hidden" style="background: rgba(139, 92, 246, 0.06);">
                     <div class="h-full rounded-full transition-all duration-700" :style="{ width: Math.min(g.stock / 100 * 100, 100) + '%', background: 'linear-gradient(90deg, var(--stock-color), var(--stock-color)aa)' }"></div>
                   </div>
                 </div>
@@ -587,11 +587,11 @@
               </div>
 
               <!-- 操作 -->
-              <div class="flex gap-2 pt-2" style="border-top: 1px solid rgba(34, 184, 207, 0.05);">
+              <div class="flex gap-2 pt-2" style="border-top: 1px solid rgba(139, 92, 246, 0.05);">
                 <button @click="toggleStock(g)" :disabled="togglingId === g.id"
                   class="flex-1 py-1.5 rounded-lg text-xs font-medium transition-all"
                   :style="g.inStock
-                    ? 'background: rgba(76, 175, 80, 0.08); color: #4CAF50; border: 1px solid rgba(76, 175, 80, 0.15);'
+                    ? 'background: rgba(168, 85, 247, 0.08); color: #A855F7; border: 1px solid rgba(168, 85, 247, 0.15);'
                     : 'background: rgba(239, 83, 80, 0.06); color: #EF5350; border: 1px solid rgba(239, 83, 80, 0.12);'"
                   @mouseenter="$event.currentTarget.style.opacity='0.8'"
                   @mouseleave="$event.currentTarget.style.opacity='1'"
@@ -600,7 +600,7 @@
                 </button>
                 <button @click="editProduct(g)"
                   class="px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
-                  style="background: rgba(34, 184, 207, 0.05); color: #546E7A; border: 1px solid rgba(34, 184, 207, 0.08);">编辑</button>
+                  style="background: rgba(139, 92, 246, 0.05); color: #546E7A; border: 1px solid rgba(139, 92, 246, 0.08);">编辑</button>
                 <button @click="deleteProduct(g)"
                   class="px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
                   style="background: rgba(239, 83, 80, 0.05); color: rgba(239, 83, 80, 0.7); border: 1px solid rgba(239, 83, 80, 0.1);">删除</button>
@@ -610,18 +610,18 @@
         </div>
 
         <!-- 空状态 -->
-        <div v-else class="rounded-xl p-16 text-center transition-all duration-300" style="background: #FFFFFF; border: 1px solid rgba(34, 184, 207, 0.08); box-shadow: 0 2px 8px rgba(34, 184, 207, 0.05);">
+        <div v-else class="rounded-xl p-16 text-center transition-all duration-300" style="background: #FFFFFF; border: 1px solid rgba(139, 92, 246, 0.08); box-shadow: 0 2px 8px rgba(139, 92, 246, 0.05);">
           <div class="mb-6 flex justify-center">
             <svg class="w-32 h-32" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
               <!-- 礼盒主体 -->
-              <rect x="28" y="50" width="72" height="56" rx="6" fill="rgba(34, 184, 207, 0.05)" stroke="rgba(34, 184, 207, 0.15)" stroke-width="2"/>
-              <rect x="28" y="50" width="72" height="18" rx="6" fill="rgba(34, 184, 207, 0.08)" stroke="rgba(34, 184, 207, 0.2)" stroke-width="2"/>
+              <rect x="28" y="50" width="72" height="56" rx="6" fill="rgba(139, 92, 246, 0.05)" stroke="rgba(139, 92, 246, 0.15)" stroke-width="2"/>
+              <rect x="28" y="50" width="72" height="18" rx="6" fill="rgba(139, 92, 246, 0.08)" stroke="rgba(139, 92, 246, 0.2)" stroke-width="2"/>
               <!-- 蝴蝶结 -->
-              <ellipse cx="64" cy="50" rx="14" ry="8" fill="rgba(34, 184, 207, 0.1)" stroke="rgba(34, 184, 207, 0.2)" stroke-width="1.5"/>
-              <circle cx="64" cy="50" r="4" fill="rgba(34, 184, 207, 0.15)"/>
+              <ellipse cx="64" cy="50" rx="14" ry="8" fill="rgba(139, 92, 246, 0.1)" stroke="rgba(139, 92, 246, 0.2)" stroke-width="1.5"/>
+              <circle cx="64" cy="50" r="4" fill="rgba(139, 92, 246, 0.15)"/>
               <!-- 丝带 -->
-              <line x1="64" y1="50" x2="64" y2="106" stroke="rgba(34, 184, 207, 0.15)" stroke-width="2"/>
-              <line x1="28" y1="78" x2="100" y2="78" stroke="rgba(34, 184, 207, 0.15)" stroke-width="2"/>
+              <line x1="64" y1="50" x2="64" y2="106" stroke="rgba(139, 92, 246, 0.15)" stroke-width="2"/>
+              <line x1="28" y1="78" x2="100" y2="78" stroke="rgba(139, 92, 246, 0.15)" stroke-width="2"/>
               <!-- 星星装饰 -->
               <circle cx="44" cy="36" r="4" fill="rgba(255, 183, 77, 0.15)" stroke="rgba(255, 183, 77, 0.25)" stroke-width="1"/>
               <circle cx="84" cy="36" r="4" fill="rgba(255, 183, 77, 0.15)" stroke="rgba(255, 183, 77, 0.25)" stroke-width="1"/>
@@ -632,7 +632,7 @@
           <p style="font-size: 12px; color: #90A4AE; margin-bottom: 20px;">点击下方按钮，开始添加你的第一款文创吧</p>
           <button @click="openAddProduct"
             class="px-8 py-3 rounded-xl text-sm font-bold text-white transition-all hover:scale-105 active:scale-95"
-            style="background: linear-gradient(135deg, #22B8CF, #1A9EB8); box-shadow: 0 6px 20px rgba(34, 184, 207, 0.25);">
+            style="background: linear-gradient(135deg, #8B5CF6, #7C3AED); box-shadow: 0 6px 20px rgba(139, 92, 246, 0.25);">
             添加商品
           </button>
         </div>
@@ -641,106 +641,106 @@
         <div v-if="productTotalPages > 1" class="flex justify-center gap-2 flex-wrap">
           <button @click="productPage--; loadProducts()" :disabled="productPage === 1"
             class="px-4 py-2 rounded-lg text-sm font-medium transition-all disabled:opacity-30 disabled:cursor-not-allowed"
-            style="background: #FFFFFF; color: #546E7A; border: 1px solid rgba(34, 184, 207, 0.1);">上一页</button>
+            style="background: #FFFFFF; color: #546E7A; border: 1px solid rgba(139, 92, 246, 0.1);">上一页</button>
           <div class="px-4 py-2 rounded-lg text-sm font-medium"
-            style="background: rgba(34, 184, 207, 0.08); color: #22B8CF; border: 1px solid rgba(34, 184, 207, 0.15);">
+            style="background: rgba(139, 92, 246, 0.08); color: #8B5CF6; border: 1px solid rgba(139, 92, 246, 0.15);">
             第 {{ productPage }} / {{ productTotalPages }} 页
           </div>
           <button @click="productPage++; loadProducts()" :disabled="productPage >= productTotalPages"
             class="px-4 py-2 rounded-lg text-sm font-medium transition-all disabled:opacity-30 disabled:cursor-not-allowed"
-            style="background: #FFFFFF; color: #546E7A; border: 1px solid rgba(34, 184, 207, 0.1);">下一页</button>
+            style="background: #FFFFFF; color: #546E7A; border: 1px solid rgba(139, 92, 246, 0.1);">下一页</button>
         </div>
 
         <!-- 商品弹窗 -->
         <Transition name="dialog">
           <div v-if="showProductModal" class="fixed inset-0 z-50 flex items-center justify-center p-4" @click.self="showProductModal = false">
             <div class="absolute inset-0" style="background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(8px);"></div>
-            <div class="relative rounded-xl max-w-lg w-full overflow-hidden max-h-[90vh] overflow-y-auto custom-scrollbar" style="background: #FFFFFF; border: 1px solid rgba(34, 184, 207, 0.1); box-shadow: 0 24px 80px rgba(0, 0, 0, 0.15);">
+            <div class="relative rounded-xl max-w-lg w-full overflow-hidden max-h-[90vh] overflow-y-auto custom-scrollbar" style="background: #FFFFFF; border: 1px solid rgba(139, 92, 246, 0.1); box-shadow: 0 24px 80px rgba(0, 0, 0, 0.15);">
               <div class="p-6">
                 <div class="flex items-center justify-between mb-5">
                   <h3 class="text-base font-bold" style="color: #2C3E50;">{{ productForm.id ? '编辑商品' : '添加商品' }}</h3>
-                  <button @click="showProductModal = false" class="w-7 h-7 rounded-lg flex items-center justify-center transition-all" style="background: rgba(34, 184, 207, 0.05);"
-                    @mouseenter="$event.currentTarget.style.background='rgba(34, 184, 207, 0.1)'"
-                    @mouseleave="$event.currentTarget.style.background='rgba(34, 184, 207, 0.05)'">
+                  <button @click="showProductModal = false" class="w-7 h-7 rounded-lg flex items-center justify-center transition-all" style="background: rgba(139, 92, 246, 0.05);"
+                    @mouseenter="$event.currentTarget.style.background='rgba(139, 92, 246, 0.1)'"
+                    @mouseleave="$event.currentTarget.style.background='rgba(139, 92, 246, 0.05)'">
                     <svg class="w-4 h-4" style="color: #546E7A;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                   </button>
                 </div>
                 <div class="space-y-4">
                   <div>
                     <label class="block text-xs font-medium mb-1.5" style="color: #546E7A;">商品名称 <span style="color: #EF5350;">*</span></label>
-                    <input v-model="productForm.name" class="w-full px-4 py-2.5 rounded-xl text-sm transition-all" style="background: #F0F8FF; border: 1px solid rgba(34, 184, 207, 0.1); color: #2C3E50;"
-                      @focus="$event.target.style.borderColor='rgba(34, 184, 207, 0.4)'; $event.target.style.background='#FFFFFF'; $event.target.style.boxShadow='0 0 0 3px rgba(34, 184, 207, 0.1)';"
-                      @blur="$event.target.style.borderColor='rgba(34, 184, 207, 0.1)'; $event.target.style.background='#F0F8FF'; $event.target.style.boxShadow='none';"
+                    <input v-model="productForm.name" class="w-full px-4 py-2.5 rounded-xl text-sm transition-all" style="background: #F0F8FF; border: 1px solid rgba(139, 92, 246, 0.1); color: #2C3E50;"
+                      @focus="$event.target.style.borderColor='rgba(139, 92, 246, 0.4)'; $event.target.style.background='#FFFFFF'; $event.target.style.boxShadow='0 0 0 3px rgba(139, 92, 246, 0.1)';"
+                      @blur="$event.target.style.borderColor='rgba(139, 92, 246, 0.1)'; $event.target.style.background='#F0F8FF'; $event.target.style.boxShadow='none';"
                       placeholder="请输入商品名称">
                   </div>
                   <div class="grid grid-cols-2 gap-3">
                     <div>
                       <label class="block text-xs font-medium mb-1.5" style="color: #546E7A;">价格 (元) <span style="color: #EF5350;">*</span></label>
-                      <input type="number" v-model.number="productForm.price" class="w-full px-4 py-2.5 rounded-xl text-sm transition-all" style="background: #F0F8FF; border: 1px solid rgba(34, 184, 207, 0.1); color: #2C3E50;"
-                        @focus="$event.target.style.borderColor='rgba(34, 184, 207, 0.4)'; $event.target.style.background='#FFFFFF'; $event.target.style.boxShadow='0 0 0 3px rgba(34, 184, 207, 0.1)';"
-                        @blur="$event.target.style.borderColor='rgba(34, 184, 207, 0.1)'; $event.target.style.background='#F0F8FF'; $event.target.style.boxShadow='none';"
+                      <input type="number" v-model.number="productForm.price" class="w-full px-4 py-2.5 rounded-xl text-sm transition-all" style="background: #F0F8FF; border: 1px solid rgba(139, 92, 246, 0.1); color: #2C3E50;"
+                        @focus="$event.target.style.borderColor='rgba(139, 92, 246, 0.4)'; $event.target.style.background='#FFFFFF'; $event.target.style.boxShadow='0 0 0 3px rgba(139, 92, 246, 0.1)';"
+                        @blur="$event.target.style.borderColor='rgba(139, 92, 246, 0.1)'; $event.target.style.background='#F0F8FF'; $event.target.style.boxShadow='none';"
                         placeholder="0.00">
                     </div>
                     <div>
                       <label class="block text-xs font-medium mb-1.5" style="color: #546E7A;">库存 <span style="color: #EF5350;">*</span></label>
-                      <input type="number" v-model.number="productForm.stock" class="w-full px-4 py-2.5 rounded-xl text-sm transition-all" style="background: #F0F8FF; border: 1px solid rgba(34, 184, 207, 0.1); color: #2C3E50;"
-                        @focus="$event.target.style.borderColor='rgba(34, 184, 207, 0.4)'; $event.target.style.background='#FFFFFF'; $event.target.style.boxShadow='0 0 0 3px rgba(34, 184, 207, 0.1)';"
-                        @blur="$event.target.style.borderColor='rgba(34, 184, 207, 0.1)'; $event.target.style.background='#F0F8FF'; $event.target.style.boxShadow='none';"
+                      <input type="number" v-model.number="productForm.stock" class="w-full px-4 py-2.5 rounded-xl text-sm transition-all" style="background: #F0F8FF; border: 1px solid rgba(139, 92, 246, 0.1); color: #2C3E50;"
+                        @focus="$event.target.style.borderColor='rgba(139, 92, 246, 0.4)'; $event.target.style.background='#FFFFFF'; $event.target.style.boxShadow='0 0 0 3px rgba(139, 92, 246, 0.1)';"
+                        @blur="$event.target.style.borderColor='rgba(139, 92, 246, 0.1)'; $event.target.style.background='#F0F8FF'; $event.target.style.boxShadow='none';"
                         placeholder="0">
                     </div>
                   </div>
                   <div class="grid grid-cols-2 gap-3">
                     <div>
                       <label class="block text-xs font-medium mb-1.5" style="color: #546E7A;">分类</label>
-                      <select v-model="productForm.category" class="w-full px-4 py-2.5 rounded-xl text-sm transition-all" style="background: #F0F8FF; border: 1px solid rgba(34, 184, 207, 0.1); color: #2C3E50;">
+                      <select v-model="productForm.category" class="w-full px-4 py-2.5 rounded-xl text-sm transition-all" style="background: #F0F8FF; border: 1px solid rgba(139, 92, 246, 0.1); color: #2C3E50;">
                         <option value="wenchuang">文创产品</option>
                         <option value="wuliao">活动物料</option>
                       </select>
                     </div>
                     <div>
                       <label class="block text-xs font-medium mb-1.5" style="color: #546E7A;">最低起订量</label>
-                      <input type="number" v-model.number="productForm.minOrder" class="w-full px-4 py-2.5 rounded-xl text-sm transition-all" style="background: #F0F8FF; border: 1px solid rgba(34, 184, 207, 0.1); color: #2C3E50;"
-                        @focus="$event.target.style.borderColor='rgba(34, 184, 207, 0.4)'; $event.target.style.background='#FFFFFF'; $event.target.style.boxShadow='0 0 0 3px rgba(34, 184, 207, 0.1)';"
-                        @blur="$event.target.style.borderColor='rgba(34, 184, 207, 0.1)'; $event.target.style.background='#F0F8FF'; $event.target.style.boxShadow='none';"
+                      <input type="number" v-model.number="productForm.minOrder" class="w-full px-4 py-2.5 rounded-xl text-sm transition-all" style="background: #F0F8FF; border: 1px solid rgba(139, 92, 246, 0.1); color: #2C3E50;"
+                        @focus="$event.target.style.borderColor='rgba(139, 92, 246, 0.4)'; $event.target.style.background='#FFFFFF'; $event.target.style.boxShadow='0 0 0 3px rgba(139, 92, 246, 0.1)';"
+                        @blur="$event.target.style.borderColor='rgba(139, 92, 246, 0.1)'; $event.target.style.background='#F0F8FF'; $event.target.style.boxShadow='none';"
                         placeholder="1">
                     </div>
                   </div>
                   <div>
                     <label class="block text-xs font-medium mb-1.5" style="color: #546E7A;">商品规格</label>
-                    <input v-model="productForm.spec" class="w-full px-4 py-2.5 rounded-xl text-sm transition-all" style="background: #F0F8FF; border: 1px solid rgba(34, 184, 207, 0.1); color: #2C3E50;"
-                      @focus="$event.target.style.borderColor='rgba(34, 184, 207, 0.4)'; $event.target.style.background='#FFFFFF'; $event.target.style.boxShadow='0 0 0 3px rgba(34, 184, 207, 0.1)';"
-                      @blur="$event.target.style.borderColor='rgba(34, 184, 207, 0.1)'; $event.target.style.background='#F0F8FF'; $event.target.style.boxShadow='none';"
+                    <input v-model="productForm.spec" class="w-full px-4 py-2.5 rounded-xl text-sm transition-all" style="background: #F0F8FF; border: 1px solid rgba(139, 92, 246, 0.1); color: #2C3E50;"
+                      @focus="$event.target.style.borderColor='rgba(139, 92, 246, 0.4)'; $event.target.style.background='#FFFFFF'; $event.target.style.boxShadow='0 0 0 3px rgba(139, 92, 246, 0.1)';"
+                      @blur="$event.target.style.borderColor='rgba(139, 92, 246, 0.1)'; $event.target.style.background='#F0F8FF'; $event.target.style.boxShadow='none';"
                       placeholder="如：S/M/L/XL 多尺码">
                   </div>
                   <div>
                     <label class="block text-xs font-medium mb-1.5" style="color: #546E7A;">商品描述</label>
-                    <textarea v-model="productForm.desc" rows="2" class="w-full px-4 py-3 rounded-xl text-sm resize-none transition-all" style="background: #F0F8FF; border: 1px solid rgba(34, 184, 207, 0.1); color: #2C3E50;"
-                      @focus="$event.target.style.borderColor='rgba(34, 184, 207, 0.4)'; $event.target.style.background='#FFFFFF'; $event.target.style.boxShadow='0 0 0 3px rgba(34, 184, 207, 0.1)';"
-                      @blur="$event.target.style.borderColor='rgba(34, 184, 207, 0.1)'; $event.target.style.background='#F0F8FF'; $event.target.style.boxShadow='none';"
+                    <textarea v-model="productForm.desc" rows="2" class="w-full px-4 py-3 rounded-xl text-sm resize-none transition-all" style="background: #F0F8FF; border: 1px solid rgba(139, 92, 246, 0.1); color: #2C3E50;"
+                      @focus="$event.target.style.borderColor='rgba(139, 92, 246, 0.4)'; $event.target.style.background='#FFFFFF'; $event.target.style.boxShadow='0 0 0 3px rgba(139, 92, 246, 0.1)';"
+                      @blur="$event.target.style.borderColor='rgba(139, 92, 246, 0.1)'; $event.target.style.background='#F0F8FF'; $event.target.style.boxShadow='none';"
                       placeholder="请输入商品描述..."></textarea>
                   </div>
                   <div>
                     <label class="block text-xs font-medium mb-1.5" style="color: #546E7A;">定制要求</label>
-                    <textarea v-model="productForm.customRequirement" rows="2" class="w-full px-4 py-3 rounded-xl text-sm resize-none transition-all" style="background: #F0F8FF; border: 1px solid rgba(34, 184, 207, 0.1); color: #2C3E50;"
-                      @focus="$event.target.style.borderColor='rgba(34, 184, 207, 0.4)'; $event.target.style.background='#FFFFFF'; $event.target.style.boxShadow='0 0 0 3px rgba(34, 184, 207, 0.1)';"
-                      @blur="$event.target.style.borderColor='rgba(34, 184, 207, 0.1)'; $event.target.style.background='#F0F8FF'; $event.target.style.boxShadow='none';"
+                    <textarea v-model="productForm.customRequirement" rows="2" class="w-full px-4 py-3 rounded-xl text-sm resize-none transition-all" style="background: #F0F8FF; border: 1px solid rgba(139, 92, 246, 0.1); color: #2C3E50;"
+                      @focus="$event.target.style.borderColor='rgba(139, 92, 246, 0.4)'; $event.target.style.background='#FFFFFF'; $event.target.style.boxShadow='0 0 0 3px rgba(139, 92, 246, 0.1)';"
+                      @blur="$event.target.style.borderColor='rgba(139, 92, 246, 0.1)'; $event.target.style.background='#F0F8FF'; $event.target.style.boxShadow='none';"
                       placeholder="请输入定制要求..."></textarea>
                   </div>
                   <div>
                     <label class="block text-xs font-medium mb-1.5" style="color: #546E7A;">图片地址</label>
-                    <input v-model="productForm.pic" class="w-full px-4 py-2.5 rounded-xl text-sm transition-all" style="background: #F0F8FF; border: 1px solid rgba(34, 184, 207, 0.1); color: #2C3E50;"
-                      @focus="$event.target.style.borderColor='rgba(34, 184, 207, 0.4)'; $event.target.style.background='#FFFFFF'; $event.target.style.boxShadow='0 0 0 3px rgba(34, 184, 207, 0.1)';"
-                      @blur="$event.target.style.borderColor='rgba(34, 184, 207, 0.1)'; $event.target.style.background='#F0F8FF'; $event.target.style.boxShadow='none';"
+                    <input v-model="productForm.pic" class="w-full px-4 py-2.5 rounded-xl text-sm transition-all" style="background: #F0F8FF; border: 1px solid rgba(139, 92, 246, 0.1); color: #2C3E50;"
+                      @focus="$event.target.style.borderColor='rgba(139, 92, 246, 0.4)'; $event.target.style.background='#FFFFFF'; $event.target.style.boxShadow='0 0 0 3px rgba(139, 92, 246, 0.1)';"
+                      @blur="$event.target.style.borderColor='rgba(139, 92, 246, 0.1)'; $event.target.style.background='#F0F8FF'; $event.target.style.boxShadow='none';"
                       placeholder="https://...">
                     <div v-if="productForm.pic" class="mt-2">
-                      <img :src="productForm.pic" class="w-20 h-14 rounded-lg object-cover" style="border: 1px solid rgba(34, 184, 207, 0.08);" @error="productForm.pic = ''">
+                      <img :src="productForm.pic" class="w-20 h-14 rounded-lg object-cover" style="border: 1px solid rgba(139, 92, 246, 0.08);" @error="productForm.pic = ''">
                     </div>
                   </div>
                 </div>
                 <div class="flex gap-3 mt-6">
                   <button @click="saveProduct" :disabled="savingProduct"
                     class="flex-1 py-3 rounded-xl text-sm font-bold text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                    style="background: linear-gradient(135deg, #22B8CF, #1A9EB8); box-shadow: 0 4px 14px rgba(34, 184, 207, 0.2);">
+                    style="background: linear-gradient(135deg, #8B5CF6, #7C3AED); box-shadow: 0 4px 14px rgba(139, 92, 246, 0.2);">
                     {{ savingProduct ? '保存中...' : '保存' }}
                   </button>
                   <button @click="showProductModal = false"
@@ -760,11 +760,11 @@
     <Transition name="dialog">
       <div v-if="showImportResult" class="fixed inset-0 z-50 flex items-center justify-center p-4" @click.self="showImportResult = false">
         <div class="absolute inset-0" style="background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(8px);"></div>
-        <div class="relative rounded-xl max-w-md w-full overflow-hidden" style="background: #FFFFFF; border: 1px solid rgba(34, 184, 207, 0.1); box-shadow: 0 24px 80px rgba(0, 0, 0, 0.15);">
+        <div class="relative rounded-xl max-w-md w-full overflow-hidden" style="background: #FFFFFF; border: 1px solid rgba(139, 92, 246, 0.1); box-shadow: 0 24px 80px rgba(0, 0, 0, 0.15);">
           <div class="p-6">
             <h3 class="text-base font-bold mb-4 flex items-center gap-2" style="color: #2C3E50;">批量导入结果</h3>
-            <div v-if="importData.successCount > 0" class="mb-4 p-3 rounded-xl" style="background: rgba(76, 175, 80, 0.06); border: 1px solid rgba(76, 175, 80, 0.1);">
-              <p class="text-sm font-medium" style="color: #4CAF50;">成功导入 {{ importData.successCount }} 件商品</p>
+            <div v-if="importData.successCount > 0" class="mb-4 p-3 rounded-xl" style="background: rgba(168, 85, 247, 0.06); border: 1px solid rgba(168, 85, 247, 0.1);">
+              <p class="text-sm font-medium" style="color: #A855F7;">成功导入 {{ importData.successCount }} 件商品</p>
             </div>
             <div v-if="importData.errors && importData.errors.length > 0">
               <p class="text-sm font-medium mb-2" style="color: #EF5350;">导入失败 {{ importData.errors.length }} 条</p>
@@ -777,7 +777,7 @@
             <div class="mt-6 flex justify-center">
               <button @click="showImportResult = false; loadProducts(); loadStats()"
                 class="px-8 py-2.5 rounded-xl text-sm font-bold text-white transition-all"
-                style="background: linear-gradient(135deg, #22B8CF, #1A9EB8); box-shadow: 0 4px 14px rgba(34, 184, 207, 0.2);">关闭</button>
+                style="background: linear-gradient(135deg, #8B5CF6, #7C3AED); box-shadow: 0 4px 14px rgba(139, 92, 246, 0.2);">关闭</button>
             </div>
           </div>
         </div>
@@ -792,7 +792,7 @@
 <script setup>
 import { ref, computed, onMounted, reactive, onUnmounted } from 'vue'
 import { ElMessage } from 'element-plus'
-import { api } from './api.js'
+import { api } from './api.ts'
 
 // ============ 状态 ============
 const activeTab = ref('dashboard')
@@ -894,11 +894,11 @@ const greeting = computed(() => {
 })
 
 const dailyQuotes = [
-  { text: '今日也是元气满满的文创打工人～', color: 'rgba(34, 184, 207, 0.7)' },
-  { text: '每一件文创，都承载着校园的美好回忆', color: 'rgba(255, 183, 77, 0.7)' },
-  { text: '用心做好每一件产品，用情服务每一位同学', color: 'rgba(76, 175, 80, 0.7)' },
-  { text: '库存充足，订单顺利，今天又是美好的一天！', color: 'rgba(34, 184, 207, 0.7)' },
-  { text: '让创意落地，让美好发生', color: 'rgba(255, 183, 77, 0.7)' },
+  { text: '今日也是元气满满的文创打工人～', color: 'rgba(139, 92, 246, 0.7)' },
+  { text: '每一件文创，都承载着校园的美好回忆', color: 'rgba(168, 85, 247, 0.7)' },
+  { text: '用心做好每一件产品，用情服务每一位同学', color: 'rgba(167, 139, 250, 0.7)' },
+  { text: '库存充足，订单顺利，今天又是美好的一天！', color: 'rgba(139, 92, 246, 0.7)' },
+  { text: '让创意落地，让美好发生', color: 'rgba(168, 85, 247, 0.7)' },
 ]
 const dailyQuote = computed(() => dailyQuotes[new Date().getDay() % dailyQuotes.length])
 
@@ -906,7 +906,7 @@ const statCards = computed(() => [
   {
     label: '今日新增订单', value: adminStats.value.todayOrders,
     icon: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>',
-    accentColor: '#22B8CF', accentColor2: '#1A9EB8', sub: '用户总数 / 项目总数'
+    accentColor: '#8B5CF6', accentColor2: '#7C3AED', sub: '用户总数 / 项目总数'
   },
   {
     label: '待审核订单', value: adminStats.value.pendingReview,
@@ -950,10 +950,10 @@ function getStepClass(status, index) {
 }
 
 const shortcuts = computed(() => [
-  { label: '订单管理', sub: `${adminStats.value.totalOrders} 条订单待处理`, icon: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>', action: () => navigate('orders'), hoverColor: '#22B8CF', disabled: false },
-  { label: '商品管理', sub: `${adminStats.value.totalProducts} 件商品在架`, icon: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>', action: () => navigate('products'), hoverColor: '#FFB74D', disabled: false },
+  { label: '订单管理', sub: `${adminStats.value.totalOrders} 条订单待处理`, icon: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>', action: () => navigate('orders'), hoverColor: '#8B5CF6', disabled: false },
+  { label: '商品管理', sub: `${adminStats.value.totalProducts} 件商品在架`, icon: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>', action: () => navigate('products'), hoverColor: '#A855F7', disabled: false },
   { label: '批量导入', sub: 'Excel / CSV 批量上架', icon: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>', action: () => triggerImport(), hoverColor: '#AB47BC', disabled: false },
-  { label: '导出报表', sub: '下载 Excel / CSV', icon: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>', action: () => handleExport(), hoverColor: '#4CAF50', disabled: exporting.value },
+  { label: '导出报表', sub: '下载 Excel / CSV', icon: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>', action: () => handleExport(), hoverColor: '#A855F7', disabled: exporting.value },
 ])
 
 // ============ 时钟 ============
@@ -1173,9 +1173,9 @@ const handleExport = async () => {
 const statusStyle = (s) => {
   const styles = {
     1: { container: 'padding: 4px 12px; border-radius: 9999px; font-size: 12px; font-weight: 500; background: rgba(255, 183, 77, 0.1); color: #FFB74D; border: 1px solid rgba(255, 183, 77, 0.15);' },
-    2: { container: 'padding: 4px 12px; border-radius: 9999px; font-size: 12px; font-weight: 500; background: rgba(34, 184, 207, 0.1); color: #22B8CF; border: 1px solid rgba(34, 184, 207, 0.15);' },
+    2: { container: 'padding: 4px 12px; border-radius: 9999px; font-size: 12px; font-weight: 500; background: rgba(139, 92, 246, 0.1); color: #8B5CF6; border: 1px solid rgba(139, 92, 246, 0.15);' },
     3: { container: 'padding: 4px 12px; border-radius: 9999px; font-size: 12px; font-weight: 500; background: rgba(255, 183, 77, 0.12); color: #FFB74D; border: 1px solid rgba(255, 183, 77, 0.2);' },
-    4: { container: 'padding: 4px 12px; border-radius: 9999px; font-size: 12px; font-weight: 500; background: rgba(76, 175, 80, 0.1); color: #4CAF50; border: 1px solid rgba(76, 175, 80, 0.15);' },
+    4: { container: 'padding: 4px 12px; border-radius: 9999px; font-size: 12px; font-weight: 500; background: rgba(168, 85, 247, 0.1); color: #A855F7; border: 1px solid rgba(168, 85, 247, 0.15);' },
     5: { container: 'padding: 4px 12px; border-radius: 9999px; font-size: 12px; font-weight: 500; background: rgba(239, 83, 80, 0.08); color: #EF5350; border: 1px solid rgba(239, 83, 80, 0.12);' },
   }
   return styles[s] || styles[5]
@@ -1204,15 +1204,15 @@ onUnmounted(() => { if (clockTimer) clearInterval(clockTimer) })
 <style>
 /* ===== 步骤状态 ===== */
 .active-step {
-  border-color: #22B8CF !important;
-  color: #22B8CF !important;
-  background: rgba(34, 184, 207, 0.1) !important;
-  box-shadow: 0 0 0 4px rgba(34, 184, 207, 0.1) !important;
+  border-color: #8B5CF6 !important;
+  color: #8B5CF6 !important;
+  background: rgba(139, 92, 246, 0.1) !important;
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1) !important;
 }
 .completed-step {
-  border-color: #4CAF50 !important;
-  color: #4CAF50 !important;
-  background: rgba(76, 175, 80, 0.1) !important;
+  border-color: #A855F7 !important;
+  color: #A855F7 !important;
+  background: rgba(168, 85, 247, 0.1) !important;
 }
 .pending-step {
   border-color: rgba(144, 164, 174, 0.3) !important;
@@ -1234,40 +1234,40 @@ onUnmounted(() => { if (clockTimer) clearInterval(clockTimer) })
 
 /* ===== 骨架屏 ===== */
 .skeleton {
-  background: linear-gradient(90deg, rgba(34, 184, 207, 0.04) 25%, rgba(34, 184, 207, 0.08) 50%, rgba(34, 184, 207, 0.04) 75%);
+  background: linear-gradient(90deg, rgba(139, 92, 246, 0.04) 25%, rgba(139, 92, 246, 0.08) 50%, rgba(139, 92, 246, 0.04) 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
   border-radius: 8px;
 }
 @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-.skeleton-card { background: #FFFFFF; border: 1px solid rgba(34, 184, 207, 0.08); border-radius: 12px; }
+.skeleton-card { background: #FFFFFF; border: 1px solid rgba(139, 92, 246, 0.08); border-radius: 12px; }
 
 /* ===== 滚动条 ===== */
 .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
 .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-.custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(34, 184, 207, 0.12); border-radius: 4px; }
-.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(34, 184, 207, 0.2); }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(139, 92, 246, 0.12); border-radius: 4px; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(139, 92, 246, 0.2); }
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(34, 184, 207, 0.08); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(34, 184, 207, 0.15); }
+::-webkit-scrollbar-thumb { background: rgba(139, 92, 246, 0.08); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(139, 92, 246, 0.15); }
 
 /* ===== 安全区 ===== */
 .safe-area-pb { padding-bottom: env(safe-area-inset-bottom, 0); }
 
 /* ===== 输入 ===== */
-input, select, textarea { outline-color: #22B8CF; font-family: 'Source Han Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+input, select, textarea { outline-color: #8B5CF6; font-family: 'Source Han Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif; }
 input::placeholder, textarea::placeholder { color: rgba(144, 164, 174, 0.5); }
 input[type="file"]::file-selector-button {
-  background: rgba(34, 184, 207, 0.1);
-  color: #22B8CF;
+  background: rgba(139, 92, 246, 0.1);
+  color: #8B5CF6;
   border: none;
   padding: 4px 12px;
   border-radius: 8px;
   font-size: 12px;
   cursor: pointer;
 }
-input[type="file"]::file-selector-button:hover { background: rgba(34, 184, 207, 0.18); }
+input[type="file"]::file-selector-button:hover { background: rgba(139, 92, 246, 0.18); }
 
 /* ===== 按钮波纹效果 ===== */
 button { position: relative; overflow: hidden; }

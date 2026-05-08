@@ -615,13 +615,33 @@
             </div>
           </div>
 
+          <!-- ========== 订单详情 · 定制设计稿上传区（图标点击 = 打开文件选择，与点 input 一致）========== -->
           <div
             v-if="currentOrder.custom === '需要定制' && currentOrder.status === 1"
             class="order-detail-upload"
           >
-            <div class="order-detail-upload-icon">📤</div>
+            <!-- 【新增】图标点击触发下方 ref="designFileInputRef" 的 file input -->
+            <div
+              class="order-detail-upload-icon"
+              role="button"
+              tabindex="0"
+              aria-label="选择设计稿文件"
+              @click="triggerFileUpload"
+              @keydown.enter.prevent="triggerFileUpload"
+              @keydown.space.prevent="triggerFileUpload"
+            >
+              📤
+            </div>
             <p class="order-detail-upload-text">上传定制设计稿</p>
-            <input type="file" class="detail-file-input" @change="handleFileUpload" />
+            <!-- 【新增】id 供无障碍；ref 供 triggerFileUpload() 内 .click() -->
+            <input
+              id="order-design-file-input"
+              ref="designFileInputRef"
+              type="file"
+              class="detail-file-input detail-file-input--visually-hidden"
+              tabindex="-1"
+              @change="handleFileUpload"
+            />
             <p v-if="selectedDesignFile" class="order-detail-file-info">
               已选文件：{{ selectedDesignFile.name }}
             </p>
@@ -931,6 +951,13 @@ const errors = ref<Record<string, string>>({})
 const orders = ref<Order[]>([])
 const currentOrder = ref<Order>({} as Order)
 const selectedDesignFile = ref<File | null>(null)
+// 【新增】与模板中 ref="designFileInputRef" 对应
+const designFileInputRef = ref<HTMLInputElement | null>(null)
+
+// 【新增】点击上传图标时调用，与直接点击 <input type="file">（含「选择文件」）效果一致
+const triggerFileUpload = () => {
+  designFileInputRef.value?.click()
+}
 const favoriteIds = ref<number[]>([])
 
 /** 导出订单：可选日期区间（YYYY-MM-DD），空表示不按日期筛选 */
@@ -1622,16 +1649,16 @@ loadFavoriteIds()
 @import '@/styles/studentPage.css';
 
 :root {
-  --first-color: #6366f1;
-  --second-color: #4f46e5;
-  --el-color-primary: #6366f1;
+  --first-color: #4f6ae8;
+  --second-color: #3d52c4;
+  --el-color-primary: #4f6ae8;
   --el-color-primary-light-3: #a5b4fc;
   --el-color-primary-light-5: #c7d2fe;
   --el-color-primary-light-7: #e0e7ff;
   --el-color-primary-light-8: #eef2ff;
   --el-color-primary-light-9: #f5f3ff;
-  --el-color-primary-dark-2: #4f46e5;
-  --el-border-radius-base: 14px;
+  --el-color-primary-dark-2: #3d52c4;
+  --el-border-radius-base: 12px;
 }
 
 body {
@@ -1640,8 +1667,10 @@ body {
 
 .el-message {
   border-radius: 14px;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  box-shadow:
+    0 4px 24px rgba(15, 23, 42, 0.06),
+    0 20px 50px -24px rgba(79, 70, 229, 0.12);
 }
 
 .select-beauty {
@@ -1666,8 +1695,8 @@ body {
 
 .select-beauty:focus {
   outline: none;
-  border-color: #6366f1;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+  border-color: #4f6ae8;
+  box-shadow: 0 0 0 3px rgba(79, 106, 232, 0.22);
 }
 
 .select-arrow {
@@ -1681,7 +1710,7 @@ body {
 }
 
 .select-beauty:focus + .select-arrow {
-  color: #6366f1;
+  color: #4f6ae8;
 }
 
 .favorite-heart-btn {
@@ -1741,12 +1770,15 @@ body {
   width: 100%;
   max-width: 22rem;
   margin: 0 auto;
-  background: #ffffff;
-  border-radius: 16px;
-  border: 1px solid rgba(199, 210, 254, 0.85);
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 18px;
+  border: 1px solid rgba(15, 23, 42, 0.06);
   box-shadow:
-    0 24px 60px -12px rgba(79, 70, 229, 0.28),
-    0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+    0 4px 24px rgba(15, 23, 42, 0.06),
+    0 24px 60px -20px rgba(79, 70, 229, 0.2),
+    0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   overflow: hidden;
 }
 
@@ -1784,7 +1816,7 @@ body {
 
 .sp-dialog-icon--confirm {
   background: #eef2ff;
-  color: #6366f1;
+  color: #4f6ae8;
   box-shadow: 0 0 0 1px #c7d2fe;
 }
 
@@ -1838,13 +1870,13 @@ body {
 
 .sp-dialog-btn--primary {
   color: #fff;
-  background: linear-gradient(135deg, #6366f1 0%, #7c3aed 50%, #8b5cf6 100%);
-  box-shadow: 0 6px 18px rgba(99, 102, 241, 0.32);
+  background: linear-gradient(135deg, #4f6ae8 0%, #5b62f0 50%, #6366f1 100%);
+  box-shadow: 0 6px 18px rgba(79, 106, 232, 0.2);
 }
 
 .sp-dialog-btn--primary:hover {
-  filter: brightness(1.05);
-  box-shadow: 0 10px 24px rgba(99, 102, 241, 0.38);
+  filter: brightness(1.04);
+  box-shadow: 0 10px 24px rgba(79, 106, 232, 0.26);
 }
 
 .sp-dialog-btn--warning {
