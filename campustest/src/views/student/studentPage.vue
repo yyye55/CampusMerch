@@ -676,7 +676,7 @@ function handleLogoutClick() {
     () => {
       userStore.logout()
       ElMessage.success('已退出登录')
-      void router.replace('/')
+      void router.replace('/login')
     },
     { confirmText: '确定' },
   )
