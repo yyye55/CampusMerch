@@ -21,8 +21,13 @@ interface ApiResponse<T = unknown> {
 async function request<T = unknown>(
   method: string,
   url: string,
+<<<<<<<< HEAD:campustest/src/views/admin/api.ts
   data?: unknown,
   options: RequestOptions = {}
+========
+  data?: BodyInit | null,
+  options: RequestOptions = {},
+>>>>>>>> 1aa55d952598419b2ba633405bc1f7182e0dead6:campustest/src/api/admin.ts
 ): Promise<T> {
   const { headers = {}, responseType } = options
   const headersInit: Record<string, string> = {
@@ -31,7 +36,11 @@ async function request<T = unknown>(
   }
   const config: RequestInit = {
     method,
+<<<<<<<< HEAD:campustest/src/views/admin/api.ts
     headers: headersInit,
+========
+    headers: { 'Content-Type': 'application/json', ...headers },
+>>>>>>>> 1aa55d952598419b2ba633405bc1f7182e0dead6:campustest/src/api/admin.ts
   }
 
   if (data instanceof FormData) {
@@ -125,40 +134,44 @@ export const api = {
   products: {
     list: (params: { page: number; pageSize: number }) =>
       request<ListResponse<Product>>('GET', `/products?${toQuery(params)}`),
-    create: (data: Partial<Product>) =>
-      request<Product>('POST', '/products', data),
+    create: (data: Partial<Product>) => request<Product>('POST', '/products', data),
     update: (id: number, data: Partial<Product>) =>
       request<Product>('PUT', `/products/${id}`, data),
-    remove: (id: number) =>
-      request<void>('DELETE', `/products/${id}`),
+    remove: (id: number) => request<void>('DELETE', `/products/${id}`),
     toggleStock: (id: number, inStock: boolean) =>
       request<void>('PATCH', `/products/${id}/stock`, { inStock }),
     import: (formData: FormData) =>
-      request<{ successCount: number; errors: Array<{ row: number; field: string; reason: string }> }>(
-        'POST', '/products/import', formData, { headers: {} }
-      ),
+      request<{
+        successCount: number
+        errors: Array<{ row: number; field: string; reason: string }>
+      }>('POST', '/products/import', formData, { headers: {} }),
   },
 
   // ============ 订单管理 ============
   orders: {
-    list: (params: { page: number; pageSize: number; status?: number | string; keyword?: string }) =>
-      request<ListResponse<Order>>('GET', `/orders?${toQuery(params)}`),
+    list: (params: {
+      page: number
+      pageSize: number
+      status?: number | string
+      keyword?: string
+    }) => request<ListResponse<Order>>('GET', `/orders?${toQuery(params)}`),
     uploadDesign: (id: number, formData: FormData) =>
       request<{ designFile: string }>('POST', `/orders/${id}/design`, formData, { headers: {} }),
     review: (id: number, data: { action: 'approve' | 'reject'; adjustNum?: number }) =>
       request<void>('PUT', `/admin/orders/${id}/review`, data),
-    complete: (id: number) =>
-      request<void>('POST', `/orders/${id}/complete`),
+    complete: (id: number) => request<void>('POST', `/orders/${id}/complete`),
     export: async (params: Record<string, unknown>): Promise<void> => {
-      const blob = await request<Blob>('GET', `/orders/export?${toQuery(params)}`, null, { responseType: 'blob' })
+      const blob = await request<Blob>('GET', `/orders/export?${toQuery(params)}`, null, {
+        responseType: 'blob',
+      })
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
       a.download = `orders_${Date.now()}.csv`
       a.click()
       URL.revokeObjectURL(url)
-    }
-  }
+    },
+  },
 }
 
 function toQuery(obj: Record<string, unknown> | undefined): string {
