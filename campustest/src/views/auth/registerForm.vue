@@ -93,11 +93,7 @@ import landingNav from '@/components/landingNav.vue'
 const router = useRouter()
 
 const registerForm = ref({
-<<<<<<< HEAD
-  username: '',
-=======
   name: '',
->>>>>>> b50897ecb81934a3a570354c23893323d4644736
   phone: '',
   email: '',
   password: '',
