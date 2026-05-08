@@ -16,8 +16,8 @@
           ref="registerRef"
           :hide-required-asterisk="true"
         >
-          <el-form-item label="用户名" prop="username">
-            <el-input v-model="registerForm.username" placeholder="请输入用户名" autocomplete="off">
+          <el-form-item label="用户名" prop="name">
+            <el-input v-model="registerForm.name" placeholder="请输入用户名" autocomplete="off">
               <template #prefix>
                 <i class="fas fa-user"></i>
               </template>
@@ -54,7 +54,7 @@
             </el-input>
           </el-form-item>
 
-          <el-form-item label="确认密码" prop="confirmPassword">
+          <el-form-item label="确认密码" prop="password_confirmation">
             <el-input
               v-model="registerForm.password_confirmation"
               placeholder="请再次输入密码"
@@ -89,7 +89,6 @@ import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import type { FormItemRule } from 'element-plus'
 import landingNav from '@/components/landingNav.vue'
-import { register } from '@/api/auth'
 
 const router = useRouter()
 
@@ -98,11 +97,11 @@ const registerForm = ref({
   phone: '',
   email: '',
   password: '',
-  confirmPassword: '',
+  password_confirmation: '',
 })
 
 const registerRules = ref({
-  username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+  name: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
   phone: [{ required: true, message: '请输入电话号码', trigger: 'blur' }],
   email: [
     { required: true, message: '请输入邮箱', trigger: 'blur' },
@@ -112,7 +111,7 @@ const registerRules = ref({
     { required: true, message: '请输入密码', trigger: 'blur' },
     { min: 6, message: '请输入6位以上密码', trigger: 'blur' },
   ],
-  confirmPassword: [
+  password_confirmation: [
     { required: true, message: '请确认密码', trigger: 'blur' },
     {
       validator: (_rule: FormItemRule, value: string, callback: (error?: Error) => void) => {
@@ -133,24 +132,15 @@ const handleRegister = async () => {
   if (!registerRef.value) return
   try {
     await registerRef.value.validate()
-
-    // 调用注册接口
-    await register({
-      name: registerForm.value.name,
-      email: registerForm.value.email,
-      phone: registerForm.value.phone,
-      password: registerForm.value.password,
-      password_confirmation: registerForm.value.password_confirmation
-    })
-
     ElMessage.success('注册成功！即将跳转到登录页面')
     setTimeout(() => {
       router.push('/login')
     }, 1500)
-  } catch (err: any) {
-    ElMessage.error(err.response?.data?.message || '注册失败')
+  } catch (err) {
+    ElMessage.error('注册失败')
   }
 }
+
 const handleClose = () => {
   router.push('/')
 }

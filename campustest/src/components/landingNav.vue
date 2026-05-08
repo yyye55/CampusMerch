@@ -40,7 +40,6 @@ a:hover {
   font-weight: 700;
   }
 
-<<<<<<< HEAD
 /* 实心渐变 — 注册 */
 .nav-link--solid {
   color: #fff !important;
@@ -81,6 +80,4 @@ a:hover {
   position: relative;
   z-index: 1;
 }
-=======
->>>>>>> b50897ecb81934a3a570354c23893323d4644736
 </style>
