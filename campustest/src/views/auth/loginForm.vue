@@ -109,7 +109,7 @@ const handleLogin = async () => {
       rememberMe: loginForm.value.rememberMe,
     })
 
-    const emailPrefix = loginForm.value.email.trim().split('@')[0].toLowerCase()
+    const emailPrefix = (loginForm.value.email || '').trim().split('@')[0].toLowerCase()
     if (emailPrefix === 'admin') {
       router.push('/admin')
     } else {
