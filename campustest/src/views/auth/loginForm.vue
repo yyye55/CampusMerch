@@ -153,6 +153,7 @@ import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import landingNav from '@/components/landingNav.vue'
 import { useUserStore } from '@/stores/user'
+import { login } from '@/api/auth'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -185,20 +186,21 @@ const handleLogin = async () => {
     //打开加载状态
     loading.value = true
 
-    // 模拟登录（不需要接口）
-    await new Promise((resolve) => setTimeout(resolve, 500))
+    // 调用登录接口
+    const res = await login({
+      email: loginForm.value.email.trim(),
+      password: loginForm.value.password,
+    })
 
     // 保存登录信息
     userStore.setSession({
       email: loginForm.value.email.trim(),
-      accessToken: 'FAKE_TOKEN_' + Date.now(),
+      accessToken: res.data?.token || 'token_' + Date.now(),
     })
 
-    // 判断管理员账号跳转到对应页面
-    if (
-      loginForm.value.email.trim() === userStore.ADMIN.email &&
-      loginForm.value.password === userStore.ADMIN.password
-    ) {
+    // 根据邮箱前缀判断跳转（admin 前缀 → 管理端）
+    const emailPrefix = loginForm.value.email.trim().split('@')[0].toLowerCase()
+    if (emailPrefix === 'admin') {
       router.push('/admin')
     } else {
       router.push('/student')

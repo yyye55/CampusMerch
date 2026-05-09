@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 const request = axios.create({
-  baseURL: '/api', // 相对路径，Vite代理会转发到后端
+  baseURL: '/api', // 使用 Vite 代理
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
