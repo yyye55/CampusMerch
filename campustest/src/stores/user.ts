@@ -11,8 +11,8 @@ const AUTH_STORAGE_KEYS = [
 ] as const
 
 const ADMIN = {
-  email: 'admin@qq.com',    // 管理员账号
-  password: '123456'         // 管理员密码
+  email: 'admin@example.com',    // 管理员账号
+  password: 'Admin123456'         // 管理员密码
 }
 
 export const useUserStore = defineStore('user', () => {
