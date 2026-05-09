@@ -68,7 +68,7 @@ import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import landingNav from '@/components/landingNav.vue'
 import { useUserStore } from '@/stores/user'
-import { login } from '@/api/auth'
+import { login, sendCaptcha, resetPassword } from '@/api/auth'
 
 const router = useRouter()
 const userStore = useUserStore()

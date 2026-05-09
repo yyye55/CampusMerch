@@ -35,19 +35,33 @@ request.interceptors.request.use(
     }
     return config
   },
-  (err) => Promise.reject(err),
+  (err) => {
+    ElMessage.error('请求发送失败')
+    return Promise.reject(err)
+  },
 )
 
 request.interceptors.response.use(
   (res) => res.data,
   (err) => {
-    if (err.response?.status === 401) {
+    const status = err.response?.status
+    const message = err.response?.data?.message || '请求失败'
+
+    if (status === 401) {
       localStorage.removeItem('campus_token')
       localStorage.removeItem('campus_token_expire')
       localStorage.removeItem('campus_login_email')
       sessionStorage.clear()
       ElMessage.error('登录已过期，请重新登录')
-      window.location.href = '/login'
+      setTimeout(() => {
+        window.location.href = '/login'
+      }, 1500)
+    } else if (status === 403) {
+      ElMessage.error('您没有权限访问此资源')
+    } else if (status === 500) {
+      ElMessage.error('服务器内部错误，请稍后重试')
+    } else {
+      ElMessage.error(message)
     }
     return Promise.reject(err)
   },

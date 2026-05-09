@@ -699,6 +699,9 @@ import { ref, computed, watch, nextTick, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/stores/user'
+import { getProducts, getProductDetail } from '@/api/product'
+import { createOrder, getMyOrders, getOrderDetail, uploadDesign as apiUploadDesign } from '@/api/order'
+import { addFavorite, removeFavorite, getFavorites } from '@/api/user'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -986,6 +989,16 @@ const triggerFileUpload = () => {
 }
 const favoriteIds = ref<number[]>([])
 
+// 加载状态
+const loading = ref({
+  goods: false,
+  detail: false,
+  order: false,
+  orders: false,
+  favorite: false,
+  upload: false,
+})
+
 /** 导出订单：可选日期区间（YYYY-MM-DD），空表示不按日期筛选 */
 const exportStartDate = ref('')
 const exportEndDate = ref('')
@@ -1048,32 +1061,42 @@ const showPaginationNext = computed(
     currentPage.value < totalPages.value,
 )
 
-const loadFavoriteIds = () => {
+const loadFavoriteIds = async () => {
   try {
-    const raw = localStorage.getItem('bangbang_favorite_ids')
-    const parsed = raw ? JSON.parse(raw) : []
-    favoriteIds.value = Array.isArray(parsed) ? parsed : []
+    loading.value.favorite = true
+    const res = await getFavorites()
+    if (res && Array.isArray(res.data)) {
+      favoriteIds.value = res.data.map((item: { product_id: number }) => item.product_id)
+    } else {
+      favoriteIds.value = []
+    }
   } catch (error) {
+    console.error('加载收藏失败', error)
     favoriteIds.value = []
+  } finally {
+    loading.value.favorite = false
   }
-}
-
-const saveFavoriteIds = () => {
-  localStorage.setItem('bangbang_favorite_ids', JSON.stringify(favoriteIds.value))
 }
 
 const isFavorite = (goodsId: number) => favoriteIds.value.includes(goodsId)
 
-const toggleFavorite = (goodsItem: Goods) => {
+const toggleFavorite = async (goodsItem: Goods) => {
   if (!goodsItem || !goodsItem.id) return
-  if (isFavorite(goodsItem.id)) {
-    favoriteIds.value = favoriteIds.value.filter((id) => id !== goodsItem.id)
-    showSuccessDialog('已取消收藏', `${goodsItem.name} 已从收藏夹移除。`)
-  } else {
-    favoriteIds.value = [...favoriteIds.value, goodsItem.id]
-    showSuccessDialog('收藏成功', `${goodsItem.name} 已加入收藏夹。`)
+  
+  try {
+    if (isFavorite(goodsItem.id)) {
+      await removeFavorite(goodsItem.id)
+      favoriteIds.value = favoriteIds.value.filter((id) => id !== goodsItem.id)
+      showSuccessDialog('已取消收藏', `${goodsItem.name} 已从收藏夹移除。`)
+    } else {
+      await addFavorite(goodsItem.id)
+      favoriteIds.value = [...favoriteIds.value, goodsItem.id]
+      showSuccessDialog('收藏成功', `${goodsItem.name} 已加入收藏夹。`)
+    }
+  } catch (error) {
+    console.error('收藏操作失败', error)
+    ElMessage.error('收藏操作失败，请重试')
   }
-  saveFavoriteIds()
 }
 
 watch(currentPage, (newVal) => {
@@ -1103,9 +1126,87 @@ function onGlobalKeydown(e: KeyboardEvent) {
   closeDialog()
 }
 
+// 加载商品列表
+const loadGoods = async () => {
+  try {
+    loading.value.goods = true
+    const res = await getProducts()
+    if (res && Array.isArray(res.data)) {
+      goods.value = res.data.map((item: any) => ({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        stock: item.stock,
+        sold: item.sold || 0,
+        desc: item.description || item.desc || '',
+        img: item.image || item.img || '/images/default.png',
+        category: item.category || 'wenchuang',
+        categoryText: item.category_text || '文创产品',
+        inStock: item.in_stock !== undefined ? item.in_stock : (item.stock > 0),
+        statusText: item.status_text || (item.stock > 0 ? '有货' : '缺货'),
+        spec: item.spec || '',
+        customRequirement: item.custom_requirement || item.customRequirement || '',
+        sizes: item.sizes ? (Array.isArray(item.sizes) ? item.sizes : item.sizes.split(',')) : ['S', 'M', 'L', 'XL', 'XXL'],
+        colors: item.colors ? (Array.isArray(item.colors) ? item.colors : item.colors.split(',')) : ['红色', '蓝色', '黑色', '白色'],
+        minOrder: item.min_order || item.minOrder || 1,
+      }))
+    }
+  } catch (error) {
+    console.error('加载商品列表失败', error)
+    ElMessage.error('加载商品列表失败，将使用本地数据')
+  } finally {
+    loading.value.goods = false
+  }
+}
+
+// 加载我的订单
+const loadOrders = async () => {
+  try {
+    loading.value.orders = true
+    const res = await getMyOrders()
+    if (res && Array.isArray(res.data)) {
+      orders.value = res.data.map((item: any) => ({
+        orderNo: item.order_no || item.orderNo,
+        createdAt: item.created_at ? new Date(item.created_at).getTime() : Date.now(),
+        unitPrice: item.unit_price || item.unitPrice,
+        totalAmount: item.total_amount || item.totalAmount,
+        paymentRecord: item.payment_record || item.paymentRecord,
+        goodsName: item.goods_name || item.goodsName,
+        num: item.quantity || item.num,
+        size: item.size || '',
+        color: item.color || '',
+        custom: item.custom || '',
+        remark: item.remark || '',
+        status: item.status,
+        statusText: item.status_text || getStatusText(item.status),
+      }))
+    }
+  } catch (error) {
+    console.error('加载订单失败', error)
+    ElMessage.error('加载订单失败，将使用本地数据')
+  } finally {
+    loading.value.orders = false
+  }
+}
+
+// 根据状态码获取状态文本
+const getStatusText = (status: number): string => {
+  const map: Record<number, string> = {
+    1: '待处理',
+    2: '制作中',
+    3: '待收货',
+    4: '已完成',
+    5: '已取消',
+  }
+  return map[status] || '未知'
+}
+
 onMounted(() => {
   userStore.updateFromStorage()
   document.addEventListener('keydown', onGlobalKeydown, true)
+  loadGoods()
+  loadOrders()
+  loadFavoriteIds()
 })
 
 onUnmounted(() => {
@@ -1170,17 +1271,54 @@ const go = (p: string) => {
   if (p === 'list') currentPage.value = 1
 }
 
-const openDetail = (g: Goods) => {
-  currentGoods.value = g
-  // 关键修复：这里不再给size/color赋默认值，而是设为空，让下拉框显示提示
-  bookForm.value = {
-    num: g.minOrder || 1,
-    size: '',
-    color: '',
-    custom: '',
-    remark: '',
+const openDetail = async (g: Goods) => {
+  try {
+    loading.value.detail = true
+    
+    let goodsData = g
+    
+    try {
+      const res = await getProductDetail(g.id)
+      if (res && res.data) {
+        const item = res.data
+        goodsData = {
+          id: item.id,
+          name: item.name,
+          price: item.price,
+          stock: item.stock,
+          sold: item.sold || 0,
+          desc: item.description || item.desc || '',
+          img: item.image || item.img || '/images/default.png',
+          category: item.category || 'wenchuang',
+          categoryText: item.category_text || '文创产品',
+          inStock: item.in_stock !== undefined ? item.in_stock : (item.stock > 0),
+          statusText: item.status_text || (item.stock > 0 ? '有货' : '缺货'),
+          spec: item.spec || '',
+          customRequirement: item.custom_requirement || item.customRequirement || '',
+          sizes: item.sizes ? (Array.isArray(item.sizes) ? item.sizes : item.sizes.split(',')) : ['S', 'M', 'L', 'XL', 'XXL'],
+          colors: item.colors ? (Array.isArray(item.colors) ? item.colors : item.colors.split(',')) : ['红色', '蓝色', '黑色', '白色'],
+          minOrder: item.min_order || item.minOrder || 1,
+        }
+      }
+    } catch (error) {
+      console.warn('加载商品详情失败，使用本地数据', error)
+    }
+    
+    currentGoods.value = goodsData
+    bookForm.value = {
+      num: goodsData.minOrder || 1,
+      size: '',
+      color: '',
+      custom: '',
+      remark: '',
+    }
+    go('detail')
+  } catch (error) {
+    console.error('打开商品详情失败', error)
+    ElMessage.error('打开商品详情失败')
+  } finally {
+    loading.value.detail = false
   }
-  go('detail')
 }
 
 const validateNum = () => {
@@ -1251,44 +1389,106 @@ const validateForm = () => {
   return valid
 }
 
-const submitOrder = () => {
+const submitOrder = async () => {
+  if (loading.value.order) return
+  
   if (!currentGoods.value.inStock || currentGoods.value.stock <= 0) {
     showWarningDialog('库存不足', '该商品当前不可预订，请返回列表选择其他商品。')
-    go('detail')
     return
   }
   if (!validateForm()) return
-  const unitPrice = currentGoods.value.price
-  const num = bookForm.value.num
-  const order: Order = {
-    orderNo: `CM-${Date.now()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`,
-    createdAt: Date.now(),
-    unitPrice,
-    totalAmount: Math.round(unitPrice * num * 100) / 100,
-    paymentRecord: '待支付（校园文创预订·统一结算）',
-    goodsName: currentGoods.value.name,
-    num,
-    size: bookForm.value.size,
-    color: bookForm.value.color,
-    custom: bookForm.value.custom,
-    remark: bookForm.value.remark,
-    status: 1,
-    statusText: bookForm.value.custom === '需要定制' ? '待上传设计稿' : '待处理',
+  
+  try {
+    loading.value.order = true
+    
+    const orderData = {
+      product_id: currentGoods.value.id,
+      quantity: bookForm.value.num,
+      size: bookForm.value.size,
+      color: bookForm.value.color,
+      remark: bookForm.value.remark,
+    }
+    
+    const res = await createOrder(orderData)
+    
+    if (res && res.data) {
+      const item = res.data
+      const order: Order = {
+        orderNo: item.order_no || item.orderNo || `CM-${Date.now()}`,
+        createdAt: item.created_at ? new Date(item.created_at).getTime() : Date.now(),
+        unitPrice: item.unit_price || currentGoods.value.price,
+        totalAmount: item.total_amount || (currentGoods.value.price * bookForm.value.num),
+        paymentRecord: item.payment_record || '待支付（校园文创预订·统一结算）',
+        goodsName: currentGoods.value.name,
+        num: item.quantity || bookForm.value.num,
+        size: item.size || bookForm.value.size,
+        color: item.color || bookForm.value.color,
+        custom: bookForm.value.custom || '',
+        remark: item.remark || bookForm.value.remark,
+        status: item.status || 1,
+        statusText: item.status_text || (bookForm.value.custom === '需要定制' ? '待上传设计稿' : '待处理'),
+      }
+      orders.value.unshift(order)
+      
+      currentGoods.value.stock -= bookForm.value.num
+      currentGoods.value.sold += bookForm.value.num
+      if (currentGoods.value.stock <= 0) {
+        currentGoods.value.inStock = false
+        currentGoods.value.statusText = '缺货'
+      }
+      
+      showSuccessDialog('预订成功', '您的预订已成功提交，请在订单列表中查看详情！')
+      go('myorder')
+    }
+  } catch (error: any) {
+    console.error('创建订单失败', error)
+    const message = error.response?.data?.message || '预订失败，请重试'
+    ElMessage.error(message)
+  } finally {
+    loading.value.order = false
   }
-  orders.value.unshift(order)
-  currentGoods.value.stock -= bookForm.value.num
-  currentGoods.value.sold += bookForm.value.num
-  if (currentGoods.value.stock <= 0) {
-    currentGoods.value.inStock = false
-    currentGoods.value.statusText = '缺货'
-  }
-  showSuccessDialog('预订成功', '您的预订已成功提交，请在订单列表中查看详情！')
-  go('myorder')
 }
 
-const openOrderDetail = (o: Order) => {
-  currentOrder.value = o
-  go('orderDetail')
+const openOrderDetail = async (o: Order) => {
+  try {
+    const orderNo = o.orderNo
+    if (orderNo && orderNo.startsWith('CM-')) {
+      const idStr = orderNo.split('-')[1] || ''
+      const id = parseInt(idStr)
+      if (!isNaN(id)) {
+        try {
+          const res = await getOrderDetail(id)
+          if (res && res.data) {
+            const item = res.data
+            currentOrder.value = {
+              orderNo: item.order_no || item.orderNo || orderNo,
+              createdAt: item.created_at ? new Date(item.created_at).getTime() : o.createdAt,
+              unitPrice: item.unit_price || o.unitPrice,
+              totalAmount: item.total_amount || o.totalAmount,
+              paymentRecord: item.payment_record || o.paymentRecord,
+              goodsName: item.goods_name || o.goodsName,
+              num: item.quantity || o.num,
+              size: item.size || o.size,
+              color: item.color || o.color,
+              custom: item.custom || o.custom,
+              remark: item.remark || o.remark,
+              status: item.status || o.status,
+              statusText: item.status_text || o.statusText,
+            }
+            go('orderDetail')
+            return
+          }
+        } catch (error) {
+          console.warn('加载订单详情失败，使用本地数据', error)
+        }
+      }
+    }
+    currentOrder.value = o
+    go('orderDetail')
+  } catch (error) {
+    console.error('打开订单详情失败', error)
+    ElMessage.error('打开订单详情失败')
+  }
 }
 
 const cancelOrder = (index: number) => {
@@ -1346,7 +1546,9 @@ const handleFileUpload = (e: Event) => {
   }
 }
 
-const uploadDesign = () => {
+const uploadDesign = async () => {
+  if (loading.value.upload) return
+  
   if (currentOrder.value.custom !== '需要定制' || currentOrder.value.status !== 1) {
     showWarningDialog('无需上传', '当前订单不处于待上传设计稿状态。')
     return
@@ -1355,10 +1557,45 @@ const uploadDesign = () => {
     showWarningDialog('请选择文件', '请先选择设计稿文件后再上传。')
     return
   }
-  currentOrder.value.status = 2
-  currentOrder.value.statusText = '制作中'
-  showSuccessDialog('上传成功', `设计稿 ${selectedDesignFile.value.name} 已成功上传！`)
-  selectedDesignFile.value = null
+  
+  const file = selectedDesignFile.value
+  if (file.size > 15 * 1024 * 1024) {
+    showWarningDialog('文件过大', '设计稿文件大小不能超过15MB')
+    return
+  }
+  
+  const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf', 'application/postscript', 'image/psd']
+  if (!allowedTypes.includes(file.type)) {
+    showWarningDialog('文件格式不支持', '仅支持 jpg/png/pdf/ai/psd 格式')
+    return
+  }
+  
+  try {
+    loading.value.upload = true
+    
+    const orderNo = currentOrder.value.orderNo || ''
+    let orderId = 0
+    if (orderNo.startsWith('CM-')) {
+      const idStr = orderNo.split('-')[1] || ''
+      orderId = parseInt(idStr) || 0
+    }
+    
+    const formData = new FormData()
+    formData.append('design_file', file)
+    
+    await apiUploadDesign(orderId, formData)
+    
+    currentOrder.value.status = 2
+    currentOrder.value.statusText = '制作中'
+    showSuccessDialog('上传成功', `设计稿 ${file.name} 已成功上传！`)
+    selectedDesignFile.value = null
+  } catch (error: any) {
+    console.error('上传设计稿失败', error)
+    const message = error.response?.data?.message || '上传失败，请重试'
+    ElMessage.error(message)
+  } finally {
+    loading.value.upload = false
+  }
 }
 
 const finishOrder = () => {
