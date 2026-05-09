@@ -21,31 +21,17 @@ interface ApiResponse<T = unknown> {
 async function request<T = unknown>(
   method: string,
   url: string,
-<<<<<<<< HEAD:campustest/src/views/admin/api.ts
-  data?: unknown,
-  options: RequestOptions = {}
-========
   data?: BodyInit | null,
   options: RequestOptions = {},
->>>>>>>> 1aa55d952598419b2ba633405bc1f7182e0dead6:campustest/src/api/admin.ts
 ): Promise<T> {
   const { headers = {}, responseType } = options
-  const headersInit: Record<string, string> = {
-    'Content-Type': 'application/json',
-    ...headers,
-  }
   const config: RequestInit = {
     method,
-<<<<<<<< HEAD:campustest/src/views/admin/api.ts
-    headers: headersInit,
-========
     headers: { 'Content-Type': 'application/json', ...headers },
->>>>>>>> 1aa55d952598419b2ba633405bc1f7182e0dead6:campustest/src/api/admin.ts
   }
 
   if (data instanceof FormData) {
     config.body = data
-    delete headersInit['Content-Type']
   } else if (data != null && data !== '') {
     config.body = JSON.stringify(data)
   }
