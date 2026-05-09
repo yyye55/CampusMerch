@@ -8,7 +8,6 @@
         <h1 class="auth-title">登录</h1>
         <p class="auth-desc">使用邮箱登录，进入校园文创预订</p>
 
-        <!-- 登录表单 -->
         <el-form
           :model="loginForm"
           label-position="top"
@@ -40,7 +39,6 @@
 
           <div class="remember-forgot-row">
             <el-checkbox class="remember-check">记住我</el-checkbox>
-            <!-- 点击直接触发弹窗 -->
             <a class="forgot-link" @click="openResetDialog">忘记密码?</a>
           </div>
 
@@ -62,7 +60,6 @@
         </div>
       </div>
 
-      <!-- 忘记密码弹窗 (优化无滚动条版本) -->
       <el-dialog
         v-model="showResetDialog"
         width="420px"
@@ -153,7 +150,7 @@ import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import landingNav from '@/components/landingNav.vue'
 import { useUserStore } from '@/stores/user'
-import { login } from '@/api/auth'
+import { login, sendCaptcha, resetPassword } from '@/api/auth'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -161,7 +158,6 @@ const loginRef = ref()
 const resetRef = ref()
 const loading = ref(false)
 
-// 登录相关
 const loginForm = ref({
   email: '',
   password: '',
@@ -181,26 +177,25 @@ const rules = {
 const handleLogin = async () => {
   if (!loginRef.value) return
   try {
-    // 验证表单，通过了才会继续
     await loginRef.value.validate()
-    //打开加载状态
     loading.value = true
 
-    // 调用登录接口
     const res = await login({
       email: loginForm.value.email.trim(),
       password: loginForm.value.password,
     })
 
-    // 保存登录信息
+    if (res.token || res.access_token) {
+      const token = res.token || res.access_token
+      localStorage.setItem('campus_token', token)
+    }
+
     userStore.setSession({
-      email: loginForm.value.email.trim(),
-      accessToken: res.data?.token || 'token_' + Date.now(),
+      email: res.email || loginForm.value.email.trim(),
+      accessToken: res.token || res.access_token || 'token_' + Date.now(),
     })
 
-    // 根据邮箱前缀判断跳转（admin 前缀 → 管理端）
-    const emailPrefix = loginForm.value.email.trim().split('@')[0].toLowerCase()
-    if (emailPrefix === 'admin') {
+    if (res.role === 'admin') {
       router.push('/admin')
     } else {
       router.push('/student')
@@ -218,7 +213,6 @@ const handleClose = () => {
   router.push('/')
 }
 
-// 忘记密码逻辑
 const showResetDialog = ref(false)
 const sendingCaptcha = ref(false)
 const captchaCountdown = ref(0)
@@ -255,7 +249,7 @@ const sendResetCaptcha = async () => {
   if (!resetForm.value.email) return
   try {
     sendingCaptcha.value = true
-    // 模拟发送
+    await sendCaptcha(resetForm.value.email)
     captchaCountdown.value = 60
     const timer = setInterval(() => {
       captchaCountdown.value--
@@ -267,6 +261,7 @@ const sendResetCaptcha = async () => {
     ElMessage.success('验证码已发送至邮箱')
   } catch (error) {
     sendingCaptcha.value = false
+    ElMessage.error('发送失败，请重试')
   }
 }
 
@@ -274,10 +269,11 @@ const handleReset = async () => {
   if (!resetRef.value) return
   try {
     await resetRef.value.validate()
+    await resetPassword(resetForm.value)
     ElMessage.success('密码重置成功！请登录')
     showResetDialog.value = false
   } catch (error) {
-    ElMessage.error('请检查输入信息')
+    ElMessage.error('重置失败，请检查输入信息')
   }
 }
 </script>
@@ -285,7 +281,6 @@ const handleReset = async () => {
 <style scoped>
 @import '@/styles/authPage.css';
 
-/* --- 通用 Element 样式覆盖 --- */
 :deep(.el-form-item) {
   margin-bottom: 1.125rem;
 }
@@ -312,7 +307,6 @@ const handleReset = async () => {
   background: #fff !important;
 }
 
-/* --- 登录特定样式 --- */
 .remember-forgot-row {
   display: flex;
   justify-content: space-between;
@@ -351,14 +345,13 @@ const handleReset = async () => {
   transform: scale(0.97);
 }
 
-/* --- 弹窗专项优化：防止滚动条 --- */
 :deep(.reset-dialog-no-scroll) {
   border-radius: 20px !important;
-  overflow: hidden !important; /* 核心：禁止溢出 */
+  overflow: hidden !important;
 }
 
 :deep(.reset-dialog-no-scroll .el-dialog__body) {
-  padding: 10px 28px !important; /* 缩小内边距 */
+  padding: 10px 28px !important;
 }
 
 :deep(.reset-dialog-no-scroll .el-dialog__header) {
@@ -388,7 +381,6 @@ const handleReset = async () => {
   margin: 0;
 }
 
-/* 压缩弹窗内的表单间距 */
 .compact-form-item {
   margin-bottom: 12px !important;
 }
@@ -399,7 +391,7 @@ const handleReset = async () => {
 }
 
 .reset-captcha-btn {
-  flex: 0 0 80px; /* 固定宽度防止抖动 */
+  flex: 0 0 80px;
   height: 2.75rem;
   border-radius: 10px !important;
   background: #f1f5f9 !important;
