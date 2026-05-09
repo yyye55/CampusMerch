@@ -16,7 +16,7 @@ export function register(data: {
   return request.post('/register', data)
 }
 
-// 登出接口
+// 退出登录接口
 export function logout() {
   return request.post('/logout')
 }
@@ -26,12 +26,21 @@ export function getCurrentUser() {
   return request.get('/me')
 }
 
-// 发送验证码（如果后端有这个接口）
+// 用户信息类型
+export interface UserInfo {
+  id: number
+  name: string
+  email: string
+  role: 'admin' | 'user'
+  phone: string
+}
+
+// 发送验证码
 export const sendCaptcha = (email: string) => {
   return request.post('/captcha', { email })
 }
 
-// 重置密码（如果后端有这个接口）
+// 重置密码
 export const resetPassword = (data: {
   email: string
   captcha: string

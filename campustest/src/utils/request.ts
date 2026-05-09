@@ -1,17 +1,35 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
+
+function getToken(): string | null {
+  const sessionToken = sessionStorage.getItem('campus_session_token')
+  if (sessionToken) return sessionToken
+
+  const localToken = localStorage.getItem('campus_token')
+  if (!localToken) return null
+
+  const expireTime = localStorage.getItem('campus_token_expire')
+  if (expireTime && Date.now() > Number(expireTime)) {
+    localStorage.removeItem('campus_token')
+    localStorage.removeItem('campus_token_expire')
+    localStorage.removeItem('campus_login_email')
+    return null
+  }
+
+  return localToken
+}
+
 const request = axios.create({
-  baseURL: '/api', // 使用 Vite 代理
+  baseURL: '/api',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
   },
 })
 
-// 请求拦截器：自动携带 Token
 request.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('campus_token')
+    const token = getToken()
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
@@ -20,19 +38,19 @@ request.interceptors.request.use(
   (err) => Promise.reject(err),
 )
 
-// 响应拦截器：统一处理返回
 request.interceptors.response.use(
-  //拿到后端返回的数据
   (res) => res.data,
   (err) => {
-    // 401 未授权：Token 过期
     if (err.response?.status === 401) {
       localStorage.removeItem('campus_token')
+      localStorage.removeItem('campus_token_expire')
       localStorage.removeItem('campus_login_email')
+      sessionStorage.clear()
       ElMessage.error('登录已过期，请重新登录')
       window.location.href = '/login'
     }
     return Promise.reject(err)
   },
 )
+
 export default request
