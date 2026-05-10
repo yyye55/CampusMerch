@@ -14,7 +14,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://c2c67ae.natappfree.cc',
+        target: 'http://d552cf99.natappfree.cc',
         changeOrigin: true,
       },
     },

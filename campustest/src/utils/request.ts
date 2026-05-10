@@ -20,7 +20,7 @@ function getToken(): string | null {
 }
 
 const request = axios.create({
-  baseURL: '/api',
+  baseURL: '/',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
@@ -35,6 +35,7 @@ request.interceptors.request.use(
     }
     return config
   },
+
   (err) => {
     ElMessage.error('请求发送失败')
     return Promise.reject(err)
@@ -42,28 +43,19 @@ request.interceptors.request.use(
 )
 
 request.interceptors.response.use(
-  (res) => res.data,
-  (err) => {
-    const status = err.response?.status
-    const message = err.response?.data?.message || '请求失败'
+  (response) => {
+    return response
+  },
 
-    if (status === 401) {
-      localStorage.removeItem('campus_token')
-      localStorage.removeItem('campus_token_expire')
-      localStorage.removeItem('campus_login_email')
-      sessionStorage.clear()
+  (error) => {
+    if (error.response?.status === 401) {
       ElMessage.error('登录已过期，请重新登录')
-      setTimeout(() => {
-        window.location.href = '/login'
-      }, 1500)
-    } else if (status === 403) {
-      ElMessage.error('您没有权限访问此资源')
-    } else if (status === 500) {
-      ElMessage.error('服务器内部错误，请稍后重试')
-    } else {
-      ElMessage.error(message)
+    } else if (error.response?.status === 403) {
+      ElMessage.error('没有权限访问')
+    } else if (error.response?.status >= 500) {
+      ElMessage.error('服务器错误，请稍后重试')
     }
-    return Promise.reject(err)
+    return Promise.reject(error)
   },
 )
 

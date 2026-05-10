@@ -99,18 +99,20 @@ const handleLogin = async () => {
     loading.value = true
 
     const res = await login({
-      email: loginForm.value.email.trim(),
+      email: loginForm.value.email.trim().toLowerCase(),
       password: loginForm.value.password,
     })
 
+    const token = res.data?.data?.token || ''
+    const user = res.data?.data?.user || {}
+
     userStore.setSession({
-      email: loginForm.value.email.trim(),
-      accessToken: res.data?.token || 'token_' + Date.now(),
+      email: user.email || loginForm.value.email.trim().toLowerCase(),
+      accessToken: token,
       rememberMe: loginForm.value.rememberMe,
     })
 
-    const emailPrefix = (loginForm.value.email || '').trim().split('@')[0].toLowerCase()
-    if (emailPrefix === 'admin') {
+    if (user.role === 'admin') {
       router.push('/admin')
     } else {
       router.push('/student')
@@ -118,7 +120,8 @@ const handleLogin = async () => {
 
     ElMessage.success('登录成功！')
   } catch (err: any) {
-    ElMessage.error(err.response?.data?.message || '登录失败')
+    const errorMsg = err?.response?.data?.message || err?.message || '登录失败'
+    ElMessage.error(errorMsg)
   } finally {
     loading.value = false
   }

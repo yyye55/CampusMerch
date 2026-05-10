@@ -89,7 +89,10 @@ import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import type { FormItemRule } from 'element-plus'
 import landingNav from '@/components/landingNav.vue'
+import { useUserStore } from '@/stores/user'
 import { register } from '@/api/auth'
+
+const userStore = useUserStore()
 
 const router = useRouter()
 
@@ -138,27 +141,36 @@ const handleRegister = async () => {
     // 调用注册接口
     const res = await register({
       name: registerForm.value.username,
-      email: registerForm.value.email,
+      email: registerForm.value.email.trim().toLowerCase(),
       password: registerForm.value.password,
       password_confirmation: registerForm.value.confirmPassword,
       phone: registerForm.value.phone,
     })
 
+    const token = res.data?.data?.token || ''
+    const user = res.data?.data?.user || {}
+
+    userStore.setSession({
+      email: user.email || registerForm.value.email.trim().toLowerCase(),
+      accessToken: token,
+      rememberMe: false,
+    })
+
     ElMessage({
-      message: '注册成功！3秒后将自动跳转到登录页面',
+      message: '注册成功！正在跳转到首页...',
       type: 'success',
-      duration: 3000,
+      duration: 2000,
       showClose: true,
     })
 
     setTimeout(() => {
-      router.push('/login')
-    }, 3000)
-  } catch (error) {
+      router.push('/student')
+    }, 2000)
+  } catch (error: any) {
     console.log('注册验证失败', error)
-
+    const errorMsg = error?.response?.data?.message || error?.message || '注册失败，请检查输入信息'
     ElMessage({
-      message: '注册失败，请检查输入信息',
+      message: errorMsg,
       type: 'error',
       duration: 3000,
       showClose: true,

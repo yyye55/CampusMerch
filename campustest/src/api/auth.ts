@@ -1,47 +1,83 @@
 import request from '@/utils/request'
 
-export function login(data: { email: string; password: string }) {
-  return request.post('/login', data)
+export interface LoginRequest {
+  email: string
+  password: string
 }
 
-export function register(data: {
+export interface RegisterRequest {
   name: string
   email: string
   password: string
   password_confirmation: string
-  phone: string
-}) {
-  return request.post('/register', data)
+  phone?: string
+}
+
+export interface LoginResponse {
+  code: number
+  message: string
+  data: {
+    token: string
+    token_type: string
+    user: {
+      id: number
+      name: string
+      email: string
+      role: 'admin' | 'user'
+      phone?: string
+    }
+  }
+}
+
+export interface RegisterResponse {
+  code: number
+  message: string
+  data: {
+    token: string
+    token_type: string
+    user: {
+      id: number
+      name: string
+      email: string
+      role: 'admin' | 'user'
+      phone?: string
+    }
+  }
+}
+
+export function login(data: LoginRequest) {
+  return request.post<LoginResponse>('/api/login', data)
+}
+
+export function register(data: RegisterRequest) {
+  return request.post<RegisterResponse>('/api/register', data)
 }
 
 export function logout() {
-  return request.post('/logout')
+  return request.post('/api/logout')
 }
 
 export function getCurrentUser() {
-  return request.get('/user')
+  return request.get('/api/me')
 }
 
-// 用户信息类型
 export interface UserInfo {
   id: number
   name: string
   email: string
   role: 'admin' | 'user'
-  phone: string
+  phone?: string
 }
 
-// 发送验证码
 export const sendCaptcha = (email: string) => {
-  return request.post('/captcha', { email })
+  return request.post('/api/captcha', { email })
 }
 
-// 重置密码
 export const resetPassword = (data: {
   email: string
   captcha: string
   password: string
   password_confirmation: string
 }) => {
-  return request.post('/reset-password', data)
+  return request.post('/api/reset-password', data)
 }
