@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { logout } from '@/api/auth'
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -29,6 +30,32 @@ export const useUserStore = defineStore('user', {
       localStorage.removeItem('campus_login_email')
       localStorage.removeItem('campus_token_expire')
       sessionStorage.removeItem('campus_session_token')
+    },
+    async logout() {
+      try {
+        await logout()
+      } catch {
+        // ignore API error
+      }
+      this.clearSession()
+    },
+    updateFromStorage() {
+      const sessionToken = sessionStorage.getItem('campus_session_token')
+      if (sessionToken) {
+        this.accessToken = sessionToken
+        this.rememberMe = false
+        return
+      }
+
+      const localToken = localStorage.getItem('campus_token')
+      const expireTime = localStorage.getItem('campus_token_expire')
+      const email = localStorage.getItem('campus_login_email')
+
+      if (localToken && expireTime && Date.now() < Number(expireTime)) {
+        this.accessToken = localToken
+        this.email = email || ''
+        this.rememberMe = true
+      }
     },
   },
 })

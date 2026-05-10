@@ -1,7 +1,5 @@
 import request from '@/utils/request'
 
-// ============ 类型定义 ============
-
 export interface Product {
   id: number
   name: string
@@ -54,42 +52,37 @@ export interface ListResponse<T> {
   pagination: PaginationInfo
 }
 
-// ============ API 对象 ============
-
 export const api = {
-  // ============ 数据看板 ============
-  stats: (): Promise<AdminStats> => request.get('/admin/stats'),
+  stats: (): Promise<AdminStats> => request.get('/api/admin/stats'),
 
-  // ============ 商品管理 ============
   products: {
     list: (params: { page: number; pageSize: number }) =>
-      request.get('/products', { params }),
-    create: (data: Partial<Product>) => request.post('/products', data),
+      request.get('/api/products', { params }),
+    create: (data: Partial<Product>) => request.post('/api/products', data),
     update: (id: number, data: Partial<Product>) =>
-      request.put(`/products/${id}`, data),
-    remove: (id: number) => request.delete(`/products/${id}`),
+      request.put(`/api/products/${id}`, data),
+    remove: (id: number) => request.delete(`/api/products/${id}`),
     toggleStock: (id: number, inStock: boolean) =>
-      request.patch(`/products/${id}/stock`, { inStock }),
+      request.patch(`/api/products/${id}/stock`, { inStock }),
     import: (formData: FormData) =>
-      request.post('/products/import', formData, { headers: { 'Content-Type': 'multipart/form-data' } }),
+      request.post('/api/products/import', formData, { headers: { 'Content-Type': 'multipart/form-data' } }),
   },
 
-  // ============ 订单管理 ============
   orders: {
     list: (params: {
       page: number
       pageSize: number
       status?: number | string
       keyword?: string
-    }) => request.get('/orders', { params }),
+    }) => request.get('/api/orders', { params }),
     uploadDesign: (id: number, formData: FormData) =>
-      request.post(`/orders/${id}/design`, formData, { headers: { 'Content-Type': 'multipart/form-data' } }),
+      request.post(`/api/orders/${id}/design`, formData, { headers: { 'Content-Type': 'multipart/form-data' } }),
     review: (id: number, data: { action: 'approve' | 'reject'; adjustNum?: number }) =>
-      request.put(`/admin/orders/${id}/review`, data),
-    complete: (id: number) => request.post(`/orders/${id}/complete`),
+      request.put(`/api/admin/orders/${id}/review`, data),
+    complete: (id: number) => request.post(`/api/orders/${id}/complete`),
     export: async (params: Record<string, unknown>): Promise<void> => {
-      const res = await request.get('/orders/export', { params, responseType: 'blob' })
-      const blob = new Blob([res], { type: 'text/csv;charset=utf-8' })
+      const res = await request.get('/api/orders/export', { params, responseType: 'blob' })
+      const blob = new Blob([res.data], { type: 'text/csv;charset=utf-8' })
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url

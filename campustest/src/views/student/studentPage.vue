@@ -2,12 +2,7 @@
   <!-- 自定义弹窗：Teleport 到 body + 纯 CSS，避免未加载 Tailwind 时布局崩溃 -->
   <Teleport to="body">
     <Transition name="dialog">
-      <div
-        v-if="showDialog"
-        class="sp-dialog-overlay"
-        role="dialog"
-        aria-modal="true"
-      >
+      <div v-if="showDialog" class="sp-dialog-overlay" role="dialog" aria-modal="true">
         <div class="sp-dialog-backdrop" aria-hidden="true" @click="closeDialog"></div>
         <div class="sp-dialog-card" @click.stop>
           <!-- 成功弹窗 -->
@@ -170,10 +165,7 @@
             <button
               v-for="cat in categories"
               :key="cat.value"
-              @click="
-                filters.category = cat.value;
-                currentPage = 1
-              "
+              @click="setCategoryFilter(cat)"
               :class="filters.category === cat.value ? 'filter-button active' : 'filter-button'"
             >
               {{ cat.label }}
@@ -184,10 +176,7 @@
             <button
               v-for="s in statusFilters"
               :key="s.value"
-              @click="
-                filters.status = s.value;
-                currentPage = 1
-              "
+              @click="setStatusFilter(s)"
               :class="filters.status === s.value ? 'filter-button active' : 'filter-button'"
             >
               {{ s.label }}
@@ -373,7 +362,9 @@
                 <div class="book-form detail-book-form">
                   <div class="book-form-row detail-book-form-row-pair">
                     <div class="book-form-group">
-                      <label class="book-label">📦 预订数量 <span class="book-required">*</span></label>
+                      <label class="book-label"
+                        >📦 预订数量 <span class="book-required">*</span></label
+                      >
                       <div class="book-quantity-controls">
                         <button
                           type="button"
@@ -381,7 +372,12 @@
                           class="book-quantity-button"
                           :disabled="bookForm.num <= (currentGoods.minOrder || 1)"
                         >
-                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg
+                            class="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
                             <path
                               stroke-linecap="round"
                               stroke-linejoin="round"
@@ -405,7 +401,12 @@
                           class="book-quantity-button"
                           :disabled="bookForm.num >= currentGoods.stock"
                         >
-                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg
+                            class="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
                             <path
                               stroke-linecap="round"
                               stroke-linejoin="round"
@@ -417,11 +418,14 @@
                       </div>
                       <p v-if="errors.num" class="book-error">{{ errors.num }}</p>
                       <p class="book-quantity-hint">
-                        最低 {{ currentGoods.minOrder || 1 }} 件起订，库存剩余 {{ currentGoods.stock }} 件
+                        最低 {{ currentGoods.minOrder || 1 }} 件起订，库存剩余
+                        {{ currentGoods.stock }} 件
                       </p>
                     </div>
                     <div class="book-form-group">
-                      <label class="book-label">📐 尺寸选择 <span class="book-required">*</span></label>
+                      <label class="book-label"
+                        >📐 尺寸选择 <span class="book-required">*</span></label
+                      >
                       <select v-model="bookForm.size" class="book-select">
                         <option value="" disabled hidden>请选择尺寸</option>
                         <option
@@ -438,7 +442,9 @@
 
                   <div class="book-form-row detail-book-form-row-pair">
                     <div class="book-form-group">
-                      <label class="book-label">🎨 颜色选择 <span class="book-required">*</span></label>
+                      <label class="book-label"
+                        >🎨 颜色选择 <span class="book-required">*</span></label
+                      >
                       <select v-model="bookForm.color" class="book-select">
                         <option value="" disabled hidden>请选择颜色</option>
                         <option
@@ -493,32 +499,6 @@
         <h2 class="section-heading">
           <span>📦 我的订单</span>
         </h2>
-
-        <div class="export-toolbar">
-          <div class="export-toolbar__filters">
-            <label class="export-filter-label" for="export-start">起始日期</label>
-            <input
-              id="export-start"
-              v-model="exportStartDate"
-              type="date"
-              class="export-date-input"
-            />
-            <label class="export-filter-label" for="export-end">结束日期</label>
-            <input id="export-end" v-model="exportEndDate" type="date" class="export-date-input" />
-            <button type="button" class="export-clear-filter" @click="clearExportDateFilters">
-              清除筛选
-            </button>
-          </div>
-          <button
-            type="button"
-            class="export-btn"
-            :disabled="exportLoading || orders.length === 0"
-            @click="onClickExportOrders"
-          >
-            <span v-if="exportLoading" class="export-btn__spinner" aria-hidden="true"></span>
-            {{ exportLoading ? '导出中...' : '导出明细' }}
-          </button>
-        </div>
 
         <div v-if="orders.length > 0" class="orders-container">
           <div v-for="(o, i) in orders" :key="i" class="order-card">
@@ -644,7 +624,7 @@
 
           <!-- ========== 订单详情 · 定制设计稿上传区（图标点击 = 打开文件选择，与点 input 一致）========== -->
           <div
-            v-if="currentOrder.custom === '需要定制' && currentOrder.status === 1"
+            v-if="(currentOrder.custom === '需要定制' || currentOrder.customRequirement) && currentOrder.status === 1"
             class="order-detail-upload"
           >
             <!-- 【新增】图标点击触发下方 ref="designFileInputRef" 的 file input -->
@@ -700,8 +680,12 @@ import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/stores/user'
 import { getProducts, getProductDetail } from '@/api/product'
-import { createOrder, getMyOrders, getOrderDetail, uploadDesign as apiUploadDesign } from '@/api/order'
-import { addFavorite, removeFavorite, getFavorites } from '@/api/user'
+import {
+  createOrder,
+  getMyOrders,
+  getOrderDetail,
+  uploadDesign as apiUploadDesign,
+} from '@/api/order'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -748,6 +732,8 @@ interface Goods {
 }
 
 interface Order {
+  /** 后端订单ID */
+  id?: number
   /** 订单编号 */
   orderNo?: string
   /** 下单时间（毫秒时间戳） */
@@ -766,6 +752,10 @@ interface Order {
   remark: string
   status: number
   statusText: string
+  /** 后端原始状态字符串 */
+  statusRaw?: string
+  /** 商品的定制要求 */
+  customRequirement?: string
 }
 
 interface BookForm {
@@ -785,6 +775,15 @@ function formatGoodsCardPrice(price: number) {
 const page = ref('list')
 /** 商品大厅每页条数（2 行×4 列 = 8） */
 const GOODS_LIST_PAGE_SIZE = 8
+
+const API_BASE_URL = 'http://127.0.0.1:8000'
+
+const getImageUrl = (path: string): string => {
+  if (!path) return '/images/default.png'
+  if (path.startsWith('http://') || path.startsWith('https://')) return path
+  if (path.startsWith('//')) return 'http:' + path
+  return API_BASE_URL + path
+}
 
 const currentPage = ref(1)
 const pageSize = ref(GOODS_LIST_PAGE_SIZE)
@@ -1049,9 +1048,7 @@ const paginatedGoods = computed(() => {
 })
 
 /** 仅多页时显示；不在第 1 页时显示上一页 */
-const showPaginationPrev = computed(
-  () => totalPages.value > 1 && currentPage.value > 1,
-)
+const showPaginationPrev = computed(() => totalPages.value > 1 && currentPage.value > 1)
 
 /** 仅当本页满页且仍有后续页时显示下一页 */
 const showPaginationNext = computed(
@@ -1061,42 +1058,49 @@ const showPaginationNext = computed(
     currentPage.value < totalPages.value,
 )
 
-const loadFavoriteIds = async () => {
+const loadFavoriteIds = () => {
   try {
-    loading.value.favorite = true
-    const res = await getFavorites()
-    if (res && Array.isArray(res.data)) {
-      favoriteIds.value = res.data.map((item: { product_id: number }) => item.product_id)
+    const stored = localStorage.getItem('campus_favorites')
+    if (stored) {
+      favoriteIds.value = JSON.parse(stored)
     } else {
       favoriteIds.value = []
     }
   } catch (error) {
     console.error('加载收藏失败', error)
     favoriteIds.value = []
-  } finally {
-    loading.value.favorite = false
   }
 }
 
 const isFavorite = (goodsId: number) => favoriteIds.value.includes(goodsId)
 
-const toggleFavorite = async (goodsItem: Goods) => {
+const toggleFavorite = (goodsItem: Goods) => {
   if (!goodsItem || !goodsItem.id) return
-  
+
   try {
     if (isFavorite(goodsItem.id)) {
-      await removeFavorite(goodsItem.id)
       favoriteIds.value = favoriteIds.value.filter((id) => id !== goodsItem.id)
+      localStorage.setItem('campus_favorites', JSON.stringify(favoriteIds.value))
       showSuccessDialog('已取消收藏', `${goodsItem.name} 已从收藏夹移除。`)
     } else {
-      await addFavorite(goodsItem.id)
       favoriteIds.value = [...favoriteIds.value, goodsItem.id]
+      localStorage.setItem('campus_favorites', JSON.stringify(favoriteIds.value))
       showSuccessDialog('收藏成功', `${goodsItem.name} 已加入收藏夹。`)
     }
   } catch (error) {
     console.error('收藏操作失败', error)
     ElMessage.error('收藏操作失败，请重试')
   }
+}
+
+const setCategoryFilter = (cat: { value: string; label: string }) => {
+  filters.value.category = cat.value
+  currentPage.value = 1
+}
+
+const setStatusFilter = (s: { value: string; label: string }) => {
+  filters.value.status = s.value
+  currentPage.value = 1
 }
 
 watch(currentPage, (newVal) => {
@@ -1131,25 +1135,28 @@ const loadGoods = async () => {
   try {
     loading.value.goods = true
     const res = await getProducts()
-    if (res && Array.isArray(res.data)) {
-      goods.value = res.data.map((item: any) => ({
-        id: item.id,
-        name: item.name,
-        price: item.price,
-        stock: item.stock,
-        sold: item.sold || 0,
-        desc: item.description || item.desc || '',
-        img: item.image || item.img || '/images/default.png',
-        category: item.category || 'wenchuang',
-        categoryText: item.category_text || '文创产品',
-        inStock: item.in_stock !== undefined ? item.in_stock : (item.stock > 0),
-        statusText: item.status_text || (item.stock > 0 ? '有货' : '缺货'),
-        spec: item.spec || '',
-        customRequirement: item.custom_requirement || item.customRequirement || '',
-        sizes: item.sizes ? (Array.isArray(item.sizes) ? item.sizes : item.sizes.split(',')) : ['S', 'M', 'L', 'XL', 'XXL'],
-        colors: item.colors ? (Array.isArray(item.colors) ? item.colors : item.colors.split(',')) : ['红色', '蓝色', '黑色', '白色'],
-        minOrder: item.min_order || item.minOrder || 1,
-      }))
+    if (res && res.data && Array.isArray(res.data)) {
+      goods.value = res.data.map((item) => {
+        const existingGoods = goods.value.find((g) => g.id === item.id)
+        return {
+          id: item.id,
+          name: item.name,
+          price: parseFloat(item.price) || 0,
+          stock: item.available_stock ?? item.stock ?? 0,
+          sold: item.sold_stock || 0,
+          desc: existingGoods?.desc || '',
+          img: existingGoods?.img || '/images/default.png',
+          category: item.category || 'wenchuang',
+          categoryText: item.category || '文创产品',
+          inStock: item.available_stock > 0,
+          statusText: item.is_stock_low ? '库存紧张' : item.available_stock > 0 ? '有货' : '缺货',
+          spec: existingGoods?.spec || '',
+          customRequirement: existingGoods?.customRequirement || '',
+          sizes: existingGoods?.sizes || ['S', 'M', 'L', 'XL', 'XXL'],
+          colors: existingGoods?.colors || ['红色', '蓝色', '黑色', '白色'],
+          minOrder: existingGoods?.minOrder || 1,
+        }
+      })
     }
   } catch (error) {
     console.error('加载商品列表失败', error)
@@ -1164,22 +1171,29 @@ const loadOrders = async () => {
   try {
     loading.value.orders = true
     const res = await getMyOrders()
-    if (res && Array.isArray(res.data)) {
-      orders.value = res.data.map((item: any) => ({
-        orderNo: item.order_no || item.orderNo,
-        createdAt: item.created_at ? new Date(item.created_at).getTime() : Date.now(),
-        unitPrice: item.unit_price || item.unitPrice,
-        totalAmount: item.total_amount || item.totalAmount,
-        paymentRecord: item.payment_record || item.paymentRecord,
-        goodsName: item.goods_name || item.goodsName,
-        num: item.quantity || item.num,
-        size: item.size || '',
-        color: item.color || '',
-        custom: item.custom || '',
-        remark: item.remark || '',
-        status: item.status,
-        statusText: item.status_text || getStatusText(item.status),
-      }))
+    if (res && res.data && Array.isArray(res.data)) {
+      orders.value = res.data.map((item) => {
+        const product = goods.value.find((g) => g.id === item.product_id)
+        const hasCustomRequirement = product?.customRequirement || ''
+        return {
+          id: item.id,
+          orderNo: item.order_no,
+          createdAt: item.created_at ? new Date(item.created_at).getTime() : Date.now(),
+          unitPrice: item.unit_price ? parseFloat(item.unit_price) : 0,
+          totalAmount: item.total_price ? parseFloat(item.total_price) : 0,
+          paymentRecord: '待支付（校园文创预订·统一结算）',
+          goodsName: item.product?.name || '未知商品',
+          num: item.quantity,
+          size: item.size || '',
+          color: item.color || '',
+          custom: hasCustomRequirement ? '需要定制' : '',
+          remark: item.remark || '',
+          status: statusStringToNumber(item.status),
+          statusRaw: item.status,
+          statusText: getStatusText(item.status),
+          customRequirement: hasCustomRequirement,
+        }
+      })
     }
   } catch (error) {
     console.error('加载订单失败', error)
@@ -1189,16 +1203,31 @@ const loadOrders = async () => {
   }
 }
 
-// 根据状态码获取状态文本
-const getStatusText = (status: number): string => {
+// 状态字符串转数字
+const statusStringToNumber = (status: string): number => {
+  const map: Record<string, number> = {
+    draft: 0,
+    booked: 1,
+    design_pending: 2,
+    ready: 3,
+    completed: 4,
+    rejected: 5,
+  }
+  return map[status] ?? 0
+}
+
+// 获取状态显示文本
+const getStatusText = (status: number | string): string => {
+  const numStatus = typeof status === 'string' ? statusStringToNumber(status) : status
   const map: Record<number, string> = {
-    1: '待处理',
-    2: '制作中',
+    0: '草稿',
+    1: '已预订',
+    2: '待审核',
     3: '待收货',
     4: '已完成',
-    5: '已取消',
+    5: '已驳回',
   }
-  return map[status] || '未知'
+  return map[numStatus] ?? '未知'
 }
 
 onMounted(() => {
@@ -1274,36 +1303,37 @@ const go = (p: string) => {
 const openDetail = async (g: Goods) => {
   try {
     loading.value.detail = true
-    
+
     let goodsData = g
-    
+
     try {
       const res = await getProductDetail(g.id)
       if (res && res.data) {
         const item = res.data
+        const firstDesignExample = item.attachments?.design_examples?.[0]?.url
         goodsData = {
           id: item.id,
           name: item.name,
-          price: item.price,
+          price: parseFloat(item.price) || g.price,
           stock: item.stock,
-          sold: item.sold || 0,
-          desc: item.description || item.desc || '',
-          img: item.image || item.img || '/images/default.png',
-          category: item.category || 'wenchuang',
-          categoryText: item.category_text || '文创产品',
-          inStock: item.in_stock !== undefined ? item.in_stock : (item.stock > 0),
-          statusText: item.status_text || (item.stock > 0 ? '有货' : '缺货'),
-          spec: item.spec || '',
-          customRequirement: item.custom_requirement || item.customRequirement || '',
-          sizes: item.sizes ? (Array.isArray(item.sizes) ? item.sizes : item.sizes.split(',')) : ['S', 'M', 'L', 'XL', 'XXL'],
-          colors: item.colors ? (Array.isArray(item.colors) ? item.colors : item.colors.split(',')) : ['红色', '蓝色', '黑色', '白色'],
-          minOrder: item.min_order || item.minOrder || 1,
+          sold: g.sold,
+          desc: g.desc,
+          img: firstDesignExample ? getImageUrl(firstDesignExample) : g.img,
+          category: item.category || g.category,
+          categoryText: g.categoryText,
+          inStock: item.status === 'active' && item.stock > 0,
+          statusText: item.status === 'active' ? (item.stock > 0 ? '有货' : '缺货') : '已下架',
+          spec: g.spec,
+          customRequirement: g.customRequirement,
+          sizes: g.sizes || ['S', 'M', 'L', 'XL', 'XXL'],
+          colors: g.colors || ['红色', '蓝色', '黑色', '白色'],
+          minOrder: g.minOrder || 1,
         }
       }
     } catch (error) {
       console.warn('加载商品详情失败，使用本地数据', error)
     }
-    
+
     currentGoods.value = goodsData
     bookForm.value = {
       num: goodsData.minOrder || 1,
@@ -1381,26 +1411,26 @@ const validateForm = () => {
     errors.value.color = '请选择颜色'
     valid = false
   }
-  
+
   if (!valid) {
     ElMessage.warning('请填写所有必填项')
   }
-  
+
   return valid
 }
 
 const submitOrder = async () => {
   if (loading.value.order) return
-  
+
   if (!currentGoods.value.inStock || currentGoods.value.stock <= 0) {
     showWarningDialog('库存不足', '该商品当前不可预订，请返回列表选择其他商品。')
     return
   }
   if (!validateForm()) return
-  
+
   try {
     loading.value.order = true
-    
+
     const orderData = {
       product_id: currentGoods.value.id,
       quantity: bookForm.value.num,
@@ -1408,35 +1438,40 @@ const submitOrder = async () => {
       color: bookForm.value.color,
       remark: bookForm.value.remark,
     }
-    
+
     const res = await createOrder(orderData)
-    
+
     if (res && res.data) {
       const item = res.data
       const order: Order = {
-        orderNo: item.order_no || item.orderNo || `CM-${Date.now()}`,
+        id: item.id,
+        orderNo: item.order_no,
         createdAt: item.created_at ? new Date(item.created_at).getTime() : Date.now(),
-        unitPrice: item.unit_price || currentGoods.value.price,
-        totalAmount: item.total_amount || (currentGoods.value.price * bookForm.value.num),
-        paymentRecord: item.payment_record || '待支付（校园文创预订·统一结算）',
-        goodsName: currentGoods.value.name,
-        num: item.quantity || bookForm.value.num,
+        unitPrice: item.unit_price ? parseFloat(item.unit_price) : currentGoods.value.price,
+        totalAmount: item.total_price
+          ? parseFloat(item.total_price)
+          : currentGoods.value.price * bookForm.value.num,
+        paymentRecord: '待支付（校园文创预订·统一结算）',
+        goodsName: item.product?.name || currentGoods.value.name,
+        num: item.quantity,
         size: item.size || bookForm.value.size,
         color: item.color || bookForm.value.color,
         custom: bookForm.value.custom || '',
         remark: item.remark || bookForm.value.remark,
-        status: item.status || 1,
-        statusText: item.status_text || (bookForm.value.custom === '需要定制' ? '待上传设计稿' : '待处理'),
+        status: statusStringToNumber(item.status),
+        statusRaw: item.status,
+        statusText: getStatusText(item.status),
+        customRequirement: currentGoods.value.customRequirement || '',
       }
       orders.value.unshift(order)
-      
+
       currentGoods.value.stock -= bookForm.value.num
       currentGoods.value.sold += bookForm.value.num
       if (currentGoods.value.stock <= 0) {
         currentGoods.value.inStock = false
         currentGoods.value.statusText = '缺货'
       }
-      
+
       showSuccessDialog('预订成功', '您的预订已成功提交，请在订单列表中查看详情！')
       go('myorder')
     }
@@ -1451,36 +1486,33 @@ const submitOrder = async () => {
 
 const openOrderDetail = async (o: Order) => {
   try {
-    const orderNo = o.orderNo
-    if (orderNo && orderNo.startsWith('CM-')) {
-      const idStr = orderNo.split('-')[1] || ''
-      const id = parseInt(idStr)
-      if (!isNaN(id)) {
-        try {
-          const res = await getOrderDetail(id)
-          if (res && res.data) {
-            const item = res.data
-            currentOrder.value = {
-              orderNo: item.order_no || item.orderNo || orderNo,
-              createdAt: item.created_at ? new Date(item.created_at).getTime() : o.createdAt,
-              unitPrice: item.unit_price || o.unitPrice,
-              totalAmount: item.total_amount || o.totalAmount,
-              paymentRecord: item.payment_record || o.paymentRecord,
-              goodsName: item.goods_name || o.goodsName,
-              num: item.quantity || o.num,
-              size: item.size || o.size,
-              color: item.color || o.color,
-              custom: item.custom || o.custom,
-              remark: item.remark || o.remark,
-              status: item.status || o.status,
-              statusText: item.status_text || o.statusText,
-            }
-            go('orderDetail')
-            return
+    if (o.id) {
+      try {
+        const item = await getOrderDetail(o.id)
+        if (item) {
+          currentOrder.value = {
+            id: item.id,
+            orderNo: item.order_no,
+            createdAt: item.created_at ? new Date(item.created_at).getTime() : o.createdAt,
+            unitPrice: item.unit_price ? parseFloat(item.unit_price) : o.unitPrice,
+            totalAmount: item.total_price ? parseFloat(item.total_price) : o.totalAmount,
+            paymentRecord: '待支付（校园文创预订·统一结算）',
+            goodsName: item.product?.name || o.goodsName,
+            num: item.quantity || o.num,
+            size: item.size || o.size,
+            color: item.color || o.color,
+            custom: o.custom || (o.customRequirement ? '需要定制' : ''),
+            remark: item.remark || o.remark,
+            status: statusStringToNumber(item.status),
+            statusRaw: item.status,
+            statusText: getStatusText(item.status),
+            customRequirement: o.customRequirement || '',
           }
-        } catch (error) {
-          console.warn('加载订单详情失败，使用本地数据', error)
+          go('orderDetail')
+          return
         }
+      } catch (error) {
+        console.warn('加载订单详情失败，使用本地数据', error)
       }
     }
     currentOrder.value = o
@@ -1548,8 +1580,8 @@ const handleFileUpload = (e: Event) => {
 
 const uploadDesign = async () => {
   if (loading.value.upload) return
-  
-  if (currentOrder.value.custom !== '需要定制' || currentOrder.value.status !== 1) {
+
+  if ((currentOrder.value.custom !== '需要定制' && !currentOrder.value.customRequirement) || currentOrder.value.status !== 1) {
     showWarningDialog('无需上传', '当前订单不处于待上传设计稿状态。')
     return
   }
@@ -1557,36 +1589,42 @@ const uploadDesign = async () => {
     showWarningDialog('请选择文件', '请先选择设计稿文件后再上传。')
     return
   }
-  
+
   const file = selectedDesignFile.value
   if (file.size > 15 * 1024 * 1024) {
     showWarningDialog('文件过大', '设计稿文件大小不能超过15MB')
     return
   }
-  
-  const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf', 'application/postscript', 'image/psd']
+
+  const allowedTypes = [
+    'image/jpeg',
+    'image/png',
+    'application/pdf',
+    'application/postscript',
+    'image/psd',
+  ]
   if (!allowedTypes.includes(file.type)) {
     showWarningDialog('文件格式不支持', '仅支持 jpg/png/pdf/ai/psd 格式')
     return
   }
-  
+
   try {
     loading.value.upload = true
-    
-    const orderNo = currentOrder.value.orderNo || ''
-    let orderId = 0
-    if (orderNo.startsWith('CM-')) {
-      const idStr = orderNo.split('-')[1] || ''
-      orderId = parseInt(idStr) || 0
+
+    const orderId = currentOrder.value.id
+    if (!orderId) {
+      showWarningDialog('订单无效', '无法获取订单ID，请刷新页面后重试')
+      return
     }
-    
+
     const formData = new FormData()
     formData.append('design_file', file)
-    
+
     await apiUploadDesign(orderId, formData)
-    
-    currentOrder.value.status = 2
-    currentOrder.value.statusText = '制作中'
+
+    currentOrder.value.statusRaw = 'design_pending'
+    currentOrder.value.status = statusStringToNumber('design_pending')
+    currentOrder.value.statusText = getStatusText('design_pending')
     showSuccessDialog('上传成功', `设计稿 ${file.name} 已成功上传！`)
     selectedDesignFile.value = null
   } catch (error: any) {
@@ -1612,11 +1650,12 @@ const finishOrder = () => {
 
 const getStatusClass = (s: number) => {
   const classes: Record<number, string> = {
+    0: 'bg-slate-100 text-slate-600 ring-1 ring-slate-200/80',
     1: 'bg-amber-100 text-amber-800 ring-1 ring-amber-200/80',
-    2: 'bg-sky-100 text-sky-800 ring-1 ring-sky-200/80',
+    2: 'bg-orange-100 text-orange-800 ring-1 ring-orange-200/80',
     3: 'bg-indigo-100 text-indigo-800 ring-1 ring-indigo-200/80',
     4: 'bg-emerald-100 text-emerald-800 ring-1 ring-emerald-200/80',
-    5: 'bg-slate-100 text-slate-600 ring-1 ring-slate-200/80',
+    5: 'bg-red-100 text-red-800 ring-1 ring-red-200/80',
   }
   return classes[s] ?? 'bg-slate-100 text-slate-600 ring-1 ring-slate-200/80'
 }
@@ -2040,5 +2079,4 @@ body {
   border-color: #fecaca;
   background: #fff1f2;
 }
-
 </style>
