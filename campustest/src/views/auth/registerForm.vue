@@ -68,7 +68,7 @@
             </el-input>
           </el-form-item>
 
-          <el-form-item>
+          <el-form-item class="submit-form-item">
             <el-button type="primary" class="register-submit-btn" @click="handleRegister"
               >注册</el-button
             >
@@ -89,6 +89,7 @@ import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import type { FormItemRule } from 'element-plus'
 import landingNav from '@/components/landingNav.vue'
+import { register } from '@/api/auth'
 
 const router = useRouter()
 
@@ -109,7 +110,7 @@ const registerRules = ref({
   ],
   password: [
     { required: true, message: '请输入密码', trigger: 'blur' },
-    { min: 6, message: '请输入6位以上密码', trigger: 'blur' },
+    { min: 8, message: '请输入8位以上密码', trigger: 'blur' },
   ],
   confirmPassword: [
     { required: true, message: '请确认密码', trigger: 'blur' },
@@ -133,6 +134,15 @@ const handleRegister = async () => {
   try {
     await registerRef.value.validate()
     console.log('注册验证通过', registerForm.value)
+
+    // 调用注册接口
+    const res = await register({
+      name: registerForm.value.username,
+      email: registerForm.value.email,
+      password: registerForm.value.password,
+      password_confirmation: registerForm.value.confirmPassword,
+      phone: registerForm.value.phone,
+    })
 
     ElMessage({
       message: '注册成功！3秒后将自动跳转到登录页面',
@@ -197,28 +207,30 @@ const handleClose = () => {
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.14) !important;
 }
 
-:deep(.el-input__prefix) {
-  color: var(--sp-text-muted);
+.submit-form-item {
+  text-align: center;
 }
 
 .register-submit-btn {
-  height: 2.875rem;
   width: 100%;
-  border: none !important;
+  height: 2.875rem;
   border-radius: 14px !important;
+  background: linear-gradient(135deg, #6366f1 0%, #7c3aed 50%, #8b5cf6 100%) !important;
+  border: none !important;
   font-size: 1rem !important;
   font-weight: 700 !important;
   color: #fff !important;
-  background: linear-gradient(135deg, #6366f1 0%, #7c3aed 50%, #8b5cf6 100%) !important;
   box-shadow: 0 6px 20px rgba(99, 102, 241, 0.32) !important;
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease !important;
 }
+
 .register-submit-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 10px 28px rgba(99, 102, 241, 0.38) !important;
 }
+
 .register-submit-btn:active {
   transform: scale(0.97);
 }
