@@ -216,9 +216,7 @@
 
         <div v-if="filteredGoods.length > 0" class="goods-grid goods-grid--list-page">
           <div v-for="g in paginatedGoods" :key="g.id" class="goods-card" @click="openDetail(g)">
-            <div class="goods-image">
-              <img :src="g.img" />
-            </div>
+
             <div class="goods-content">
               <div class="goods-header">
                 <div class="goods-tags">
@@ -285,13 +283,8 @@
         <div class="detail-page-layout">
           <div class="detail-page-sidebar">
             <section class="detail-summary-card" aria-label="商品信息">
-              <div class="detail-image-frame detail-image-frame--side">
-                <img
-                  :src="currentGoods.img"
-                  class="detail-image"
-                  :alt="currentGoods.name || '商品图片'"
-                />
-              </div>
+
+
 
               <div class="detail-tags">
                 <span class="detail-tag category">{{ currentGoods.categoryText }}</span>
@@ -551,9 +544,7 @@
 
         <div v-if="favoriteGoods.length > 0" class="favorites-grid">
           <div v-for="g in favoriteGoods" :key="g.id" class="favorite-card" @click="openDetail(g)">
-            <div class="favorite-image">
-              <img :src="g.img" />
-            </div>
+
             <div class="favorite-content">
               <div class="favorite-header">
                 <div class="favorite-tags">
