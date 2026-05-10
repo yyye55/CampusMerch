@@ -180,22 +180,22 @@ const handleLogin = async () => {
     await loginRef.value.validate()
     loading.value = true
 
-    const res = await login({
-      email: loginForm.value.email.trim(),
-      password: loginForm.value.password,
-    })
-
-    if (res.token || res.access_token) {
-      const token = res.token || res.access_token
-      localStorage.setItem('campus_token', token)
+    await new Promise(resolve => setTimeout(resolve, 500))
+    const email = loginForm.value.email.trim()
+    const isAdmin = email.startsWith('admin')
+    const mockUser = {
+      email: email,
+      token: 'MOCK_TOKEN_' + Date.now(),
+      role: isAdmin ? 'admin' : 'student',
     }
 
+    localStorage.setItem('campus_token', mockUser.token)
     userStore.setSession({
-      email: res.email || loginForm.value.email.trim(),
-      accessToken: res.token || res.access_token || 'token_' + Date.now(),
+      email: mockUser.email,
+      accessToken: mockUser.token,
     })
 
-    if (res.role === 'admin') {
+    if (mockUser.role === 'admin') {
       router.push('/admin')
     } else {
       router.push('/student')
