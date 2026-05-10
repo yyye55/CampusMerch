@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+:root {
+  --el-color-primary: #E8A87C;
+  --el-color-primary-light-3: #EFC9A8;
+  --el-color-primary-light-5: #F4D8BE;
+  --el-color-primary-light-7: #F8E7D4;
+  --el-color-primary-light-8: #FAF0E6;
+  --el-color-primary-light-9: #FCF5EE;
+  --el-color-primary-dark-2: #C4855A;
+  --el-border-radius-base: 12px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  background: #26201D;
+  color: #FDF6F0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+}
+
+/* ===== Element Plus 暗黑适配 ===== */
+.el-message {
+  border-radius: 14px !important;
+  background: rgba(38, 32, 29, 0.95) !important;
+  border: 1px solid rgba(253, 246, 240, 0.08) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5) !important;
+  color: #FDF6F0 !important;
+}
+.el-message .el-message__content { color: #FDF6F0 !important; }
+.el-message .el-icon-success { color: #85B391 !important; }
+.el-message .el-icon-error { color: #D98888 !important; }
+.el-message .el-icon-warning { color: #F0C898 !important; }
+.el-message .el-message__closeBtn { color: rgba(253, 246, 240, 0.4) !important; }
+
+.el-message-box {
+  border-radius: 16px !important;
+  background: #26201D !important;
+  border: 1px solid rgba(253, 246, 240, 0.08) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5) !important;
+}
+.el-message-box__title { color: #FDF6F0 !important; }
+.el-message-box__content { color: #D1C7C0 !important; }
+.el-message-box__headerbtn .el-message-box__close { color: rgba(253, 246, 240, 0.4) !important; }
+.el-button--primary {
+  background: linear-gradient(135deg, #E8A87C, #D8956A) !important;
+  border-color: transparent !important;
+}
+.el-button--warning {
+  background: rgba(240, 200, 152, 0.15) !important;
+  border-color: rgba(240, 200, 152, 0.3) !important;
+  color: #F0C898 !important;
+}
+.el-button--danger {
+  background: rgba(217, 136, 136, 0.15) !important;
+  border-color: rgba(217, 136, 136, 0.3) !important;
+  color: #D98888 !important;
+}
+
+/* ===== 全局动画 ===== */
+.page-transition {
+  animation: fadeInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.dialog-enter-active,
+.dialog-leave-active {
+  transition: all 0.25s ease;
+}
+.dialog-enter-from,
+.dialog-leave-to {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+/* ===== 滚动条 ===== */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(253, 246, 240, 0.06); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(253, 246, 240, 0.12); }
+
+/* ===== 输入聚焦 ===== */
+input:focus, select:focus, textarea:focus {
+  outline: none;
+}

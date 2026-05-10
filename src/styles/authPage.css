@@ -1,0 +1,114 @@
+/* 登录 / 注册页 — 与用户端统一的紫蓝简约风格 */
+
+.auth-layout {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 88px);
+  padding: 1.25rem 1rem 2rem;
+  background: linear-gradient(135deg, #e7bdfa 0%, #e4c2f34f 50%, #a78bfab3 100%);
+  height: 100vh;
+}
+
+.auth-card {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  padding: 2rem 1.75rem 1.75rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--sp-border, rgba(99, 102, 241, 0.14));
+  box-shadow:
+    0 4px 24px rgba(15, 23, 42, 0.06),
+    0 20px 50px -24px rgba(79, 70, 229, 0.18);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+@media (min-width: 480px) {
+  .auth-card {
+    padding: 2.25rem 2rem 2rem;
+  }
+}
+
+.auth-eyebrow {
+  text-align: center;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sp-text-muted, #64748b);
+  margin-bottom: 0.5rem;
+}
+
+.auth-title {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, #4f6ae8 0%, #5b62f0 50%, #6366f1 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 0.375rem;
+  line-height: 1.25;
+}
+
+.auth-desc {
+  text-align: center;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--sp-text-muted, #64748b);
+  margin-bottom: 1.5rem;
+}
+
+.auth-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+  color: var(--sp-text-muted, #64748b);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease;
+  z-index: 10;
+}
+
+.auth-close:hover {
+  background: var(--sp-primary-soft, #eef2ff);
+  color: var(--first-color, #6366f1);
+  transform: scale(1.06);
+}
+
+.auth-close:active {
+  transform: scale(0.94);
+}
+
+.auth-footer-text {
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--sp-text-muted, #64748b);
+  margin-top: 0.25rem;
+}
+
+.auth-footer-text a {
+  font-weight: 700;
+  color: var(--first-color, #6366f1);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.auth-footer-text a:hover {
+  color: var(--second-color, #4f46e5);
+  text-decoration: underline;
+}

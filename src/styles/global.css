@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap');
+@import 'tailwindcss';
+
+* {
+  margin: 0;
+  padding: 0;
+}
+html,
+body {
+  height: 100%;
+  width: 100%;
+  font-family: 'Noto Sans SC', system-ui, -apple-system, sans-serif;
+}
+:root {
+  --first-color: #4f6ae8;
+  --second-color: #3d52c4;
+  --sp-primary: #4f6ae8;
+  --sp-primary-deep: #3d52c4;
+  --sp-primary-soft: #eef2ff;
+  --sp-border: rgba(79, 106, 232, 0.16);
+  --sp-text-title: #0f172a;
+  --sp-text-muted: #64748b;
+}
+
